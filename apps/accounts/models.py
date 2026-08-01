@@ -18,6 +18,7 @@ class Role(models.Model):
     )
 
     class Meta:
+        db_table = 'Role'
         verbose_name = "نقش"
         verbose_name_plural = "نقش‌ها"
         ordering = ["title"]
