@@ -72,6 +72,7 @@ class Employee(models.Model):
 
     national_code = models.CharField(
         max_length=10,
+        blank=True,
         null=True,
         verbose_name="کد ملی"
     )
