@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from apps.order.models import Order
+from apps.order.models import Order, OrderType
 from apps.payment.models import Payment
 
 
@@ -8,8 +8,13 @@ class PaymentModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        cls.order_type = OrderType.objects.create(
+            name="حضوری",
+        )
+
         cls.order = Order.objects.create(
             order_number=100,
+            order_type=cls.order_type,
         )
 
         cls.payment = Payment.objects.create(
