@@ -23,6 +23,10 @@ class OrderTypeAdmin(admin.ModelAdmin):
         "name",
     )
 
+    ordering = (
+        "name",
+    )
+
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
@@ -35,6 +39,7 @@ class OrderAdmin(admin.ModelAdmin):
         "order_number",
         "customer",
         "order_type",
+        "table_number",
         "total_price",
         "created_at",
     )
@@ -46,8 +51,8 @@ class OrderAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
-        "order_type",
         "order_number",
+        "order_type__name",
         "customer__first_name",
         "customer__last_name",
         "customer__mobile",
@@ -64,6 +69,10 @@ class OrderAdmin(admin.ModelAdmin):
         OrderItemInline,
     )
 
+    ordering = (
+        "-created_at",
+    )
+
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
@@ -73,7 +82,7 @@ class OrderItemAdmin(admin.ModelAdmin):
         "quantity",
         "unit_price",
         "total_price",
-        "note"
+        "note",
     )
 
     search_fields = (
@@ -100,4 +109,8 @@ class DailyOrderCounterAdmin(admin.ModelAdmin):
     readonly_fields = (
         "date",
         "last_number",
+    )
+
+    ordering = (
+        "-date",
     )

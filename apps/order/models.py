@@ -74,6 +74,12 @@ class Order(models.Model):
         verbose_name="نوع سفارش",
     )
 
+    table_number = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="شماره میز",
+    )
+
     description = models.TextField(
         null=True,
         blank=True,
