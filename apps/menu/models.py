@@ -22,7 +22,6 @@ class Category(models.Model):
 
 
 class MenuItem(models.Model):
-
     name = models.CharField(
         max_length=150,
         unique=True,
@@ -34,10 +33,6 @@ class MenuItem(models.Model):
         on_delete=models.PROTECT,
         related_name="items",
         verbose_name="دسته بندی"
-    )
-
-    price = models.BigIntegerField(
-        verbose_name="قیمت"
     )
 
     is_available = models.BooleanField(
@@ -71,3 +66,44 @@ class MenuItem(models.Model):
     def __str__(self):
         return self.name
 
+
+class MenuItemVariant(models.Model):
+    menu_item = models.ForeignKey(
+        MenuItem,
+        on_delete=models.CASCADE,
+        related_name="variants",
+        verbose_name="آیتم منو"
+    )
+
+    name = models.CharField(
+        max_length=100,
+        verbose_name="نام زیرمنو"
+    )
+
+    price = models.BigIntegerField(
+        verbose_name="قیمت"
+    )
+
+    is_available = models.BooleanField(
+        default=True,
+        verbose_name="قابل سفارش"
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="فعال"
+    )
+
+    class Meta:
+        ordering = ["menu_item", "id"]
+        verbose_name = "زیرمنو"
+        verbose_name_plural = "زیرمنوها"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["menu_item", "name"],
+                name="unique_menu_item_variant"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.menu_item} - {self.name}"
