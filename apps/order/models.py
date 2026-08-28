@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from apps.accounts.models import Customer
+from apps.accounts.models import Customer, Employee
 from apps.menu.models import MenuItem
 
 
@@ -40,6 +40,20 @@ class Order(models.Model):
     #     TAKEAWAY = "takeaway", "بیرون بر"
     #     DELIVERY = "delivery", "ارسال"
 
+    class PaymentMethod(models.TextChoices):
+        CASH = "cash", "نقدی"
+        CARD = "card", "کارتخوان"
+        CARD_TO_CARD = "card_to_card", "کارت به کارت"
+        FREE = "free", "رایگان"
+        # STAFF_MEAL = "staff_meal", "شام کارکنان"
+
+        COMBINED = "combined", "ترکیبی"
+
+    class PaymentStatus(models.TextChoices):
+        UNPAID = "unpaid", "پرداخت نشده"
+        PAID = "paid", "پرداخت شده"
+        CREDIT = "credit", "نسیه"
+
     order_number = models.PositiveIntegerField(
         verbose_name="شماره سفارش"
     )
@@ -51,6 +65,15 @@ class Order(models.Model):
         blank=True,
         related_name="orders",
         verbose_name="مشتری",
+    )
+
+    employee = models.ForeignKey(
+        Employee,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="orders",
+        verbose_name="کارمند",
     )
 
     # cashier = models.ForeignKey(
@@ -104,6 +127,21 @@ class Order(models.Model):
     total_price = models.PositiveBigIntegerField(
         default=0,
         verbose_name="مبلغ کل",
+    )
+
+    payment_method = models.CharField(
+        max_length=20,
+        choices=PaymentMethod.choices,
+        null=True,
+        blank=True,
+        verbose_name="نوع پرداخت",
+    )
+
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PaymentStatus.choices,
+        default=PaymentStatus.UNPAID,
+        verbose_name="وضعیت پرداخت",
     )
 
     order_date = models.DateField(
