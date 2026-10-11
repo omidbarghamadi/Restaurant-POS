@@ -18,7 +18,6 @@ class Role(models.Model):
     )
 
     class Meta:
-        db_table = 'Role'
         verbose_name = "نقش"
         verbose_name_plural = "نقش‌ها"
         ordering = ["title"]
@@ -32,15 +31,7 @@ class Employee(models.Model):
     class EmploymentStatus(models.TextChoices):
         ACTIVE = "active", "فعال"
         INACTIVE = "inactive", "غیرفعال"
-        # SUSPENDED = "suspended", "تعلیق"
-
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="employee"
-    )
+        SUSPENDED = "suspended", "تعلیق"
 
     role = models.ForeignKey(
         Role,
@@ -90,10 +81,9 @@ class Employee(models.Model):
         verbose_name="تاریخ استخدام"
     )
 
-    balance = models.BigIntegerField(
+    balance = models.PositiveBigIntegerField(
         default=0,
-        editable=False,
-        verbose_name="مانده حساب"
+        verbose_name="جمع دریافتی"
     )
 
     status = models.CharField(
@@ -164,7 +154,6 @@ class Customer(models.Model):
 
     balance = models.BigIntegerField(
         default=0,
-        editable=False,
         verbose_name="مانده حساب"
     )
 

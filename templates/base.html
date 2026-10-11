@@ -1,0 +1,175 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="همبر ثنائی - فست فود">
+
+    <title>
+        {% block title %}
+            همبر ثنائی | Fast Food
+        {% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="site-header">
+
+        <div class="container navbar">
+
+            <!-- Logo -->
+
+            <a href="{% url 'home' %}" class="brand">
+
+                <div class="brand-icon">
+                    🍔
+                </div>
+
+                <div class="brand-text">
+                    <span class="brand-name">
+                        همبر ثنائی
+                    </span>
+
+                    <span class="brand-subtitle">
+                        FAST FOOD
+                    </span>
+                </div>
+
+            </a>
+
+
+            <!-- Navigation -->
+
+            <nav class="main-nav">
+
+                <a href="{% url 'home' %}"
+                   class="nav-link active">
+                    صفحه اصلی
+                </a>
+
+                <a href="#about"
+                   class="nav-link">
+                    درباره ما
+                </a>
+
+                <a href="#features"
+                   class="nav-link">
+                    خدمات
+                </a>
+
+                <a href="#contact"
+                   class="nav-link">
+                    تماس با ما
+                </a>
+
+            </nav>
+
+
+            <!-- Login -->
+
+            <a href="{% url 'dashboard' %}"
+               class="login-button">
+
+                <span>داشبورد</span>
+
+                <span class="login-icon">
+                    📜
+                </span>
+
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="site-footer">
+
+        <div class="container footer-content">
+
+            <div class="footer-brand">
+
+                <div class="footer-logo">
+                    🍔
+                </div>
+
+                <div>
+                    <strong>
+                        همبر ثنائی
+                    </strong>
+
+                    <span>
+                        FAST FOOD
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="footer-address">
+
+                <span class="footer-location-icon">
+                    📍
+                </span>
+
+                <span>
+                    خیابان ۲۴ متری انقلاب،
+                    روبه‌روی خیابان منظریه
+                </span>
+
+            </div>
+
+
+            <div class="footer-instagram">
+
+                <span>
+                    Instagram
+                </span>
+
+                <strong>
+                    @hamber_sanaei
+                </strong>
+
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            © {% now "Y" %}
+            همبر ثنائی - تمامی حقوق محفوظ است.
+
+        </div>
+
+    </footer>
+
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

@@ -11,7 +11,6 @@ class TransactionAdmin(admin.ModelAdmin):
         "payment_method",
         "employee",
         "customer",
-        "paid_by",
         "transaction_date",
     )
 
@@ -25,7 +24,6 @@ class TransactionAdmin(admin.ModelAdmin):
         "description",
         "employee__user__username",
         "customer__name",
-        "paid_by__username",
     )
 
     ordering = (
@@ -57,7 +55,6 @@ class TransactionAdmin(admin.ModelAdmin):
             "اطلاعات پرداخت",
             {
                 "fields": (
-                    "paid_by",
                     "description",
                 ),
             },

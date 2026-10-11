@@ -1,0 +1,916 @@
+/* =========================================================
+   MENU APP
+   Restaurant POS - Menu Styles
+   ========================================================= */
+
+/* =========================================================
+   MENU APP
+   ========================================================= */
+
+/* =========================================================
+   19. Menu Page Header
+   ========================================================= */
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 24px;
+}
+
+
+.page-header h2 {
+    margin: 0;
+
+    color: var(--pos-text);
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+
+.page-header p {
+    margin: 5px 0 0;
+
+    color: var(--pos-text-light);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   20. Menu Buttons
+   ========================================================= */
+
+.btn {
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 16px;
+
+    border: 1px solid transparent;
+    border-radius: var(--pos-small-radius);
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: var(--pos-transition);
+}
+
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+
+.btn-primary {
+    color: #ffffff;
+
+    background-color: var(--pos-primary);
+
+    border-color: var(--pos-primary);
+}
+
+
+.btn-primary:hover {
+    color: #ffffff;
+
+    background-color: var(--pos-primary-dark);
+
+    border-color: var(--pos-primary-dark);
+}
+
+
+.btn-secondary {
+    color: var(--pos-text);
+
+    background-color: #ffffff;
+
+    border-color: var(--pos-border);
+}
+
+
+.btn-secondary:hover {
+    color: var(--pos-primary);
+
+    background-color: var(--pos-primary-light);
+
+    border-color: var(--pos-primary-light);
+}
+
+
+.btn-warning {
+    color: #ffffff;
+
+    background-color: var(--pos-warning);
+
+    border-color: var(--pos-warning);
+}
+
+
+.btn-warning:hover {
+    color: #ffffff;
+
+    filter: brightness(0.92);
+}
+
+
+.btn-danger {
+    color: #ffffff;
+
+    background-color: var(--pos-danger);
+
+    border-color: var(--pos-danger);
+}
+
+
+.btn-danger:hover {
+    color: #ffffff;
+
+    filter: brightness(0.92);
+}
+
+
+/* =========================================================
+   21. Menu Card
+   ========================================================= */
+
+.card {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 22px;
+
+    background-color: var(--pos-card);
+
+    border: 1px solid var(--pos-border);
+
+    border-radius: var(--pos-radius);
+
+    box-shadow: var(--pos-shadow);
+}
+
+
+/* =========================================================
+   22. Menu Table
+   ========================================================= */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid var(--pos-border);
+
+    border-radius: var(--pos-small-radius);
+}
+
+
+.table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 13px;
+}
+
+
+.table thead {
+    background-color: var(--pos-primary-light);
+}
+
+
+.table th {
+    padding: 13px 14px;
+
+    color: var(--pos-primary);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    border-bottom: 1px solid var(--pos-border);
+}
+
+
+.table td {
+    padding: 13px 14px;
+
+    color: var(--pos-text);
+
+    vertical-align: middle;
+
+    border-bottom: 1px solid var(--pos-border);
+}
+
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+
+.table tbody tr:hover {
+    background-color: #fafbfd;
+}
+
+
+/* =========================================================
+   23. Table Actions
+   ========================================================= */
+
+.table-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    white-space: nowrap;
+}
+
+
+.table-actions .btn {
+    min-height: 34px;
+
+    padding: 0 11px;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   24. Badges
+   ========================================================= */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 27px;
+
+    padding: 0 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+.badge-success {
+    color: #146c43;
+
+    background-color: #d1e7dd;
+}
+
+
+.badge-warning {
+    color: #664d03;
+
+    background-color: #fff3cd;
+}
+
+
+.badge-danger {
+    color: #842029;
+
+    background-color: #f8d7da;
+}
+
+
+.badge-info {
+    color: #084298;
+
+    background-color: #cfe2ff;
+}
+
+
+.badge-secondary {
+    color: #495057;
+
+    background-color: #e9ecef;
+}
+
+
+/* =========================================================
+   25. Variant Tags
+   ========================================================= */
+
+.variant-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+
+.variant-tag {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    color: var(--pos-primary);
+
+    background-color: var(--pos-primary-light);
+
+    border: 1px solid #d7e6f3;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+.variant-tag-price {
+    color: var(--pos-text-light);
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   26. Menu Item Image
+   ========================================================= */
+
+.menu-item-image {
+    width: 52px;
+    height: 52px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: var(--pos-small-radius);
+
+    border: 1px solid var(--pos-border);
+
+    background-color: var(--pos-primary-light);
+}
+
+
+.menu-item-image-placeholder {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--pos-text-light);
+
+    background-color: var(--pos-primary-light);
+
+    border: 1px solid var(--pos-border);
+
+    border-radius: var(--pos-small-radius);
+
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   27. Empty State
+   ========================================================= */
+
+.empty-state {
+    padding: 55px 25px;
+
+    text-align: center;
+
+    color: var(--pos-text-light);
+}
+
+
+.empty-state-icon {
+    margin-bottom: 12px;
+
+    font-size: 38px;
+
+    opacity: 0.7;
+}
+
+
+.empty-state h3 {
+    margin: 0 0 7px;
+
+    color: var(--pos-text);
+
+    font-size: 16px;
+}
+
+
+.empty-state p {
+    margin: 0 0 18px;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   28. Form Card
+   ========================================================= */
+
+.form-card {
+    max-width: 850px;
+
+    margin: 0 auto;
+
+    padding: 26px;
+
+    background-color: var(--pos-card);
+
+    border: 1px solid var(--pos-border);
+
+    border-radius: var(--pos-radius);
+
+    box-shadow: var(--pos-shadow);
+}
+
+
+.form-card h3 {
+    margin: 0 0 22px;
+
+    padding-bottom: 14px;
+
+    color: var(--pos-text);
+
+    font-size: 17px;
+    font-weight: 700;
+
+    border-bottom: 1px solid var(--pos-border);
+}
+
+
+/* =========================================================
+   29. Form Groups
+   ========================================================= */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--pos-text);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 11px 13px;
+
+    color: var(--pos-text);
+
+    background-color: #ffffff;
+
+    border: 1px solid var(--pos-border);
+
+    border-radius: var(--pos-small-radius);
+
+    outline: none;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    transition: var(--pos-transition);
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--pos-primary);
+
+    box-shadow:
+        0 0 0 3px rgba(58, 110, 165, 0.10);
+}
+
+
+.form-group textarea {
+    min-height: 110px;
+
+    resize: vertical;
+}
+
+
+/* =========================================================
+   30. Form Row
+   ========================================================= */
+
+.form-row {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   31. Checkbox
+   ========================================================= */
+
+.checkbox-group {
+    min-height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 0 12px;
+
+    background-color: #fafbfd;
+
+    border: 1px solid var(--pos-border);
+
+    border-radius: var(--pos-small-radius);
+}
+
+
+.checkbox-group input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+
+    margin: 0;
+
+    accent-color: var(--pos-primary);
+
+    cursor: pointer;
+}
+
+
+.checkbox-group label {
+    margin: 0;
+
+    cursor: pointer;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   32. Form Error
+   ========================================================= */
+
+.form-error {
+    margin-top: 6px;
+
+    color: var(--pos-danger);
+
+    font-size: 11px;
+}
+
+
+.errorlist {
+    margin: 6px 0 0;
+    padding: 0;
+
+    list-style: none;
+
+    color: var(--pos-danger);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   33. Form Actions
+   ========================================================= */
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 10px;
+
+    margin-top: 24px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid var(--pos-border);
+}
+
+
+/* =========================================================
+   34. Delete Card
+   ========================================================= */
+
+.delete-card {
+    max-width: 600px;
+
+    margin: 40px auto;
+
+    padding: 30px;
+
+    text-align: center;
+
+    background-color: var(--pos-card);
+
+    border: 1px solid var(--pos-border);
+
+    border-radius: var(--pos-radius);
+
+    box-shadow: var(--pos-shadow);
+}
+
+
+.delete-card-icon {
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    color: var(--pos-danger);
+
+    background-color: #f8d7da;
+
+    border-radius: 50%;
+
+    font-size: 28px;
+}
+
+
+.delete-card h3 {
+    margin: 0 0 10px;
+
+    color: var(--pos-text);
+
+    font-size: 18px;
+}
+
+
+.delete-card p {
+    margin: 0 auto 22px;
+
+    max-width: 450px;
+
+    color: var(--pos-text-light);
+
+    font-size: 13px;
+
+    line-height: 1.9;
+}
+
+
+.delete-card strong {
+    color: var(--pos-text);
+}
+
+
+/* =========================================================
+   35. Alert
+   ========================================================= */
+
+.alert {
+    margin-bottom: 18px;
+
+    padding: 12px 15px;
+
+    border-radius: var(--pos-small-radius);
+
+    font-size: 12px;
+}
+
+
+.alert-info {
+    color: #084298;
+
+    background-color: #cfe2ff;
+
+    border-right: 4px solid var(--pos-info);
+}
+
+
+.alert-warning {
+    color: #664d03;
+
+    background-color: #fff3cd;
+
+    border-right: 4px solid var(--pos-warning);
+}
+
+
+.alert-danger {
+    color: #842029;
+
+    background-color: #f8d7da;
+
+    border-right: 4px solid var(--pos-danger);
+}
+
+
+/* =========================================================
+   36. Price
+   ========================================================= */
+
+.price {
+    color: var(--pos-primary);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.price::after {
+    content: " تومان";
+
+    color: var(--pos-text-light);
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+
+/* =========================================================
+   37. Menu Item Name
+   ========================================================= */
+
+.menu-item-name {
+    color: var(--pos-text);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.menu-item-category {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--pos-text-light);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   38. Responsive
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .form-card {
+        max-width: none;
+    }
+
+    .table th,
+    .table td {
+        padding: 11px 10px;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .page-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+
+    .page-header .btn {
+        width: 100%;
+    }
+
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+
+    .form-card {
+        padding: 20px;
+    }
+
+
+    .card {
+        padding: 16px;
+    }
+
+
+    .table {
+        min-width: 700px;
+    }
+
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+
+    .delete-card {
+        margin: 20px auto;
+
+        padding: 24px 18px;
+    }
+
+
+    .actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .actions .btn {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .page-header h2 {
+        font-size: 18px;
+    }
+
+
+    .page-header p {
+        font-size: 11px;
+    }
+
+
+    .btn {
+        width: 100%;
+    }
+
+
+    .table-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .table-actions .btn {
+        width: 100%;
+    }
+
+
+    .variant-list {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .form-card {
+        padding: 16px;
+    }
+
+}

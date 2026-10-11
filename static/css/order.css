@@ -1,0 +1,106 @@
+/* =========================================================
+   ORDER APP
+   No app-specific CSS was present in the supplied stylesheet.
+   Add this app's styles here when they are defined.
+   ========================================================= */
+/* ===== جدول اقلام سفارش ===== */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 12px;
+    background: var(--card-bg, #fff);
+    -webkit-overflow-scrolling: touch;
+}
+
+.order-table {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
+    text-align: right;
+    font-size: 16px;
+}
+
+/* سربرگ */
+.order-table thead th {
+    padding: 14px 16px;
+    background: var(--table-head-bg, #f9fafb);
+    color: var(--text-muted, #6b7280);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+/* سلول‌ها */
+.order-table tbody td {
+    padding: 14px 16px;
+    color: var(--text-color, #1f2937);
+    border-bottom: 1px solid var(--border-color, #eef0f3);
+    vertical-align: middle;
+}
+
+.order-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* هاور ردیف */
+.order-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.order-table tbody tr:hover {
+    background: var(--table-hover-bg, #f9fafb);
+}
+
+/* ستون ردیف */
+.order-table th:first-child,
+.order-table td:first-child {
+    width: 48px;
+    text-align: center;
+    color: var(--text-muted, #6b7280);
+}
+
+/* نام محصول */
+.order-table td:nth-child(2) {
+    font-weight: 700;
+}
+
+/* تعداد، قیمت واحد و جمع */
+.order-table th:nth-child(3),
+.order-table td:nth-child(3) {
+    text-align: center;
+}
+
+.order-table td:nth-child(4),
+.order-table td:nth-child(5) {
+    white-space: nowrap;
+}
+
+/* جمع هر ردیف */
+.order-table td:nth-child(5) {
+    font-weight: 700;
+}
+
+/* توضیحات */
+.order-table td:nth-child(6) {
+    color: var(--text-muted, #6b7280);
+    max-width: 220px;
+}
+
+/* حالت خالی */
+.order-table td[colspan] {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--text-muted, #6b7280);
+}
+
+/* موبایل */
+@media (max-width: 640px) {
+    .order-table thead th,
+    .order-table tbody td {
+        padding: 12px;
+        font-size: 13px;
+    }
+}

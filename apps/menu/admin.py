@@ -31,7 +31,6 @@ class MenuItemVariantInline(admin.TabularInline):
         "name",
         "price",
         "is_available",
-        "is_active",
     )
 
 
@@ -41,13 +40,11 @@ class MenuItemAdmin(admin.ModelAdmin):
         "category",
         "name",
         "is_available",
-        "is_active",
     )
 
     list_filter = (
         "category",
         "is_available",
-        "is_active",
     )
 
     search_fields = (
@@ -76,13 +73,11 @@ class MenuItemVariantAdmin(admin.ModelAdmin):
         "name",
         "price",
         "is_available",
-        "is_active",
     )
 
     list_filter = (
         "menu_item__category",
         "is_available",
-        "is_active",
     )
 
     search_fields = (

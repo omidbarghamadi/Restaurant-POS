@@ -1,3 +1,166 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 
-# Create your views here.
+from .models import Category, MenuItem, MenuItemVariant
+from .forms import (
+    CategoryForm,
+    MenuItemForm,
+    MenuItemVariantForm,
+)
+
+
+# ============================================================
+# Category Views
+# ============================================================
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = "category-list.html"
+    context_object_name = "categories"
+
+    def get_queryset(self):
+        return Category.objects.order_by("title")
+
+
+class CategoryCreateView(SuccessMessageMixin, CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "category-form.html"
+    success_url = reverse_lazy("menu:category-list")
+    success_message = "دسته‌بندی با موفقیت ایجاد شد."
+
+
+class CategoryUpdateView(SuccessMessageMixin, UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "category-form.html"
+    success_url = reverse_lazy("menu:category-list")
+    success_message = "دسته‌بندی با موفقیت ویرایش شد."
+
+
+class CategoryDeleteView(DeleteView):
+    model = Category
+    template_name = "category-confirm_delete.html"
+    success_url = reverse_lazy("menu:category-list")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "دسته‌بندی با موفقیت حذف شد."
+        )
+        return super().form_valid(form)
+
+
+# ============================================================
+# MenuItem Views
+# ============================================================
+
+class MenuItemListView(ListView):
+    model = MenuItem
+    template_name = "menu-item_list.html"
+    context_object_name = "menu_items"
+
+    def get_queryset(self):
+        queryset = (
+            MenuItem.objects
+            .select_related("category")
+            .prefetch_related("variants")
+            .order_by("category", "name")
+        )
+
+        query = self.request.GET.get("q")
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+
+        category_id = self.request.GET.get("category")
+        if category_id:
+            queryset = queryset.filter(category_id=category_id)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.order_by("title")
+        return context
+
+
+class MenuItemCreateView(SuccessMessageMixin, CreateView):
+    model = MenuItem
+    form_class = MenuItemForm
+    template_name = "menu-item_form.html"
+    success_url = reverse_lazy("menu:menu-item-list")
+    success_message = "آیتم منو با موفقیت ایجاد شد."
+
+
+class MenuItemUpdateView(SuccessMessageMixin, UpdateView):
+    model = MenuItem
+    form_class = MenuItemForm
+    template_name = "menu-item_form.html"
+    success_url = reverse_lazy("menu:menu-item-list")
+    success_message = "آیتم منو با موفقیت ویرایش شد."
+
+
+class MenuItemDeleteView(DeleteView):
+    model = MenuItem
+    template_name = "menu-item_confirm_delete.html"
+    success_url = reverse_lazy("menu:menu-item-list")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "آیتم منو با موفقیت حذف شد."
+        )
+        return super().form_valid(form)
+
+
+# ============================================================
+# MenuItemVariant Views
+# ============================================================
+
+class MenuItemVariantListView(ListView):
+    model = MenuItemVariant
+    template_name = "variant-list.html"
+    context_object_name = "variants"
+
+    def get_queryset(self):
+        return (
+            MenuItemVariant.objects
+            .select_related("menu_item", "menu_item__category")
+            .order_by("menu_item", "name")
+        )
+
+
+class MenuItemVariantCreateView(SuccessMessageMixin, CreateView):
+    model = MenuItemVariant
+    form_class = MenuItemVariantForm
+    template_name = "variant-form.html"
+    success_url = reverse_lazy("menu:variant-list")
+    success_message = "زیرمنو با موفقیت ایجاد شد."
+
+
+class MenuItemVariantUpdateView(SuccessMessageMixin, UpdateView):
+    model = MenuItemVariant
+    form_class = MenuItemVariantForm
+    template_name = "variant-form.html"
+    success_url = reverse_lazy("menu:variant-list")
+    success_message = "زیرمنو با موفقیت ویرایش شد."
+
+
+class MenuItemVariantDeleteView(DeleteView):
+    model = MenuItemVariant
+    template_name = "variant-confirm_delete.html"
+    success_url = reverse_lazy("menu:variant-list")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "زیرمنو با موفقیت حذف شد."
+        )
+        return super().form_valid(form)

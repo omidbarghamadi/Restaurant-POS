@@ -3,7 +3,8 @@ from django.test import TestCase
 
 from apps.accounts.models import Customer, Employee, Role
 from .models import Transaction
-
+from django.utils import timezone
+from datetime import datetime
 
 User = get_user_model()
 
@@ -11,6 +12,8 @@ User = get_user_model()
 class TransactionModelTest(TestCase):
 
     def setUp(self):
+        self.transaction_date = timezone.now()
+
         self.user = User.objects.create_user(
             username="admin",
             password="testpass123",
@@ -36,7 +39,7 @@ class TransactionModelTest(TestCase):
             payment_method=Transaction.PaymentMethod.CASH,
             employee=self.employee,
             description="پرداخت حقوق",
-            transaction_date="2026-08-22 12:00:00",
+            transaction_date=self.transaction_date,
             paid_by=self.user,
         )
 
@@ -54,7 +57,7 @@ class TransactionModelTest(TestCase):
         transaction = Transaction.objects.create(
             transaction_type=Transaction.TransactionType.REPAIR,
             amount=500_000,
-            transaction_date="2026-08-22 12:00:00",
+            transaction_date=self.transaction_date,
             paid_by=self.user,
         )
 
@@ -68,7 +71,7 @@ class TransactionModelTest(TestCase):
             transaction_type=Transaction.TransactionType.SALARY,
             amount=15_000_000,
             employee=self.employee,
-            transaction_date="2026-08-22 12:00:00",
+            transaction_date=self.transaction_date,
             paid_by=self.user,
         )
 
@@ -79,7 +82,7 @@ class TransactionModelTest(TestCase):
             transaction_type=Transaction.TransactionType.RECEIVABLE,
             amount=2_000_000,
             customer=self.customer,
-            transaction_date="2026-08-22 12:00:00",
+            transaction_date=self.transaction_date,
             paid_by=self.user,
         )
 
@@ -89,7 +92,7 @@ class TransactionModelTest(TestCase):
         transaction = Transaction.objects.create(
             transaction_type=Transaction.TransactionType.EXPENSE,
             amount=300_000,
-            transaction_date="2026-08-22 12:00:00",
+            transaction_date=self.transaction_date,
             paid_by=self.user,
         )
 
@@ -104,7 +107,7 @@ class TransactionModelTest(TestCase):
             transaction_type=Transaction.TransactionType.RAW_MATERIAL,
             amount=1_000_000,
             payment_method=Transaction.PaymentMethod.CARD_TO_CARD,
-            transaction_date="2026-08-22 12:00:00",
+            transaction_date=self.transaction_date,
             paid_by=self.user,
         )
 
@@ -117,7 +120,7 @@ class TransactionModelTest(TestCase):
         transaction = Transaction.objects.create(
             transaction_type=Transaction.TransactionType.OTHER_EXPENSE,
             amount=100_000,
-            transaction_date="2026-08-22 12:00:00",
+            transaction_date=self.transaction_date,
             paid_by=self.user,
         )
 

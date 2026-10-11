@@ -1,0 +1,505 @@
+{% extends "posBase.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+
+    <!-- تقویم شمسی برای فیلتر تاریخ و ساعت -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+
+    <style>
+        .order-filters {
+            padding: 22px 25px 8px;
+            border-bottom: 1px solid var(--border, #ead8bd);
+            background: var(--cream-light, #fff8ed);
+        }
+
+        .order-filters__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 14px 16px;
+        }
+
+        .filter-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--red, #55130e);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .filter-field input {
+            width: 100%;
+            height: 44px;
+            padding: 8px 12px;
+            border: 1px solid #dfcfbb;
+            border-radius: 10px;
+            background: #fffdf9;
+            color: var(--text, #321712);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .filter-field input:focus {
+            border-color: var(--blue, #174d7a);
+            box-shadow: 0 0 0 3px rgba(23, 77, 122, 0.08);
+        }
+
+        .filter-field input[data-jdp] {
+            cursor: pointer;
+        }
+
+        .order-filters__footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 0 12px;
+        }
+
+        .order-filters__count {
+            color: #76645c;
+            font-size: 13px;
+        }
+
+        .order-filters__reset {
+            border: none;
+            background: none;
+            color: var(--blue, #174d7a);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .order-filters__reset:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    سفارش‌ها | همبر ثنائی
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+                <span class="page-label">
+                    مدیریت سفارش‌ها
+                </span>
+
+                <h1>
+                    سفارش‌ها
+                </h1>
+
+                <p>
+                    لیست سفارش‌های ثبت شده
+                </p>
+            </div>
+
+            <a href="{% url 'order:order_create' %}"
+               class="btn btn-primary">
+                + ثبت سفارش جدید
+            </a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="content-card">
+
+            {% if orders %}
+
+                <div class="order-filters">
+
+                    <div class="order-filters__grid">
+
+                        <div class="filter-field">
+                            <label for="filter-number">شماره فاکتور</label>
+                            <input type="text" id="filter-number" inputmode="numeric"
+                                   autocomplete="off" placeholder="مثلاً 105">
+                        </div>
+
+                        <div class="filter-field">
+                            <label for="filter-customer">نام مشتری</label>
+                            <input type="text" id="filter-customer"
+                                   autocomplete="off" placeholder="جستجوی نام مشتری">
+                        </div>
+
+                        <div class="filter-field">
+                            <label for="filter-date-from">از تاریخ</label>
+                            <input type="text" id="filter-date-from" autocomplete="off"
+                                   placeholder="انتخاب تاریخ" data-jdp data-jdp-only-date>
+                        </div>
+
+                        <div class="filter-field">
+                            <label for="filter-date-to">تا تاریخ</label>
+                            <input type="text" id="filter-date-to" autocomplete="off"
+                                   placeholder="انتخاب تاریخ" data-jdp data-jdp-only-date>
+                        </div>
+
+                        <div class="filter-field">
+                            <label for="filter-time-from">از ساعت</label>
+                            <input type="text" id="filter-time-from" autocomplete="off"
+                                   placeholder="انتخاب ساعت"
+                                   data-jdp data-jdp-only-time data-jdp-has-second="false">
+                        </div>
+
+                        <div class="filter-field">
+                            <label for="filter-time-to">تا ساعت</label>
+                            <input type="text" id="filter-time-to" autocomplete="off"
+                                   placeholder="انتخاب ساعت"
+                                   data-jdp data-jdp-only-time data-jdp-has-second="false">
+                        </div>
+
+                    </div>
+
+                    <div class="order-filters__footer">
+                        <span class="order-filters__count" id="filter-count"></span>
+                        <button type="button" class="order-filters__reset" id="filter-reset">
+                            پاک کردن فیلترها
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+                            <tr>
+                                <th>شماره سفارش</th>
+                                <th>تاریخ</th>
+                                <th>ساعت</th>
+                                <th>نوع سفارش</th>
+                                <th>مشتری</th>
+                                <th>میز</th>
+                                <th>مبلغ کل</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for order in orders %}
+
+                                <tr data-order-row
+                                    data-number="{{ order.order_number }}"
+                                    data-customer="{% if order.customer %}{{ order.customer }}{% else %}مشتری متفرقه{% endif %}"
+                                    data-time="{{ order.order_time|time:'H:i' }}">
+
+                                    <td>
+                                        <strong>
+                                            #{{ order.order_number }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        <time datetime="{{ order.order_date|date:'Y-m-d' }}"
+                                              data-jalali-date>
+                                            {{ order.order_date|date:"Y/m/d" }}
+                                        </time>
+                                    </td>
+
+                                    <td>
+                                        {% if order.order_time %}
+                                            {{ order.order_time|time:"H:i" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {{ order.order_type.name }}
+                                    </td>
+
+                                    <td>
+                                        {% if order.customer %}
+                                            {{ order.customer }}
+                                        {% else %}
+                                            مشتری متفرقه
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if order.table_number %}
+                                            {{ order.table_number }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <span data-money="{{ order.total_price|stringformat:'d' }}">{{ order.total_price|stringformat:"d" }}</span>
+                                        تومان
+                                    </td>
+
+                                    <td>
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'order:order_detail' order.pk %}"
+                                               class="action-button view">
+                                                مشاهده
+                                            </a>
+
+                                            <a href="{% url 'order:order_update' order.pk %}"
+                                               class="action-button edit">
+                                                ویرایش
+                                            </a>
+
+                                            <a href="{% url 'order:order_delete' order.pk %}"
+                                               class="action-button delete">
+                                                حذف
+                                            </a>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="empty-state" id="no-results" style="display: none;">
+                    <div class="empty-icon">🔍</div>
+                    <h3>سفارشی با این مشخصات پیدا نشد.</h3>
+                    <p>فیلترها را تغییر دهید یا پاک کنید.</p>
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        هنوز سفارشی ثبت نشده است.
+                    </h3>
+
+                    <p>
+                        برای شروع، اولین سفارش را ثبت کنید.
+                    </p>
+
+                    <a href="{% url 'order:order_create' %}"
+                       class="btn btn-primary">
+                        ثبت سفارش
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ==================================================
+    // ۱) تبدیل تاریخ میلادی ردیف‌ها به شمسی (Intl داخلی مرورگر)
+    // ==================================================
+
+    var jalaliFmt = new Intl.DateTimeFormat("en-US-u-ca-persian-nu-latn", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    });
+
+    var jalaliCache = {};
+
+    function toJalali(iso) {
+        if (jalaliCache[iso]) return jalaliCache[iso];
+
+        var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+        if (!m) return null;
+
+        // ظهر می‌گذاریم تا جابه‌جایی منطقه زمانی روز را عوض نکند
+        var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+        var v = {};
+        jalaliFmt.formatToParts(d).forEach(function (p) { v[p.type] = p.value; });
+
+        return (jalaliCache[iso] = v.year + "/" + v.month + "/" + v.day);
+    }
+
+    document.querySelectorAll("time[data-jalali-date]").forEach(function (t) {
+        var j = toJalali(t.getAttribute("datetime"));
+        if (j) t.textContent = j;
+    });
+
+
+    // جداسازی سه‌رقمی مبلغ‌ها (مستقل از تنظیمات زبان جنگو)
+    var moneyFmt = new Intl.NumberFormat("en-US");
+
+    document.querySelectorAll("[data-money]").forEach(function (m) {
+        var n = Number(m.getAttribute("data-money"));
+        if (!isNaN(n)) m.textContent = moneyFmt.format(n);
+    });
+
+
+    // ==================================================
+    // ۲) فیلتر و جستجوی لحظه‌ای
+    // ==================================================
+
+    var rows = Array.prototype.slice.call(document.querySelectorAll("tr[data-order-row]"));
+    if (!rows.length) return;
+
+    var el = {
+        number:   document.getElementById("filter-number"),
+        customer: document.getElementById("filter-customer"),
+        dateFrom: document.getElementById("filter-date-from"),
+        dateTo:   document.getElementById("filter-date-to"),
+        timeFrom: document.getElementById("filter-time-from"),
+        timeTo:   document.getElementById("filter-time-to"),
+        count:    document.getElementById("filter-count"),
+        reset:    document.getElementById("filter-reset"),
+        empty:    document.getElementById("no-results"),
+        table:    document.querySelector(".table-wrapper")
+    };
+
+    // ارقام فارسی/عربی → انگلیسی، و یکسان‌سازی ی/ک عربی
+    function normalize(str) {
+        return String(str || "")
+            .replace(/[۰-۹]/g, function (c) { return c.charCodeAt(0) - 1776; })
+            .replace(/[٠-٩]/g, function (c) { return c.charCodeAt(0) - 1632; })
+            .replace(/ي/g, "ی")
+            .replace(/ك/g, "ک")
+            .replace(/\u200c/g, " ")
+            .trim()
+            .toLowerCase();
+    }
+
+    // اطلاعات هر ردیف یک بار خوانده می‌شود
+    rows.forEach(function (row) {
+        var t = row.querySelector("time[data-jalali-date]");
+        row._hidden = false;
+        row._f = {
+            number:   normalize(row.dataset.number),
+            customer: normalize(row.dataset.customer),
+            date:     t ? normalize(t.textContent) : "",   // 1405/07/08
+            time:     normalize(row.dataset.time)          // 14:35
+        };
+    });
+
+    var fa = new Intl.NumberFormat("fa-IR");
+    var lastKey = null;
+
+    function applyFilters() {
+
+        var number   = normalize(el.number.value).replace(/^#/, "");
+        var customer = normalize(el.customer.value);
+        var dateFrom = normalize(el.dateFrom.value);
+        var dateTo   = normalize(el.dateTo.value);
+        var timeFrom = normalize(el.timeFrom.value);
+        var timeTo   = normalize(el.timeTo.value);
+
+        // اگر هیچ فیلتری عوض نشده کاری نکن
+        var key = [number, customer, dateFrom, dateTo, timeFrom, timeTo].join("|");
+        if (key === lastKey) return;
+        lastKey = key;
+
+        var overnight = timeFrom && timeTo && timeFrom > timeTo;
+        var visible = 0;
+
+        // جدول را موقتاً از چیدمان خارج می‌کنیم تا مرورگر برای هر ردیف
+        // دوباره محاسبه‌ی layout نکند (مهم‌ترین عامل کندی)
+        el.table.style.display = "none";
+
+        for (var k = 0; k < rows.length; k++) {
+            var row = rows[k];
+            var f = row._f;
+            var ok = true;
+
+            if (number && f.number.indexOf(number) === -1) ok = false;
+            else if (customer && f.customer.indexOf(customer) === -1) ok = false;
+            else if (dateFrom && f.date < dateFrom) ok = false;
+            else if (dateTo && f.date > dateTo) ok = false;
+            else if (overnight) {
+                if (!(f.time >= timeFrom || f.time <= timeTo)) ok = false;
+            } else {
+                if (timeFrom && f.time < timeFrom) ok = false;
+                else if (timeTo && f.time > timeTo) ok = false;
+            }
+
+            if (ok) visible++;
+
+            // فقط ردیف‌هایی که وضعیتشان عوض شده را تغییر بده
+            if (row._hidden === ok) {
+                row.style.display = ok ? "" : "none";
+                row._hidden = !ok;
+            }
+        }
+
+        el.table.style.display = visible ? "" : "none";
+        el.empty.style.display = visible ? "none" : "";
+
+        el.count.textContent =
+            "نمایش " + fa.format(visible) + " از " + fa.format(rows.length) + " سفارش";
+    }
+
+    // چند رویداد پشت‌سرهم (input + change + ...) یک‌بار محاسبه شوند
+    var timer = null;
+    function scheduleFilter() {
+        clearTimeout(timer);
+        timer = setTimeout(applyFilters, 120);
+    }
+
+    [el.number, el.customer, el.dateFrom, el.dateTo, el.timeFrom, el.timeTo]
+        .forEach(function (input) {
+            ["input", "change", "jdp:change"].forEach(function (evt) {
+                input.addEventListener(evt, scheduleFilter);
+            });
+            // پاک کردن از داخل خود تقویم
+            input.addEventListener("blur", scheduleFilter);
+        });
+
+    el.reset.addEventListener("click", function () {
+        [el.number, el.customer, el.dateFrom, el.dateTo, el.timeFrom, el.timeTo]
+            .forEach(function (input) { input.value = ""; });
+        applyFilters();
+    });
+
+    if (typeof jalaliDatepicker !== "undefined") {
+        jalaliDatepicker.startWatch({
+            time: true,
+            hasSecond: "attr",
+            autoReadOnlyInput: true,
+            showEmptyBtn: true,
+            zIndex: 900
+        });
+    }
+
+    applyFilters();
+
+});
+</script>
+
+{% endblock %}

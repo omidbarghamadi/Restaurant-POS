@@ -24,7 +24,6 @@ class Category(models.Model):
 class MenuItem(models.Model):
     name = models.CharField(
         max_length=150,
-        unique=True,
         verbose_name="نام آیتم"
     )
 
@@ -40,10 +39,10 @@ class MenuItem(models.Model):
         verbose_name="قابل سفارش"
     )
 
-    is_active = models.BooleanField(
-        default=True,
-        verbose_name="فعال"
-    )
+    # is_active = models.BooleanField(
+    #     default=True,
+    #     verbose_name="فعال"
+    # )
 
     image = models.ImageField(
         upload_to="menu/",
@@ -60,11 +59,12 @@ class MenuItem(models.Model):
 
     class Meta:
         ordering = ["category", "name"]
+        unique_together = ["category", "name"]
         verbose_name = "آیتم منو"
         verbose_name_plural = "آیتم های منو"
 
     def __str__(self):
-        return self.name
+        return f"{self.category} {self.name}"
 
 
 class MenuItemVariant(models.Model):
@@ -89,10 +89,10 @@ class MenuItemVariant(models.Model):
         verbose_name="قابل سفارش"
     )
 
-    is_active = models.BooleanField(
-        default=True,
-        verbose_name="فعال"
-    )
+    # is_active = models.BooleanField(
+    #     default=True,
+    #     verbose_name="فعال"
+    # )
 
     class Meta:
         ordering = ["menu_item", "id"]

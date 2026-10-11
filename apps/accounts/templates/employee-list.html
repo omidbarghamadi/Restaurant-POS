@@ -1,0 +1,230 @@
+{% extends "posBase.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
+
+{% block title %}
+    کارکنان | همبر ثنائی
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    مدیریت حساب‌ها
+                </span>
+
+                <h1>
+                    کارکنان
+                </h1>
+
+                <p>
+                    مدیریت اطلاعات کارکنان مجموعه
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'accounts:employee-create' %}"
+               class="btn btn-primary">
+
+                + افزودن کارمند
+
+            </a>
+
+        </div>
+
+
+        <div class="content-card">
+
+            {% if employees %}
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>
+                                    نام و نام خانوادگی
+                                </th>
+
+                                <th>
+                                    نقش
+                                </th>
+
+                                <th>
+                                    موبایل
+                                </th>
+
+                                <th>
+                                    وضعیت
+                                </th>
+
+                                <th>
+                                    جمع دریافتی
+                                </th>
+
+                                <th>
+                                    عملیات
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for employee in employees %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+
+
+                                    <td>
+
+                                        <strong>
+                                            {{ employee.first_name }}
+                                            {{ employee.last_name }}
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="role-badge">
+                                            {{ employee.role.title }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+                                        {{ employee.mobile }}
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if employee.status == "active" %}
+
+                                            <span class="status-badge active">
+                                                فعال
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="status-badge inactive">
+                                                غیرفعال
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="
+                                            {% if employee.balance < 0 %}
+                                                debt-value
+                                            {% else %}
+                                                balance-value
+                                            {% endif %}
+                                        " dir="ltr">
+
+                                            {{ employee.balance|default:0|intcomma:False }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'accounts:employee-detail' employee.pk %}"
+                                               class="action-button view">
+                                                مشاهده
+                                            </a>
+
+                                            <a href="{% url 'accounts:employee-update' employee.pk %}"
+                                               class="action-button edit">
+                                                ویرایش
+                                            </a>
+
+                                            <a href="{% url 'accounts:employee-delete' employee.pk %}"
+                                               class="action-button delete">
+                                                حذف
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        👨‍🍳
+                    </div>
+
+                    <h3>
+                        هنوز کارمندی ثبت نشده است
+                    </h3>
+
+                    <p>
+                        اولین کارمند را به سیستم اضافه کنید.
+                    </p>
+
+                    <a href="{% url 'accounts:employee-create' %}"
+                       class="btn btn-primary">
+
+                        افزودن کارمند
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

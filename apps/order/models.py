@@ -2,7 +2,12 @@ from django.db import models
 from django.utils import timezone
 
 from apps.accounts.models import Customer, Employee
-from apps.menu.models import MenuItem
+from apps.menu.models import MenuItem, MenuItemVariant
+
+
+def current_time():
+    """ساعت فعلی (بدون ثانیه) به وقت محلی؛ مقدار پیش‌فرض ساعت سفارش."""
+    return timezone.localtime().time().replace(second=0, microsecond=0)
 
 
 class OrderType(models.Model):
@@ -28,31 +33,18 @@ class OrderType(models.Model):
 
 class Order(models.Model):
 
-    # class Status(models.TextChoices):
-    #     PENDING = "pending", "در انتظار"
-    #     PREPARING = "preparing", "در حال آماده سازی"
-    #     READY = "ready", "آماده تحویل"
-    #     COMPLETED = "completed", "تحویل شده"
-    #     CANCELED = "canceled", "لغو شده"
-
-    # class OrderType(models.TextChoices):
-    #     DINE_IN = "dine_in", "سالن"
-    #     TAKEAWAY = "takeaway", "بیرون بر"
-    #     DELIVERY = "delivery", "ارسال"
-
     class PaymentMethod(models.TextChoices):
         CASH = "cash", "نقدی"
         CARD = "card", "کارتخوان"
         CARD_TO_CARD = "card_to_card", "کارت به کارت"
-        FREE = "free", "رایگان"
-        # STAFF_MEAL = "staff_meal", "شام کارکنان"
-
-        COMBINED = "combined", "ترکیبی"
-
-    class PaymentStatus(models.TextChoices):
-        UNPAID = "unpaid", "پرداخت نشده"
-        PAID = "paid", "پرداخت شده"
+        ONLINE = "online", "آنلاین"
         CREDIT = "credit", "نسیه"
+        COMBINED = "combined", "ترکیبی"
+        FREE = "free", "رایگان"
+
+    # class PaymentStatus(models.TextChoices):
+    #     UNPAID = "unpaid", "پرداخت نشده"
+    #     PAID = "paid", "پرداخت شده"
 
     order_number = models.PositiveIntegerField(
         verbose_name="شماره سفارش"
@@ -75,20 +67,6 @@ class Order(models.Model):
         related_name="orders",
         verbose_name="کارمند",
     )
-
-    # cashier = models.ForeignKey(
-    #     settings.AUTH_USER_MODEL,
-    #     on_delete=models.PROTECT,
-    #     related_name="orders",
-    #     verbose_name="صندوق دار",
-    # )
-
-    # status = models.CharField(
-    #     max_length=20,
-    #     choices=Status.choices,
-    #     default=Status.PENDING,
-    #     verbose_name="وضعیت",
-    # )
 
     order_type = models.ForeignKey(
         OrderType,
@@ -114,9 +92,9 @@ class Order(models.Model):
         verbose_name="تخفیف",
     )
 
-    tax = models.PositiveBigIntegerField(
+    delivery = models.PositiveBigIntegerField(
         default=0,
-        verbose_name="مالیات",
+        verbose_name="هزینه پیک",
     )
 
     packaging_cost = models.PositiveBigIntegerField(
@@ -132,21 +110,27 @@ class Order(models.Model):
     payment_method = models.CharField(
         max_length=20,
         choices=PaymentMethod.choices,
+        default=PaymentMethod.CARD,
         null=True,
         blank=True,
         verbose_name="نوع پرداخت",
     )
 
-    payment_status = models.CharField(
-        max_length=20,
-        choices=PaymentStatus.choices,
-        default=PaymentStatus.UNPAID,
-        verbose_name="وضعیت پرداخت",
-    )
+    # payment_status = models.CharField(
+    #     max_length=20,
+    #     choices=PaymentStatus.choices,
+    #     default=PaymentStatus.UNPAID,
+    #     verbose_name="وضعیت پرداخت",
+    # )
 
     order_date = models.DateField(
         default=timezone.localdate,
         verbose_name="تاریخ سفارش"
+    )
+
+    order_time = models.TimeField(
+        default=current_time,
+        verbose_name="ساعت سفارش",
     )
 
     created_at = models.DateTimeField(
@@ -207,6 +191,18 @@ class OrderItem(models.Model):
         related_name="order_items",
     )
 
+    # زیرمنوی انتخاب‌شده (قیمت واقعی از همینجا خوانده می‌شود).
+    # nullable گذاشته شده تا migration بدون نیاز به backfill دیتای
+    # قدیمی اجرا شود؛ اما در فرم به صورت الزامی اعتبارسنجی می‌شود.
+    variant = models.ForeignKey(
+        MenuItemVariant,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="order_items",
+        verbose_name="زیرمنو",
+    )
+
     quantity = models.PositiveIntegerField(
         default=1,
         verbose_name="تعداد",
@@ -233,4 +229,3 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.menu_item.name} × {self.quantity}"
-    

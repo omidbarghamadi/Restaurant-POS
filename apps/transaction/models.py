@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.db import models
 
 
@@ -11,7 +10,7 @@ class Transaction(models.Model):
         REPAIR = "repair", "تعمیرات"
         DAMAGE = "damage", "خسارت"
         DELIVERY = "delivery", "پیک"
-        WITHDRAWAL = "withdrawal", "برداشت"
+        # WITHDRAWAL = "withdrawal", "برداشت درآمد"
         OTHER_INCOME = "other_income", "سایر درآمدها"
         OTHER_EXPENSE = "other_expense", "سایر هزینه‌ها"
 
@@ -66,13 +65,6 @@ class Transaction(models.Model):
 
     transaction_date = models.DateTimeField(
         verbose_name="تاریخ تراکنش",
-    )
-
-    paid_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        related_name="paid_transactions",
-        verbose_name="پرداخت کننده",
     )
 
     class Meta:

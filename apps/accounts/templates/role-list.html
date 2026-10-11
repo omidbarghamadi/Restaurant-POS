@@ -1,0 +1,150 @@
+{% extends "posBase.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
+
+{% block title %}
+    نقش‌ها | همبر ثنائی
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+                <span class="page-label">
+                    مدیریت حساب‌ها
+                </span>
+
+                <h1>
+                    نقش‌ها
+                </h1>
+
+                <p>
+                    مدیریت نقش‌های کارکنان سیستم
+                </p>
+            </div>
+
+            <a href="{% url 'accounts:role-create' %}"
+               class="btn btn-primary">
+
+                + افزودن نقش
+
+            </a>
+
+        </div>
+
+
+        <div class="content-card">
+
+            {% if roles %}
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>عنوان نقش</th>
+                                <th>توضیحات</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for role in roles %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+
+                                    <td>
+                                        <strong>
+                                            {{ role.title }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {% if role.description %}
+                                            {{ role.description|truncatechars:70 }}
+                                        {% else %}
+                                            <span class="text-muted">
+                                                بدون توضیحات
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'accounts:role-update' role.pk %}"
+                                               class="action-button edit">
+                                                ویرایش
+                                            </a>
+
+                                            <a href="{% url 'accounts:role-delete' role.pk %}"
+                                               class="action-button delete">
+                                                حذف
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        هنوز نقشی ثبت نشده است
+                    </h3>
+
+                    <p>
+                        برای شروع، اولین نقش را ایجاد کنید.
+                    </p>
+
+                    <a href="{% url 'accounts:role-create' %}"
+                       class="btn btn-primary">
+
+                        افزودن اولین نقش
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

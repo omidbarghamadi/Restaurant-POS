@@ -38,15 +38,19 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = (
         "order_number",
         "customer",
+        "employee",
         "order_type",
         "table_number",
+        "payment_method",
         "total_price",
-        "created_at",
+        "order_date",
+        "order_time",
     )
 
     list_filter = (
         "order_date",
         "order_type",
+        "payment_method",
         "created_at",
     )
 
@@ -56,6 +60,9 @@ class OrderAdmin(admin.ModelAdmin):
         "customer__first_name",
         "customer__last_name",
         "customer__mobile",
+        "employee__first_name",
+        "employee__last_name",
+        "employee__mobile",
     )
 
     readonly_fields = (
@@ -63,6 +70,51 @@ class OrderAdmin(admin.ModelAdmin):
         "order_number",
         "created_at",
         "updated_at",
+    )
+
+    fieldsets = (
+        (
+            "اطلاعات سفارش",
+            {
+                "fields": (
+                    "order_number",
+                    "order_type",
+                    "customer",
+                    "employee",
+                    "table_number",
+                    "description",
+                ),
+            },
+        ),
+        (
+            "پرداخت",
+            {
+                "fields": (
+                    "payment_method",
+                ),
+            },
+        ),
+        (
+            "مبالغ",
+            {
+                "fields": (
+                    "discount",
+                    "delivery",
+                    "packaging_cost",
+                    "total_price",
+                ),
+            },
+        ),
+        (
+            "تاریخ‌ها",
+            {
+                "fields": (
+                    "order_date",
+                    "created_at",
+                    "updated_at",
+                ),
+            },
+        ),
     )
 
     inlines = (
