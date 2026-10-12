@@ -1,0 +1,224 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+{% load jalali_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../static/transactions/css/transaction.css' %}">
+{% endblock %}
+
+{% block title %}
+    تراکنش‌ها | همبر ثنائی
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    مدیریت مالی
+                </span>
+
+                <h1>
+                    تراکنش‌ها
+                </h1>
+
+                <p>
+                    مدیریت تراکنش‌های مالی
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'transaction:transaction_create' %}"
+               class="btn btn-primary">
+
+                + ثبت تراکنش جدید
+
+            </a>
+
+        </div>
+
+
+        <div class="content-card">
+
+            {% if transactions %}
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>
+                                    نوع تراکنش
+                                </th>
+
+                                <th>
+                                    مبلغ
+                                </th>
+
+                                <th>
+                                    روش پرداخت
+                                </th>
+
+                                <th>
+                                    کارمند
+                                </th>
+
+                                <th>
+                                    مشتری
+                                </th>
+
+                                <th>
+                                    تاریخ و ساعت
+                                </th>
+
+                                <th>
+                                    عملیات
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for transaction in transactions %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ transaction.get_transaction_type_display }}
+                                    </td>
+
+
+                                    <td>
+                                        <strong>
+                                            {{ transaction.amount|thousands_separator }}
+                                        </strong>
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if transaction.payment_method %}
+                                            {{ transaction.get_payment_method_display }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if transaction.employee %}
+                                            {{ transaction.employee }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if transaction.customer %}
+                                            {{ transaction.customer }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+                                        {{ transaction.transaction_date|jalali:"%Y/%m/%d - %H:%M" }}
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'transaction:transaction_update' transaction.pk %}"
+                                               class="action-button edit">
+
+                                                ویرایش
+
+                                            </a>
+
+
+                                            <a href="{% url 'transaction:transaction_delete' transaction.pk %}"
+                                               class="action-button delete">
+
+                                                حذف
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        💳
+                    </div>
+
+                    <h3>
+                        هنوز تراکنشی ثبت نشده است
+                    </h3>
+
+                    <p>
+                        اولین تراکنش مالی را به سیستم اضافه کنید.
+                    </p>
+
+                    <a href="{% url 'transaction:transaction_create' %}"
+                       class="btn btn-primary">
+
+                        ثبت تراکنش
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

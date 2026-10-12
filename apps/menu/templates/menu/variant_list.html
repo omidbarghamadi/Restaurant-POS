@@ -1,0 +1,216 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+
+{#{% block extra_css %}#}
+{#    <link rel="stylesheet" href="{% static 'css/menu.css' %}">#}
+{#{% endblock %}#}
+
+{% block title %}
+    زیرمنوها
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    مدیریت منو
+                </span>
+
+                <h1>
+                    زیرمنوها
+                </h1>
+
+                <p>
+                    مدیریت انواع و سایزهای آیتم‌های منو
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'menu:variant-create' %}"
+               class="btn btn-primary">
+
+                + افزودن زیرمنو
+
+            </a>
+
+        </div>
+
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <div class="content-card">
+
+            {% if variants %}
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>
+                                    دسته
+                                </th>
+
+                                <th>
+                                    آیتم منو
+                                </th>
+
+
+                                <th>
+                                    نوع / سایز
+                                </th>
+
+                                <th>
+                                    قیمت
+                                </th>
+
+                                <th>
+                                    وضعیت
+                                </th>
+
+                                <th>
+                                    عملیات
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for variant in variants %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+
+                                    <td>
+                                        {{ variant.menu_item.category.title }}
+                                    </td>
+
+                                    <td>
+                                        {{ variant.menu_item.name }}
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+                                            {{ variant.name }}
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+                                        <span class="price-value">{{ variant.price }}</span>
+                                    </td>
+
+                                    <td>
+
+                                        {% if variant.is_available %}
+
+                                            <span class="status-badge active">
+                                                قابل سفارش
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="status-badge inactive">
+                                                غیرفعال
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'menu:variant-update' variant.pk %}"
+                                               class="action-button edit">
+                                                ویرایش
+                                            </a>
+
+                                            <a href="{% url 'menu:variant-delete' variant.pk %}"
+                                               class="action-button delete">
+                                                حذف
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        🥤
+                    </div>
+
+                    <h3>
+                        هنوز زیرمنویی ثبت نشده است
+                    </h3>
+
+                    <p>
+                        اولین زیرمنو را به آیتم‌های منو اضافه کنید.
+                    </p>
+
+                    <a href="{% url 'menu:variant-create' %}"
+                       class="btn btn-primary">
+
+                        افزودن زیرمنو
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

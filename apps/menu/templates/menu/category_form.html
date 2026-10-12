@@ -1,0 +1,126 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../../accounts/static/accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block title %}
+
+    {% if object %}
+        ویرایش دسته‌بندی
+    {% else %}
+        افزودن دسته‌بندی
+    {% endif %}
+
+    | همبر ثنائی
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container form-container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    مدیریت دسته‌بندی‌ها
+                </span>
+
+                <h1>
+
+                    {% if object %}
+                        ویرایش دسته‌بندی
+                    {% else %}
+                        افزودن دسته‌بندی جدید
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+
+                {% endif %}
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.title.id_for_label }}">
+                        نام دسته
+                    </label>
+
+                    {{ form.title }}
+
+                    {% if form.title.errors %}
+                        <div class="field-error">
+                            {{ form.title.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group checkbox-group">
+
+                    {{ form.is_active }}
+
+                    <label for="{{ form.is_active.id_for_label }}">
+                        دسته‌بندی فعال باشد
+                    </label>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        {% if object %}
+                            ذخیره تغییرات
+                        {% else %}
+                            ثبت دسته‌بندی
+                        {% endif %}
+
+                    </button>
+
+
+                    <a href="{% url 'menu:category-list' %}"
+                       class="btn btn-outline">
+
+                        انصراف
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

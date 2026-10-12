@@ -1,0 +1,184 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../../accounts/static/accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block title %}
+
+    {% if object %}
+        ویرایش آیتم منو
+    {% else %}
+        افزودن آیتم منو
+    {% endif %}
+
+    | همبر ثنائی
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container form-container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    مدیریت منو
+                </span>
+
+                <h1>
+
+                    {% if object %}
+                        ویرایش آیتم منو
+                    {% else %}
+                        افزودن آیتم منو جدید
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card">
+
+            <form method="post"
+                  enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+
+                {% endif %}
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.name.id_for_label }}">
+                            نام آیتم
+                        </label>
+
+                        {{ form.name }}
+
+                        {% if form.name.errors %}
+                            <div class="field-error">
+                                {{ form.name.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.category.id_for_label }}">
+                            دسته‌بندی
+                        </label>
+
+                        {{ form.category }}
+
+                        {% if form.category.errors %}
+                            <div class="field-error">
+                                {{ form.category.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.description.id_for_label }}">
+                        توضیحات
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+                        <div class="field-error">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.image.id_for_label }}">
+                        تصویر
+                    </label>
+
+                    {{ form.image }}
+
+                    {% if form.image.errors %}
+                        <div class="field-error">
+                            {{ form.image.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group checkbox-group">
+
+                    {{ form.is_available }}
+
+                    <label for="{{ form.is_available.id_for_label }}">
+                        قابل سفارش
+                    </label>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        {% if object %}
+                            ذخیره تغییرات
+                        {% else %}
+                            ثبت آیتم منو
+                        {% endif %}
+
+                    </button>
+
+
+                    <a href="{% url 'menu:menu-item-list' %}"
+                       class="btn btn-outline">
+
+                        انصراف
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

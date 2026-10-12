@@ -1,0 +1,2582 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../static/order/css/order.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- تقویم شمسی -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+
+    <style>
+
+        .order-page {
+            --op-bg: #fff8ed;
+            --op-surface: #ffffff;
+            --op-surface-muted: #fffdf9;
+            --op-border: #ead8bd;
+            --op-input-border: #dfcfbb;
+            --op-text: #321712;
+            --op-text-muted: #76645c;
+            --op-heading: #55130e;
+            --op-primary: #174d7a;
+            --op-primary-dark: #103b60;
+            --op-primary-soft: #eaf0f6;
+            --op-primary-ring: rgba(23, 77, 122, .08);
+            --op-cta: #f5a400;
+            --op-cta-hover: #ffb719;
+            --op-outline: #55130e;
+            --op-accent: #711c13;
+            --op-accent-soft: #f8ead5;
+            --op-danger: #b53023;
+            --op-danger-soft: #fae5e2;
+            --op-radius-lg: 16px;
+            --op-radius-md: 10px;
+            --op-radius-sm: 8px;
+            --op-shadow: 0 10px 30px rgba(50, 23, 18, .05);
+
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            color: var(--op-text);
+            background: var(--op-bg);
+            padding: 28px clamp(16px, 4vw, 40px) 100px;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .order-page * {
+            box-sizing: border-box;
+        }
+
+        .order-page .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .order-page .page-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 4px;
+            color: var(--op-heading);
+        }
+
+        .order-page .page-header p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--op-text-muted);
+        }
+
+        .order-page .alert {
+            border-radius: var(--op-radius-md);
+            padding: 12px 16px;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .order-page .alert-error {
+            background: var(--op-danger-soft);
+            color: var(--op-danger);
+            border: 1px solid rgba(181, 48, 35, .25);
+        }
+
+        /* --- layout: form + sticky summary sidebar --- */
+
+        .order-page .order-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .order-page .order-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .order-page .form-card {
+            background: var(--op-surface);
+            border: 1px solid var(--op-border);
+            border-radius: var(--op-radius-lg);
+            box-shadow: var(--op-shadow);
+            padding: 22px clamp(16px, 3vw, 26px);
+            margin-bottom: 18px;
+        }
+
+        .order-page .card-title {
+            margin-bottom: 18px;
+        }
+
+        .order-page .card-title h2 {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 2px;
+            color: var(--op-heading);
+        }
+
+        .order-page .card-title p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--op-text-muted);
+        }
+
+        .order-page .order-items-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        /* --- form fields --- */
+
+        .order-page .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px 18px;
+        }
+
+        @media (max-width: 720px) {
+            .order-page .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .order-page .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .order-page .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .order-page .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .order-page .field-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .order-page label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--op-heading);
+        }
+
+        .order-page .form-group.is-required label::after {
+            content: " *";
+            color: var(--op-danger);
+        }
+
+        .order-page .form-control,
+        .order-page .form-select {
+            width: 100%;
+            border: 1px solid var(--op-input-border);
+            border-radius: var(--op-radius-sm);
+            background: var(--op-surface-muted);
+            color: var(--op-text);
+            font-family: inherit;
+            font-size: 14px;
+            padding: 10px 12px;
+            transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+        }
+
+        .order-page textarea.form-control {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .order-page .form-control:focus,
+        .order-page .form-select:focus {
+            outline: none;
+            border-color: var(--op-primary);
+            background: var(--op-surface);
+            box-shadow: 0 0 0 3px var(--op-primary-ring);
+        }
+
+        .order-page .field-error {
+            font-size: 12px;
+            color: var(--op-danger);
+        }
+
+        .order-page .link-btn {
+            border: none;
+            background: none;
+            color: var(--op-primary);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .order-page .link-btn:hover {
+            color: var(--op-primary-dark);
+            text-decoration: underline;
+        }
+
+        /* --- buttons --- */
+
+        .order-page .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border-radius: var(--op-radius-sm);
+            border: 1px solid transparent;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 18px;
+            cursor: pointer;
+            transition: background .15s ease, border-color .15s ease, transform .05s ease;
+            text-decoration: none;
+        }
+
+        .order-page .btn:active {
+            transform: translateY(1px);
+        }
+
+        .order-page .btn-primary {
+            background: var(--op-cta);
+            color: var(--op-primary);
+            box-shadow: 0 8px 18px rgba(245, 164, 0, .25);
+        }
+
+        .order-page .btn-primary:hover {
+            background: var(--op-cta-hover);
+        }
+
+        .order-page .btn-primary:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        /* دکمه افزودن آیتم: رنگ آبی، متفاوت از دکمه زرد ثبت سفارش */
+        .order-page .btn-add {
+            background: var(--op-primary);
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(23, 77, 122, .22);
+        }
+
+        .order-page .btn-add:hover {
+            background: var(--op-primary-dark);
+        }
+
+        .order-page .btn-secondary {
+            background: transparent;
+            border-color: var(--op-outline);
+            color: var(--op-outline);
+        }
+
+        .order-page .btn-secondary:hover {
+            background: var(--op-outline);
+            border-color: var(--op-outline);
+            color: #fff;
+        }
+
+        .order-page .btn-ghost {
+            background: transparent;
+            border-color: transparent;
+            color: var(--op-text-muted);
+        }
+
+        .order-page .btn-ghost:hover {
+            color: var(--op-text);
+        }
+
+        .order-page .btn-block {
+            width: 100%;
+        }
+
+        .order-page .btn-sm {
+            padding: 7px 12px;
+            font-size: 13px;
+        }
+
+        /* --- order items --- */
+
+        .order-page #order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .order-page .item-row {
+            display: grid;
+            grid-template-columns: 260px 100px minmax(0, 1fr) 110px 34px;
+            gap: 10px;
+            align-items: end;
+            padding: 12px;
+            border: 1px solid var(--op-border);
+            border-radius: var(--op-radius-md);
+            background: var(--op-surface-muted);
+        }
+
+        @media (max-width: 1100px) {
+            .order-page .item-row {
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas:
+                    "product product"
+                    "qty note"
+                    "total delete";
+            }
+
+            .order-page .item-row .item-row__product { grid-area: product; }
+            .order-page .item-row .item-row__qty { grid-area: qty; }
+            .order-page .item-row .item-row__note { grid-area: note; }
+            .order-page .item-row .item-row__total { grid-area: total; }
+            .order-page .item-row .item-row__delete { grid-area: delete; justify-self: end; }
+        }
+
+        .order-page .item-row label {
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        .order-page .qty-stepper {
+            display: flex;
+            align-items: stretch;
+            border: 1px solid var(--op-border);
+            border-radius: var(--op-radius-sm);
+            overflow: hidden;
+            background: var(--op-surface);
+        }
+
+        .order-page .qty-stepper .quantity-input {
+            border: none;
+            border-radius: 0;
+            text-align: center;
+            background: transparent;
+            padding: 10px 4px;
+            width: 100%;
+        }
+
+        .order-page .qty-stepper .quantity-input:focus {
+            box-shadow: none;
+        }
+
+        .order-page .qty-btn {
+            width: 32px;
+            flex: none;
+            border: none;
+            background: var(--op-surface-muted);
+            color: var(--op-primary-dark);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .order-page .qty-btn:hover {
+            background: var(--op-primary-soft);
+        }
+
+        .order-page .item-line-total {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--op-accent);
+            padding: 10px 4px;
+            white-space: nowrap;
+        }
+
+        .order-page .item-remove-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--op-radius-sm);
+            border: 1px solid var(--op-border);
+            background: var(--op-surface);
+            color: var(--op-danger);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .order-page .item-remove-btn:hover {
+            background: var(--op-danger-soft);
+            border-color: var(--op-danger);
+        }
+
+        .order-page .item-row[hidden] {
+            display: none;
+        }
+
+        /* --- summary sidebar --- */
+
+        .order-page .order-summary {
+            position: sticky;
+            top: 20px;
+            background: var(--op-surface);
+            border: 1px solid var(--op-border);
+            border-radius: var(--op-radius-lg);
+            box-shadow: var(--op-shadow);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .order-page .order-summary h2 {
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--op-heading);
+        }
+
+        .order-page .summary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .order-page .summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .order-page .summary-row dt {
+            color: var(--op-text-muted);
+            font-weight: 500;
+        }
+
+        .order-page .summary-row dd {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .order-page .summary-total {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px dashed var(--op-border);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .order-page .summary-total strong {
+            color: var(--op-primary-dark);
+            font-size: 17px;
+        }
+
+        /* --- customer info card (in summary sidebar) --- */
+
+        .order-page .customer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px 14px;
+            background: var(--op-accent-soft);
+            border: 1px solid var(--op-border);
+            border-radius: var(--op-radius-md);
+        }
+
+        .order-page .customer-info[hidden] {
+            display: none;
+        }
+
+        .order-page .customer-info h3 {
+            margin: 0 0 2px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--op-heading);
+        }
+
+        .order-page .customer-info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .order-page .customer-info-row[hidden] {
+            display: none;
+        }
+
+        .order-page .customer-info-row dt {
+            color: var(--op-text-muted);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .order-page .customer-info-row dd {
+            margin: 0;
+            font-weight: 600;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        .order-page .customer-info-row.is-address {
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .order-page .customer-info-row.is-address dd {
+            text-align: right;
+            font-weight: 500;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 900px) {
+            .order-page .order-summary {
+                position: static;
+            }
+        }
+
+        /* --- modal --- */
+
+        .order-page .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(50, 23, 18, .45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+
+        .order-page .modal-overlay[hidden] {
+            display: none;
+        }
+
+        .order-page .modal-panel {
+            width: 100%;
+            max-width: 380px;
+            background: var(--op-surface);
+            border-radius: var(--op-radius-lg);
+            box-shadow: 0 20px 50px -20px rgba(50, 23, 18, .4);
+            overflow: hidden;
+        }
+
+        .order-page .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--op-border);
+        }
+
+        .order-page .modal-header h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .order-page .modal-close {
+            border: none;
+            background: none;
+            font-size: 18px;
+            line-height: 1;
+            color: var(--op-text-muted);
+            cursor: pointer;
+        }
+
+        .order-page .modal-body {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .order-page .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 420px) {
+            .order-page .modal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .order-page .modal-error {
+            font-size: 13px;
+            color: var(--op-danger);
+            background: var(--op-danger-soft);
+            border-radius: var(--op-radius-sm);
+            padding: 8px 10px;
+        }
+
+        .order-page .modal-error[hidden] {
+            display: none;
+        }
+
+        .order-page .modal-footer {
+            display: flex;
+            gap: 10px;
+            padding: 14px 18px 18px;
+        }
+
+        .order-page .modal-footer .btn {
+            flex: 1;
+        }
+
+        /* --- انتخاب‌گر با جستجوی درون‌خطی (بدون کتابخانه خارجی) ---
+           خود همان فیلد، ورودی جستجو هم هست؛ چیزی جدا اضافه نمی‌شود. */
+
+        .order-page .searchable-select {
+            position: relative;
+        }
+
+        .order-page .searchable-select__native {
+            display: none;
+        }
+
+        .order-page .searchable-select__input {
+            cursor: text;
+        }
+
+        .order-page .searchable-select__input::placeholder {
+            color: var(--op-text-muted);
+        }
+
+        .order-page .searchable-select.is-open .searchable-select__input {
+            border-color: var(--op-primary);
+            background: var(--op-surface);
+            box-shadow: 0 0 0 3px var(--op-primary-ring);
+        }
+
+        .order-page .searchable-select__list {
+            position: absolute;
+            z-index: 40;
+            top: calc(100% + 4px);
+            right: 0;
+            left: 0;
+            max-height: 230px;
+            overflow-y: auto;
+            background: var(--op-surface);
+            border: 1px solid var(--op-border);
+            border-radius: var(--op-radius-sm);
+            box-shadow: 0 14px 30px -14px rgba(50, 23, 18, .25);
+            padding: 4px;
+        }
+
+        .order-page .searchable-select__list[hidden] {
+            display: none;
+        }
+
+        .order-page .searchable-select__option {
+            padding: 8px 10px;
+            border-radius: var(--op-radius-sm);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .order-page .searchable-select__option:hover,
+        .order-page .searchable-select__option.is-active {
+            background: var(--op-primary-soft);
+        }
+
+        .order-page .searchable-select__option.is-selected {
+            color: var(--op-primary-dark);
+            font-weight: 700;
+        }
+
+        .order-page .searchable-select__clear {
+            padding: 8px 10px;
+            border-radius: var(--op-radius-sm);
+            font-size: 13px;
+            color: var(--op-danger);
+            cursor: pointer;
+            border-bottom: 1px dashed var(--op-border);
+            margin-bottom: 4px;
+        }
+
+        .order-page .searchable-select__clear:hover {
+            background: var(--op-danger-soft);
+        }
+
+        /* --- پیام توست --- */
+
+        .order-page .toast-container {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: min(92vw, 420px);
+            pointer-events: none;
+        }
+
+        .order-page .toast {
+            pointer-events: auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--op-surface);
+            border: 1px solid var(--op-border);
+            border-right: 4px solid var(--op-danger);
+            border-radius: var(--op-radius-md);
+            box-shadow: 0 12px 30px rgba(50, 23, 18, .18);
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--op-text);
+            cursor: pointer;
+            animation: op-toast-in .2s ease;
+        }
+
+        .order-page .toast--success {
+            border-right-color: #2e7d32;
+        }
+
+        .order-page .toast__text {
+            flex: 1;
+        }
+
+        .order-page .toast__close {
+            flex: none;
+            border: none;
+            background: none;
+            color: var(--op-text-muted);
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        @keyframes op-toast-in {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .order-page .searchable-select__empty {
+            padding: 8px 10px;
+            font-size: 13px;
+            color: var(--op-text-muted);
+        }
+
+        /* --- فلش نشان‌دهنده‌ی فیلدهای کشویی --- */
+
+        .order-page .searchable-select__input {
+            padding-left: 36px;
+            cursor: pointer;
+        }
+
+        .order-page .searchable-select::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            width: 7px;
+            height: 7px;
+            border-right: 2px solid var(--op-text-muted);
+            border-bottom: 2px solid var(--op-text-muted);
+            transform: translateY(-75%) rotate(45deg);
+            pointer-events: none;
+            transition: transform .15s ease, border-color .15s ease;
+        }
+
+        .order-page .searchable-select.is-open::after {
+            transform: translateY(-25%) rotate(-135deg);
+            border-color: var(--op-primary);
+        }
+
+        /* --- تاریخ و ساعت سفارش --- */
+
+        .order-page input[data-jdp] {
+            cursor: pointer;
+            text-align: right;
+        }
+
+        /* --- bottom action bar (mobile) --- */
+
+        .order-page .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 900px) {
+            .order-page .form-actions {
+                display: none;
+            }
+        }
+
+    </style>
+{% endblock %}
+
+{% block title %}
+    {% if order %}
+        ویرایش سفارش #{{ order.order_number }}
+    {% else %}
+        ثبت سفارش جدید
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="order-page">
+
+    {# محل نمایش پیام‌های توست #}
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <div class="page-header">
+
+        <div>
+            {% if order %}
+                <h1>ویرایش سفارش #{{ order.order_number }}</h1>
+                <p>اطلاعات سفارش را ویرایش کنید.</p>
+            {% else %}
+                <h1>ثبت سفارش جدید</h1>
+                <p>اطلاعات سفارش و اقلام آن را وارد کنید.</p>
+            {% endif %}
+        </div>
+
+        <a
+            href="{% url 'order:order_list' %}"
+            class="btn btn-secondary btn-sm"
+        >
+            بازگشت
+        </a>
+
+    </div>
+
+
+    {% if order_form.non_field_errors %}
+        <div class="alert alert-error">
+            {{ order_form.non_field_errors }}
+        </div>
+    {% endif %}
+
+
+    <form method="post" id="order-form" novalidate>
+
+        {% csrf_token %}
+
+        {# خطاهای سرور؛ اسکریپت پایین صفحه آن‌ها را به صورت توست نشان می‌دهد #}
+        <div id="server-errors" hidden>
+            {% for error in order_form.non_field_errors %}<span>{{ error }}</span>{% endfor %}
+            {% for error in item_formset.non_form_errors %}<span>{{ error }}</span>{% endfor %}
+            {% for field in order_form %}{% for error in field.errors %}<span>{{ field.label }}: {{ error }}</span>{% endfor %}{% endfor %}
+            {% for item_form in item_formset %}{% with n=forloop.counter %}
+                {% for error in item_form.non_field_errors %}<span>آیتم {{ n }}: {{ error }}</span>{% endfor %}
+                {% for field in item_form %}{% for error in field.errors %}<span>آیتم {{ n }} - {{ field.label }}: {{ error }}</span>{% endfor %}{% endfor %}
+            {% endwith %}{% endfor %}
+        </div>
+
+        <div class="order-layout">
+
+            <div class="order-main">
+
+                <!-- اطلاعات سفارش -->
+
+                <div class="form-card">
+
+                    <div class="card-title">
+                        <h2>اطلاعات سفارش</h2>
+                        <p>مشخصات مشتری، نوع سفارش و جزئیات پرداخت.</p>
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="{{ order_form.order_type.id_for_label }}">
+                                نوع سفارش
+                            </label>
+
+                            {{ order_form.order_type }}
+
+                            {% if order_form.order_type.errors %}
+                                <div class="field-error">
+                                    {{ order_form.order_type.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group" id="customer-group">
+
+                            <div class="field-label-row">
+                                <label for="{{ order_form.customer.id_for_label }}">
+                                    مشتری
+                                </label>
+
+                                <button
+                                    type="button"
+                                    class="link-btn"
+                                    id="open-customer-modal"
+                                >
+                                    + مشتری جدید
+                                </button>
+                            </div>
+
+                            {{ order_form.customer }}
+
+                            {% if order_form.customer.errors %}
+                                <div class="field-error">
+                                    {{ order_form.customer.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group" id="employee-group" style="display: none;">
+
+                            <label for="{{ order_form.employee.id_for_label }}">
+                                کارمند
+                            </label>
+
+                            {{ order_form.employee }}
+
+                            {% if order_form.employee.errors %}
+                                <div class="field-error">
+                                    {{ order_form.employee.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group" id="payment-method-group">
+
+                            <label for="{{ order_form.payment_method.id_for_label }}">
+                                نوع پرداخت
+                            </label>
+
+                            {{ order_form.payment_method }}
+
+                            {% if order_form.payment_method.errors %}
+                                <div class="field-error">
+                                    {{ order_form.payment_method.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group is-required">
+
+                            <label for="order-date-jalali">
+                                تاریخ سفارش
+                            </label>
+
+                            <input
+                                type="text"
+                                id="order-date-jalali"
+                                class="form-control"
+                                placeholder="انتخاب تاریخ"
+                                autocomplete="off"
+                                data-jdp
+                                data-jdp-only-date
+                            >
+
+                            {# مقدار میلادی که به سرور ارسال می‌شود #}
+                            {{ order_form.order_date }}
+
+                            {% if order_form.order_date.errors %}
+                                <div class="field-error">
+                                    {{ order_form.order_date.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="form-group is-required">
+
+                            <label for="{{ order_form.order_time.id_for_label }}">
+                                ساعت سفارش
+                            </label>
+
+                            {{ order_form.order_time }}
+
+                            {% if order_form.order_time.errors %}
+                                <div class="field-error">
+                                    {{ order_form.order_time.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="form-group" id="table-number-group">
+
+                            <label for="{{ order_form.table_number.id_for_label }}">
+                                شماره میز
+                            </label>
+
+                            {{ order_form.table_number }}
+
+                            {% if order_form.table_number.errors %}
+                                <div class="field-error">
+                                    {{ order_form.table_number.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="{{ order_form.discount.id_for_label }}">
+                                تخفیف
+                            </label>
+
+                            {{ order_form.discount }}
+
+                            {% if order_form.discount.errors %}
+                                <div class="field-error">
+                                    {{ order_form.discount.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="{{ order_form.delivery.id_for_label }}">
+                                هزینه ارسال
+                            </label>
+
+                            {{ order_form.delivery }}
+
+                            {% if order_form.delivery.errors %}
+                                <div class="field-error">
+                                    {{ order_form.delivery.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="{{ order_form.packaging_cost.id_for_label }}">
+                                هزینه بسته‌بندی
+                            </label>
+
+                            {{ order_form.packaging_cost }}
+
+                            {% if order_form.packaging_cost.errors %}
+                                <div class="field-error">
+                                    {{ order_form.packaging_cost.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group form-group-full">
+
+                            <label for="{{ order_form.description.id_for_label }}">
+                                توضیحات سفارش
+                            </label>
+
+                            {{ order_form.description }}
+
+                            {% if order_form.description.errors %}
+                                <div class="field-error">
+                                    {{ order_form.description.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- آیتم های سفارش -->
+
+                <div class="form-card">
+
+                    <div class="card-title order-items-header">
+
+                        <div>
+                            <h2>اقلام سفارش</h2>
+                            <p>محصولات مورد نظر را به سفارش اضافه کنید.</p>
+                        </div>
+
+                        <button
+                            type="button"
+                            id="add-item"
+                            class="btn btn-add btn-sm"
+                        >
+                            + افزودن آیتم
+                        </button>
+
+                    </div>
+
+
+                    {{ item_formset.management_form }}
+
+
+                    {% if item_formset.non_form_errors %}
+
+                        <div class="alert alert-error">
+                            {{ item_formset.non_form_errors }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <div id="order-items">
+
+                        {% for form in item_formset %}
+
+                            <div class="item-row" data-item-row
+                                 data-saved-variant="{{ form.instance.variant_id|default_if_none:''|stringformat:'s' }}"
+                                 data-saved-price="{{ form.instance.unit_price|default_if_none:''|stringformat:'s' }}">
+
+                                {{ form.id }}
+
+                                <div class="item-row__field item-row__product">
+
+                                    <label>
+                                        محصول (زیرمنو)
+                                    </label>
+
+                                    {{ form.variant }}
+
+                                    {% if form.variant.errors %}
+                                        <div class="field-error">
+                                            {{ form.variant.errors }}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="item-row__field item-row__qty">
+
+                                    <label>
+                                        تعداد
+                                    </label>
+
+                                    <div class="qty-stepper">
+                                        <button type="button" class="qty-btn qty-btn--minus" aria-label="کاهش تعداد">−</button>
+                                        {{ form.quantity }}
+                                        <button type="button" class="qty-btn qty-btn--plus" aria-label="افزایش تعداد">+</button>
+                                    </div>
+
+                                    {% if form.quantity.errors %}
+                                        <div class="field-error">
+                                            {{ form.quantity.errors }}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="item-row__field item-row__note">
+
+                                    <label>
+                                        توضیحات
+                                    </label>
+
+                                    {{ form.note }}
+
+                                    {% if form.note.errors %}
+                                        <div class="field-error">
+                                            {{ form.note.errors }}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="item-row__field item-row__total">
+                                    <label>جمع</label>
+                                    <span class="item-line-total" data-line-total>۰ تومان</span>
+                                </div>
+
+
+                                <div class="item-row__delete">
+
+                                    {# چک‌باکس حذف Django؛ فقط برای ثبت حذف توسط دکمه × استفاده می‌شود و نباید دیده شود #}
+                                    {% if form.instance.pk %}
+                                        <span hidden>{{ form.DELETE }}</span>
+                                    {% endif %}
+
+                                    <button
+                                        type="button"
+                                        class="item-remove-btn"
+                                        aria-label="حذف آیتم"
+                                    >
+                                        ×
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- دکمه ها (دسکتاپ) -->
+
+                <div class="form-actions">
+
+                    <a
+                        href="{% url 'order:order_list' %}"
+                        class="btn btn-secondary"
+                    >
+                        انصراف
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        {% if order %}
+                            ذخیره تغییرات
+                        {% else %}
+                            ثبت سفارش
+                        {% endif %}
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- خلاصه سفارش -->
+
+            <aside class="order-summary">
+
+                <h2>خلاصه سفارش</h2>
+
+                <!-- اطلاعات مشتری انتخاب‌شده -->
+                <div class="customer-info" id="customer-info" hidden>
+                    <h3>اطلاعات مشتری</h3>
+                    <dl style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                        <div class="customer-info-row">
+                            <dt>نام</dt>
+                            <dd data-customer="name"></dd>
+                        </div>
+                        <div class="customer-info-row">
+                            <dt>کد اشتراک</dt>
+                            <dd data-customer="code"></dd>
+                        </div>
+                        <div class="customer-info-row">
+                            <dt>موبایل</dt>
+                            <dd data-customer="mobile" dir="ltr"></dd>
+                        </div>
+                        <div class="customer-info-row" data-customer-row="phone">
+                            <dt>تلفن</dt>
+                            <dd data-customer="phone" dir="ltr"></dd>
+                        </div>
+                        <div class="customer-info-row is-address" data-customer-row="address">
+                            <dt>آدرس</dt>
+                            <dd data-customer="address"></dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <dl class="summary-list">
+
+                    <div class="summary-row">
+                        <dt>جمع اقلام</dt>
+                        <dd data-summary="items">۰ تومان</dd>
+                    </div>
+
+                    <div class="summary-row">
+                        <dt>تخفیف</dt>
+                        <dd data-summary="discount">۰ تومان</dd>
+                    </div>
+
+                    <div class="summary-row">
+                        <dt>هزینه ارسال</dt>
+                        <dd data-summary="delivery">۰ تومان</dd>
+                    </div>
+
+                    <div class="summary-row">
+                        <dt>بسته‌بندی</dt>
+                        <dd data-summary="packaging">۰ تومان</dd>
+                    </div>
+
+                </dl>
+
+                <div class="summary-total">
+                    <span>مبلغ قابل پرداخت</span>
+                    <strong data-summary="total">۰ تومان</strong>
+                </div>
+
+                <button
+                    type="submit"
+                    form="order-form"
+                    class="btn btn-primary btn-block"
+                >
+                    {% if order %}
+                        ذخیره تغییرات
+                    {% else %}
+                        ثبت سفارش
+                    {% endif %}
+                </button>
+
+                <a
+                    href="{% url 'order:order_list' %}"
+                    class="btn btn-ghost btn-block"
+                >
+                    انصراف
+                </a>
+
+            </aside>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- Template مربوط به آیتم جدید -->
+
+<div id="empty-form" style="display: none;">
+
+    <div class="item-row" data-item-row>
+
+        {{ item_formset.empty_form.id }}
+
+        <div class="item-row__field item-row__product">
+            <label>محصول (زیرمنو)</label>
+            {{ item_formset.empty_form.variant }}
+        </div>
+
+        <div class="item-row__field item-row__qty">
+            <label>تعداد</label>
+            <div class="qty-stepper">
+                <button type="button" class="qty-btn qty-btn--minus" aria-label="کاهش تعداد">−</button>
+                {{ item_formset.empty_form.quantity }}
+                <button type="button" class="qty-btn qty-btn--plus" aria-label="افزایش تعداد">+</button>
+            </div>
+        </div>
+
+        <div class="item-row__field item-row__note">
+            <label>توضیحات</label>
+            {{ item_formset.empty_form.note }}
+        </div>
+
+        <div class="item-row__field item-row__total">
+            <label>جمع</label>
+            <span class="item-line-total" data-line-total>۰ تومان</span>
+        </div>
+
+        <div class="item-row__delete">
+            <button type="button" class="item-remove-btn" aria-label="حذف آیتم">×</button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Modal: افزودن مشتری جدید -->
+
+<div class="order-page">
+    <div class="modal-overlay" id="customer-modal" hidden>
+
+        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="customer-modal-title">
+
+            <div class="modal-header">
+                <h3 id="customer-modal-title">افزودن مشتری جدید</h3>
+                <button type="button" class="modal-close" id="customer-modal-close" aria-label="بستن">×</button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="modal-error" id="customer-modal-error" hidden></div>
+
+                <div class="modal-grid">
+
+                    <div class="form-group is-required">
+                        <label for="new-customer-code">کد اشتراک</label>
+                        <input type="text" id="new-customer-code" class="form-control" placeholder="مثلاً 1042">
+                    </div>
+
+                    <div class="form-group is-required">
+                        <label for="new-customer-name">نام مشتری</label>
+                        <input type="text" id="new-customer-name" class="form-control" placeholder="مثلاً علی محمدی">
+                    </div>
+
+                    <div class="form-group is-required">
+                        <label for="new-customer-mobile">موبایل</label>
+                        <input type="tel" id="new-customer-mobile" class="form-control" inputmode="numeric" maxlength="11" placeholder="09xxxxxxxxx">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-customer-phone">تلفن ثابت</label>
+                        <input type="tel" id="new-customer-phone" class="form-control" inputmode="numeric" maxlength="11" placeholder="اختیاری">
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="new-customer-address">آدرس</label>
+                    <textarea id="new-customer-address" class="form-control" rows="2" placeholder="اختیاری"></textarea>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="customer-modal-cancel">انصراف</button>
+                <button type="button" class="btn btn-primary" id="customer-modal-save">
+                    <span class="btn-label">ذخیره مشتری</span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+
+{{ customers_data|json_script:"customers-data" }}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ==================================================
+    // تنظیمات
+    // ==================================================
+
+    // آدرس endpoint ثبت سریع مشتری - این مسیر را با آدرس واقعی
+    // ویو ایجاد مشتری در اپ accounts جایگزین کنید.
+    var CUSTOMER_CREATE_URL = "/accounts/customers/quick-create/";
+
+    // اطلاعات همه‌ی مشتری‌ها (از ویو)؛ برای نمایش موبایل و آدرس بعد از انتخاب
+    var customersDataEl = document.getElementById("customers-data");
+    var customersData = customersDataEl ? JSON.parse(customersDataEl.textContent) : {};
+
+    var csrfToken = document.querySelector(
+        '#order-form input[name="csrfmiddlewaretoken"]'
+    ).value;
+
+
+    // ==================================================
+    // پیام توست
+    // ==================================================
+
+    var toastContainer = document.getElementById("toast-container");
+
+    function showToast(message, type) {
+
+        if (!toastContainer) {
+            return;
+        }
+
+        var toast = document.createElement("div");
+        toast.className = "toast" + (type === "success" ? " toast--success" : "");
+        toast.setAttribute("role", type === "success" ? "status" : "alert");
+
+        var text = document.createElement("span");
+        text.className = "toast__text";
+        text.textContent = message;
+
+        var close = document.createElement("button");
+        close.type = "button";
+        close.className = "toast__close";
+        close.setAttribute("aria-label", "بستن");
+        close.textContent = "×";
+
+        toast.appendChild(text);
+        toast.appendChild(close);
+        toastContainer.appendChild(toast);
+
+        function dismiss() {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }
+
+        toast.addEventListener("click", dismiss);
+        setTimeout(dismiss, type === "success" ? 3500 : 6000);
+    }
+
+    // نمایش چند خطا با هم؛ بیش از ۴ مورد در یک توست خلاصه می‌شود
+    function showToasts(messages) {
+        var MAX = 4;
+        messages.slice(0, MAX).forEach(function (m) {
+            showToast(m, "error");
+        });
+        if (messages.length > MAX) {
+            showToast("و " + (messages.length - MAX) + " خطای دیگر. لطفاً فرم را بررسی کنید.", "error");
+        }
+    }
+
+    // خطاهایی که سرور بعد از ارسال فرم برگردانده است
+    var serverMessages = [];
+    document.querySelectorAll("#server-errors span").forEach(function (el) {
+        var text = el.textContent.trim();
+        if (text) {
+            serverMessages.push(text);
+        }
+    });
+    showToasts(serverMessages);
+
+
+    // ==================================================
+    // افزودن / حذف آیتم سفارش
+    // ==================================================
+
+    var container = document.getElementById("order-items");
+    var addButton = document.getElementById("add-item");
+    var totalForms = document.getElementById("id_items-TOTAL_FORMS");
+    var emptyForm = document.getElementById("empty-form").innerHTML;
+
+    {% if order %}
+    // در حالت ویرایش، ردیف(های) خالی انتهایی که formset خودش اضافه کرده
+    // (extra) حذف می‌شود. فقط ردیف‌های انتهایی که ذخیره نشده‌اند، محصولی
+    // ندارند و خطایی هم ندارند حذف می‌شوند؛ پس ایندکس بقیه ردیف‌ها
+    // پیوسته می‌ماند و TOTAL_FORMS با تعداد ردیف‌های باقی‌مانده برابر می‌شود.
+    (function removeBlankTrailingRows() {
+
+        var rows = Array.prototype.slice.call(container.querySelectorAll("[data-item-row]"));
+
+        while (rows.length) {
+            var row = rows[rows.length - 1];
+            var idInput = row.querySelector('input[name$="-id"]');
+            var variant = row.querySelector(".menu-item-select");
+            var hasErrors = !!row.querySelector(".field-error");
+            var isSaved = !!(idInput && idInput.value);
+            var isBlank = !isSaved && variant && !variant.value && !hasErrors;
+
+            if (!isBlank) {
+                break;
+            }
+
+            row.remove();
+            rows.pop();
+        }
+
+        totalForms.value = rows.length;
+    })();
+    {% endif %}
+
+    addButton.addEventListener("click", function () {
+
+        var formIndex = parseInt(totalForms.value, 10);
+
+        var newForm = emptyForm.replace(/__prefix__/g, formIndex);
+
+        container.insertAdjacentHTML("beforeend", newForm);
+
+        totalForms.value = formIndex + 1;
+
+        var addedRow = container.lastElementChild;
+        var addedSelect = addedRow ? addedRow.querySelector(".menu-item-select") : null;
+
+        if (addedSelect && typeof initSearchableSelect === "function") {
+            initSearchableSelect(addedSelect);
+        }
+
+        recalcSummary();
+
+    });
+
+
+    container.addEventListener("click", function (event) {
+
+        var removeBtn = event.target.closest(".item-remove-btn");
+
+        if (removeBtn) {
+
+            var row = removeBtn.closest(".item-row");
+
+            if (!row) {
+                return;
+            }
+
+            var deleteInput = row.querySelector('input[name$="-DELETE"]');
+
+            if (deleteInput) {
+                deleteInput.checked = true;
+                row.hidden = true;
+            } else {
+                // ردیف ذخیره‌نشده را نباید از DOM حذف کرد: TOTAL_FORMS ثابت می‌ماند
+                // و فرمِ بدون داده برای Django «تغییرکرده» حساب می‌شود (چون مقدار
+                // اولیه تعداد ۱ است) و خطای «محصول الزامی است» می‌دهد. به‌جای آن،
+                // مقادیر را به حالت اولیه برمی‌گردانیم و ردیف را مخفی می‌کنیم تا
+                // Django آن را ردیف خالی بداند و نادیده بگیرد.
+                var rowSelect = row.querySelector(".menu-item-select");
+                var rowSearchInput = row.querySelector(".searchable-select__input");
+                var rowQty = row.querySelector(".quantity-input");
+                var rowNote = row.querySelector('input[name$="-note"]');
+
+                if (rowSelect) { rowSelect.value = ""; }
+                if (rowSearchInput) { rowSearchInput.value = ""; }
+                if (rowQty) { rowQty.value = 1; }
+                if (rowNote) { rowNote.value = ""; }
+
+                row.hidden = true;
+            }
+
+            recalcSummary();
+
+        } else if (event.target.classList.contains("qty-btn")) {
+
+            var qtyRow = event.target.closest(".item-row");
+            var qtyInput = qtyRow.querySelector(".quantity-input");
+
+            if (!qtyInput) {
+                return;
+            }
+
+            var current = parseInt(qtyInput.value, 10) || 1;
+            var min = parseInt(qtyInput.min, 10) || 1;
+
+            if (event.target.classList.contains("qty-btn--plus")) {
+                qtyInput.value = current + 1;
+            } else {
+                qtyInput.value = Math.max(current - 1, min);
+            }
+
+            recalcSummary();
+
+        }
+
+    });
+
+
+    container.addEventListener("change", function (event) {
+        if (
+            event.target.classList.contains("menu-item-select") ||
+            event.target.classList.contains("quantity-input")
+        ) {
+            recalcSummary();
+        }
+    });
+
+    container.addEventListener("input", function (event) {
+        if (event.target.classList.contains("quantity-input")) {
+            recalcSummary();
+        }
+    });
+
+
+    // ==================================================
+    // خلاصه زنده سفارش
+    // ==================================================
+
+    var numberFormatter = new Intl.NumberFormat("fa-IR");
+
+    function toToman(value) {
+        return numberFormatter.format(value || 0) + " تومان";
+    }
+
+    function fieldValue(id) {
+        var el = document.getElementById(id);
+        if (!el) {
+            return 0;
+        }
+        var digits = (el.value || "").replace(/[^\d]/g, "");
+        return parseInt(digits, 10) || 0;
+    }
+
+    function setSummary(key, value) {
+        var el = document.querySelector('[data-summary="' + key + '"]');
+        if (el) {
+            el.textContent = toToman(value);
+        }
+    }
+
+    function recalcSummary() {
+
+        var itemsTotal = 0;
+
+        document.querySelectorAll("[data-item-row]").forEach(function (row) {
+
+            if (row.hidden) {
+                return;
+            }
+
+            var select = row.querySelector(".menu-item-select");
+            var qtyInput = row.querySelector(".quantity-input");
+            var lineTotalEl = row.querySelector("[data-line-total]");
+
+            var selectedOption = select
+                ? select.options[select.selectedIndex]
+                : null;
+
+            var price = selectedOption
+                ? parseInt(selectedOption.getAttribute("data-price"), 10) || 0
+                : 0;
+
+            // آیتم ذخیره‌شده با همان زیرمنو: قیمتِ زمان ثبت سفارش ملاک است،
+            // نه قیمت فعلی زیرمنو.
+            var savedPrice = row.getAttribute("data-saved-price");
+            var savedVariant = row.getAttribute("data-saved-variant");
+            if (savedPrice && savedVariant && select && select.value === savedVariant) {
+                price = parseInt(savedPrice, 10) || 0;
+            }
+
+            var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 0) : 0;
+            var lineTotal = price * qty;
+
+            if (lineTotalEl) {
+                lineTotalEl.textContent = toToman(lineTotal);
+            }
+
+            itemsTotal += lineTotal;
+
+        });
+
+        var discount = fieldValue("{{ order_form.discount.id_for_label }}");
+        var delivery = fieldValue("{{ order_form.delivery.id_for_label }}");
+        var packaging = fieldValue("{{ order_form.packaging_cost.id_for_label }}");
+
+        var total = Math.max(itemsTotal + delivery + packaging - discount, 0);
+
+        setSummary("items", itemsTotal);
+        setSummary("discount", discount);
+        setSummary("delivery", delivery);
+        setSummary("packaging", packaging);
+        setSummary("total", total);
+
+    }
+
+    // ==================================================
+    // جداکننده هزار برای فیلدهای مبلغ
+    // ==================================================
+
+    var groupFormatter = new Intl.NumberFormat("en-US");
+
+    function formatMoneyInput(el) {
+        var digits = (el.value || "").replace(/[^\d]/g, "");
+        el.value = digits ? groupFormatter.format(parseInt(digits, 10)) : "";
+    }
+
+    document.querySelectorAll(".money-input").forEach(function (el) {
+        formatMoneyInput(el);
+        el.addEventListener("input", function () {
+            formatMoneyInput(el);
+            recalcSummary();
+        });
+    });
+
+    // قبل از ارسال فرم، جداکننده‌های نمایشی حذف می‌شوند تا مقدار خام
+    // (فقط رقم) به سرور برسد.
+    document.getElementById("order-form").addEventListener("submit", function () {
+        document.querySelectorAll(".money-input").forEach(function (el) {
+            el.value = (el.value || "").replace(/[^\d]/g, "");
+        });
+    });
+
+    recalcSummary();
+
+
+    // ==================================================
+    // نمایش/الزامی بودن شماره میز برای سفارش داخل سالن
+    // ==================================================
+
+    var orderTypeSelect = document.getElementById("{{ order_form.order_type.id_for_label }}");
+    var tableNumberGroup = document.getElementById("table-number-group");
+
+    function toggleTableNumber() {
+        if (!orderTypeSelect || !tableNumberGroup) {
+            return;
+        }
+        var opt = orderTypeSelect.options[orderTypeSelect.selectedIndex];
+        var isDineIn = !!(opt && opt.textContent.indexOf("داخل سالن") !== -1);
+        tableNumberGroup.classList.toggle("is-required", isDineIn);
+    }
+
+    if (orderTypeSelect) {
+        orderTypeSelect.addEventListener("change", toggleTableNumber);
+        toggleTableNumber();
+    }
+
+    {#var tableNumberGroup = document.getElementById("table-number-group");#}
+    {##}
+    {#function toggleTableNumber() {#}
+    {#    if (!orderTypeSelect || !tableNumberGroup) {#}
+    {#        return;#}
+    {#    }#}
+    {##}
+    {#    var selected = orderTypeSelect.options[orderTypeSelect.selectedIndex];#}
+    {#    var isDineIn = !!(selected && selected.textContent.indexOf("حضوری-پایین") !== -1);#}
+    {##}
+    {#    tableNumberGroup.classList.toggle("is-required", isDineIn);#}
+   // }
+    {##}
+    {#if (orderTypeSelect) {#}
+    {#    orderTypeSelect.addEventListener("change", toggleTableNumber);#}
+    {#    toggleTableNumber();#}
+  //  }
+
+
+    // ==================================================
+    // الزامی بودن نوع پرداخت برای سفارش پرداخت‌شده
+    // ==================================================
+    {#var paymentMethodGroup = document.getElementById("payment-method-group");#}
+    {##}
+    {#function togglePaymentMethod() {#}
+    {#    if (!paymentMethodGroup) {#}
+    {#        return;#}
+    {#    }#}
+    {#    paymentMethodGroup.classList.toggle("is-required");#}
+   // }
+    {##}
+    {#if (paymentStatusSelect) {#}
+    {#    paymentStatusSelect.addEventListener("change", togglePaymentMethod);#}
+    {#    togglePaymentMethod();#}
+  //  }
+
+
+    // ==================================================
+    // مودال افزودن مشتری جدید
+    // ==================================================
+
+    var customerModal = document.getElementById("customer-modal");
+    var openCustomerModalBtn = document.getElementById("open-customer-modal");
+    var closeCustomerModalBtn = document.getElementById("customer-modal-close");
+    var cancelCustomerModalBtn = document.getElementById("customer-modal-cancel");
+    var saveCustomerBtn = document.getElementById("customer-modal-save");
+    var customerCodeInput = document.getElementById("new-customer-code");
+    var customerNameInput = document.getElementById("new-customer-name");
+    var customerMobileInput = document.getElementById("new-customer-mobile");
+    var customerPhoneInput = document.getElementById("new-customer-phone");
+    var customerAddressInput = document.getElementById("new-customer-address");
+    var customerModalError = document.getElementById("customer-modal-error");
+    var customerSelect = document.getElementById("{{ order_form.customer.id_for_label }}");
+
+    function openCustomerModal() {
+        customerModalError.hidden = true;
+        customerCodeInput.value = "";
+        customerNameInput.value = "";
+        customerMobileInput.value = "";
+        customerPhoneInput.value = "";
+        customerAddressInput.value = "";
+        customerModal.hidden = false;
+        customerCodeInput.focus();
+    }
+
+    function closeCustomerModal() {
+        customerModal.hidden = true;
+    }
+
+    function showCustomerError(message) {
+        // خطا به صورت توست نمایش داده می‌شود (z-index بالاتر از مودال)
+        showToast(message, "error");
+    }
+
+    if (openCustomerModalBtn) {
+        openCustomerModalBtn.addEventListener("click", openCustomerModal);
+    }
+
+    closeCustomerModalBtn.addEventListener("click", closeCustomerModal);
+    cancelCustomerModalBtn.addEventListener("click", closeCustomerModal);
+
+    customerModal.addEventListener("click", function (event) {
+        if (event.target === customerModal) {
+            closeCustomerModal();
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !customerModal.hidden) {
+            closeCustomerModal();
+        }
+    });
+
+    saveCustomerBtn.addEventListener("click", function () {
+
+        var subscriptionCode = customerCodeInput.value.trim();
+        var name = customerNameInput.value.trim();
+        var mobile = customerMobileInput.value.trim();
+        var phone = customerPhoneInput.value.trim();
+        var address = customerAddressInput.value.trim();
+
+        if (!subscriptionCode) {
+            showCustomerError("لطفاً کد اشتراک را وارد کنید.");
+            customerCodeInput.focus();
+            return;
+        }
+
+        if (!name) {
+            showCustomerError("لطفاً نام مشتری را وارد کنید.");
+            customerNameInput.focus();
+            return;
+        }
+
+        if (!/^\d{11}$/.test(mobile)) {
+            showCustomerError("شماره موبایل باید ۱۱ رقم و فقط عدد باشد.");
+            customerMobileInput.focus();
+            return;
+        }
+
+        saveCustomerBtn.disabled = true;
+        saveCustomerBtn.querySelector(".btn-label").textContent = "در حال ذخیره...";
+
+        fetch(CUSTOMER_CREATE_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+                "X-Requested-With": "XMLHttpRequest",
+            },
+            body: JSON.stringify({
+                subscription_code: subscriptionCode,
+                name: name,
+                mobile: mobile,
+                phone: phone,
+                address: address,
+            }),
+        })
+            .then(function (response) {
+                return response.json().then(function (data) {
+                    if (!response.ok) {
+                        throw new Error(data.error || "request-failed");
+                    }
+                    return data;
+                });
+            })
+            .then(function (data) {
+
+                var label = data.name || (subscriptionCode + " " + name);
+
+                // اطلاعات مشتری تازه‌ساخته‌شده را هم به لیست محلی اضافه می‌کنیم
+                customersData[String(data.id)] = {
+                    code: subscriptionCode,
+                    name: name,
+                    mobile: mobile,
+                    phone: phone,
+                    address: address
+                };
+
+                if (customerSearchable) {
+                    // گزینه جدید را به <select> اصلی اضافه و انتخاب می‌کنیم؛
+                    // کامپوننت جستجو خودش با آن هماهنگ می‌شود.
+                    customerSearchable.addOption(String(data.id), label, true);
+                } else {
+                    var option = document.createElement("option");
+                    option.value = data.id;
+                    option.textContent = label;
+                    option.selected = true;
+                    customerSelect.appendChild(option);
+                    customerSelect.value = data.id;
+                }
+
+                closeCustomerModal();
+                showToast("مشتری جدید با موفقیت ثبت شد.", "success");
+
+            })
+            .catch(function (err) {
+                showCustomerError(
+                    (err && err.message && err.message !== "request-failed")
+                        ? err.message
+                        : "ثبت مشتری با خطا مواجه شد. دوباره تلاش کنید یا مسیر endpoint را بررسی کنید."
+                );
+            })
+            .finally(function () {
+                saveCustomerBtn.disabled = false;
+                saveCustomerBtn.querySelector(".btn-label").textContent = "ذخیره مشتری";
+            });
+
+    });
+
+
+    // ==================================================
+    // جستجوی درون‌خطی روی لیست‌های کشویی (بدون کتابخانه خارجی)
+    //
+    // به‌جای باز شدن یک کادر جستجوی جداگانه، همان فیلد نمایشی
+    // select به یک ورودی متنی قابل‌تایپ تبدیل می‌شود؛ با تایپ در
+    // همان فیلد، گزینه‌ها فیلتر می‌شوند. <select> اصلی مخفی می‌ماند
+    // اما مقدارش هماهنگ نگه داشته می‌شود، پس هیچ منطق دیگری
+    // (محاسبه قیمت، الزامی‌بودن شماره میز و ...) نیاز به تغییر ندارد.
+    // ==================================================
+
+    // options.clearable: اگر true باشد، کاربر می‌تواند انتخاب را برگرداند
+    // و مقدار را خالی کند (برای فیلدهای غیراجباری مثل مشتری و کارمند).
+    function initSearchableSelect(selectEl, options) {
+
+        var clearable = !!(options && options.clearable);
+
+        if (!selectEl || selectEl.dataset.searchableInit) {
+            return null;
+        }
+
+        selectEl.dataset.searchableInit = "1";
+
+        var wrapper = document.createElement("div");
+        wrapper.className = "searchable-select";
+
+        selectEl.parentNode.insertBefore(wrapper, selectEl);
+        wrapper.appendChild(selectEl);
+        selectEl.classList.add("searchable-select__native");
+
+        var input = document.createElement("input");
+        input.type = "text";
+        input.autocomplete = "off";
+        input.className = "form-control searchable-select__input";
+
+        var list = document.createElement("div");
+        list.className = "searchable-select__list";
+        list.hidden = true;
+
+        wrapper.appendChild(input);
+        wrapper.appendChild(list);
+
+        function getOptions() {
+            return Array.prototype.map.call(selectEl.options, function (opt) {
+                return { value: opt.value, label: opt.textContent };
+            });
+        }
+
+        function currentLabel() {
+            var opt = selectEl.options[selectEl.selectedIndex];
+            return opt ? opt.textContent : "";
+        }
+
+        function syncInputFromSelect() {
+            if (clearable && selectEl.value === "") {
+                // مقدار خالی: به جای «---------» فیلد خالی با راهنما نمایش داده می‌شود
+                input.value = "";
+                input.placeholder = "بدون انتخاب";
+                return;
+            }
+            input.value = currentLabel();
+        }
+
+        function closeList() {
+            list.hidden = true;
+            wrapper.classList.remove("is-open");
+        }
+
+        function selectValue(value, label) {
+            selectEl.value = value;
+            input.value = label;
+            closeList();
+            selectEl.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+
+        function renderList(filterText) {
+
+            list.innerHTML = "";
+
+            var query = (filterText || "").trim().toLowerCase();
+            var options = getOptions();
+            var hasMatch = false;
+
+            // گزینه خالی در بالای لیست، فقط وقتی چیزی انتخاب شده باشد
+            if (clearable && selectEl.value !== "" && !query) {
+                var clearItem = document.createElement("div");
+                clearItem.className = "searchable-select__clear";
+                clearItem.textContent = "× بدون انتخاب (پاک کردن)";
+                clearItem.addEventListener("mousedown", function (event) {
+                    event.preventDefault();
+                    selectValue("", "");
+                });
+                list.appendChild(clearItem);
+            }
+
+            options.forEach(function (opt) {
+
+                // گزینه خالی («---------») در لیست جستجو نشان داده نمی‌شود
+                if (opt.value === "") {
+                    return;
+                }
+
+                if (query && opt.label.toLowerCase().indexOf(query) === -1) {
+                    return;
+                }
+
+                hasMatch = true;
+
+                var item = document.createElement("div");
+                item.className = "searchable-select__option";
+                item.textContent = opt.label;
+                item.dataset.value = opt.value;
+
+                if (opt.value === selectEl.value) {
+                    item.classList.add("is-selected");
+                }
+
+                item.addEventListener("mousedown", function (event) {
+                    event.preventDefault();
+                    selectValue(opt.value, opt.label);
+                });
+
+                list.appendChild(item);
+
+            });
+
+            if (!hasMatch) {
+                var empty = document.createElement("div");
+                empty.className = "searchable-select__empty";
+                empty.textContent = "موردی یافت نشد";
+                list.appendChild(empty);
+            }
+
+        }
+
+        function openList() {
+            renderList("");
+            list.hidden = false;
+            wrapper.classList.add("is-open");
+        }
+
+        input.addEventListener("focus", function () {
+            input.select();
+            openList();
+        });
+
+        input.addEventListener("input", function () {
+            renderList(input.value);
+            list.hidden = false;
+            wrapper.classList.add("is-open");
+        });
+
+        input.addEventListener("blur", function () {
+            if (clearable && input.value.trim() === "" && selectEl.value !== "") {
+                selectValue("", "");
+            }
+            // با کمی تاخیر، تا رویداد کلیک روی گزینه زودتر ثبت شود
+            setTimeout(function () {
+                syncInputFromSelect();
+                closeList();
+            }, 120);
+        });
+
+        input.addEventListener("keydown", function (event) {
+
+            var items = list.querySelectorAll(".searchable-select__option");
+            var activeIndex = -1;
+
+            items.forEach(function (item, idx) {
+                if (item.classList.contains("is-active")) {
+                    activeIndex = idx;
+                }
+            });
+
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+                if (!items.length) return;
+                if (activeIndex >= 0) items[activeIndex].classList.remove("is-active");
+                var next = items[Math.min(activeIndex + 1, items.length - 1)];
+                next.classList.add("is-active");
+                next.scrollIntoView({ block: "nearest" });
+
+            } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                if (!items.length) return;
+                if (activeIndex >= 0) items[activeIndex].classList.remove("is-active");
+                var prev = items[Math.max(activeIndex - 1, 0)];
+                prev.classList.add("is-active");
+                prev.scrollIntoView({ block: "nearest" });
+
+            } else if (event.key === "Enter") {
+                event.preventDefault();
+                var active = list.querySelector(".searchable-select__option.is-active") || items[0];
+                if (active) {
+                    selectValue(active.dataset.value, active.textContent);
+                }
+
+            } else if (event.key === "Escape") {
+                syncInputFromSelect();
+                closeList();
+                input.blur();
+            }
+
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!wrapper.contains(event.target)) {
+                closeList();
+            }
+        });
+
+        syncInputFromSelect();
+
+        return {
+            addOption: function (value, label, selectIt) {
+                var opt = document.createElement("option");
+                opt.value = value;
+                opt.textContent = label;
+                selectEl.appendChild(opt);
+                if (selectIt) {
+                    selectValue(value, label);
+                }
+            },
+        };
+    }
+
+    // مشتری جدا مقداردهی می‌شود چون نمونه آن برای افزودن مشتری
+    // تازه‌ساخته‌شده از داخل مودال لازم است.
+    var customerSearchable = initSearchableSelect(customerSelect, { clearable: true });
+
+    // ==================================================
+    // نمایش اطلاعات مشتری (موبایل، تلفن، آدرس) پس از انتخاب
+    // ==================================================
+
+    var customerInfoBox = document.getElementById("customer-info");
+
+    function renderCustomerInfo() {
+
+        if (!customerInfoBox) {
+            return;
+        }
+
+        var info = customerSelect && customerSelect.value
+            ? customersData[String(customerSelect.value)]
+            : null;
+
+        if (!info) {
+            customerInfoBox.hidden = true;
+            return;
+        }
+
+        Object.keys(info).forEach(function (key) {
+            var el = customerInfoBox.querySelector('[data-customer="' + key + '"]');
+            if (el) {
+                el.textContent = info[key] || "";  // textContent: امن در برابر XSS
+            }
+        });
+
+        // فیلدهای اختیاری وقتی خالی‌اند مخفی شوند
+        ["phone", "address"].forEach(function (key) {
+            var row = customerInfoBox.querySelector('[data-customer-row="' + key + '"]');
+            if (row) {
+                row.hidden = !info[key];
+            }
+        });
+
+        customerInfoBox.hidden = false;
+    }
+
+    if (customerSelect) {
+        customerSelect.addEventListener("change", renderCustomerInfo);
+    }
+
+    renderCustomerInfo(); // حالت ویرایش یا بازگشت فرم با خطا
+
+    initSearchableSelect(
+        document.getElementById("{{ order_form.employee.id_for_label }}"),
+        { clearable: true }
+    );
+
+    initSearchableSelect(orderTypeSelect);
+
+    document.querySelectorAll(".menu-item-select").forEach(function (el) {
+        initSearchableSelect(el);
+    });
+
+
+    // ==================================================
+    // نمایش/الزامی بودن مشتری و کارمند بر اساس نوع سفارش و نوع پرداخت
+    //
+    // - «شام کارکنان»: مشتری مخفی؛ کارمند نمایش و الزامی
+    // - سایر نوع‌ها: کارمند مخفی
+    // - «تلفنی» یا پرداخت «نسیه»: مشتری الزامی
+    //
+    // تطبیق با متن گزینه انجام می‌شود (مثل بخش «داخل سالن» بالاتر).
+    // ==================================================
+
+    var customerGroup = document.getElementById("customer-group");
+    var employeeGroup = document.getElementById("employee-group");
+    var employeeSelect = document.getElementById("{{ order_form.employee.id_for_label }}");
+    var paymentMethodSelect = document.getElementById("{{ order_form.payment_method.id_for_label }}");
+    var paymentStatusSelect = document.getElementById("id_payment_status"); // اگر در فرم باشد
+
+    function selectedText(selectEl) {
+        if (!selectEl || selectEl.selectedIndex < 0) {
+            return "";
+        }
+        return (selectEl.options[selectEl.selectedIndex].textContent || "").trim();
+    }
+
+    // مقدار select مخفی را خالی می‌کند و متن فیلد جستجوگر را هم پاک می‌کند
+    function clearSearchableSelect(selectEl, groupEl) {
+        if (!selectEl || !selectEl.value) {
+            return;
+        }
+        selectEl.value = "";
+        var visibleInput = groupEl.querySelector(".searchable-select__input");
+        if (visibleInput) {
+            visibleInput.value = "";
+            visibleInput.placeholder = "بدون انتخاب";
+        }
+        // تا بخش‌هایی مثل کارت اطلاعات مشتری هم به‌روز شوند
+        selectEl.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    function applyOrderRules() {
+
+        var typeText = selectedText(orderTypeSelect);
+        var isStaffDinner = typeText.indexOf("شام کارکنان") !== -1;
+        var isPhone = typeText.indexOf("تلفنی") !== -1;
+        var isCredit =
+            selectedText(paymentMethodSelect).indexOf("نسیه") !== -1 ||
+            (paymentStatusSelect && (paymentStatusSelect.value === "credit" ||
+                selectedText(paymentStatusSelect).indexOf("نسیه") !== -1));
+
+        // کارمند: فقط برای شام کارکنان؛ همیشه الزامی وقتی نمایش داده می‌شود
+        employeeGroup.style.display = isStaffDinner ? "" : "none";
+        employeeGroup.classList.toggle("is-required", isStaffDinner);
+        if (!isStaffDinner) {
+            clearSearchableSelect(employeeSelect, employeeGroup);
+        }
+
+        // مشتری: در شام کارکنان مخفی؛ در تلفنی یا نسیه الزامی
+        customerGroup.style.display = isStaffDinner ? "none" : "";
+        customerGroup.classList.toggle("is-required", !isStaffDinner && (isPhone || isCredit));
+        if (isStaffDinner) {
+            clearSearchableSelect(customerSelect, customerGroup);
+        }
+    }
+
+    // select اصلی display:none است؛ پس required مرورگر روی آن کار نمی‌کند.
+    // (فرم novalidate است و همه بررسی‌ها اینجا انجام و با توست نمایش داده می‌شوند.)
+    var orderFormEl = document.getElementById("order-form");
+
+    function validateOrderForm() {
+
+        applyOrderRules();
+        syncGregorianFromJalali();
+
+        var errors = []; // هر مورد: { message, focusEl }
+
+        function fail(message, focusEl) {
+            errors.push({ message: message, focusEl: focusEl || null });
+        }
+
+        function inputOf(groupEl) {
+            return groupEl ? groupEl.querySelector(".searchable-select__input, input, select") : null;
+        }
+
+        if (orderTypeSelect && !orderTypeSelect.value) {
+            fail("نوع سفارش را انتخاب کنید.", inputOf(orderTypeSelect.closest(".form-group")));
+        }
+
+        if (employeeGroup.classList.contains("is-required") && !employeeSelect.value) {
+            fail("برای شام کارکنان، انتخاب کارمند الزامی است.", inputOf(employeeGroup));
+        }
+
+        if (customerGroup.classList.contains("is-required") && !customerSelect.value) {
+            fail("برای سفارش تلفنی یا نسیه، انتخاب مشتری الزامی است.", inputOf(customerGroup));
+        }
+
+        if (tableNumberGroup && tableNumberGroup.classList.contains("is-required")) {
+            var tableInput = tableNumberGroup.querySelector("input, select");
+            if (tableInput && !String(tableInput.value).trim()) {
+                fail("برای سفارش داخل سالن، شماره میز را وارد کنید.", tableInput);
+            }
+        }
+
+        if (dateGregorian && !dateGregorian.value) {
+            fail("تاریخ سفارش را مشخص کنید.", dateJalali);
+        }
+
+        var rows = Array.prototype.filter.call(
+            container.querySelectorAll("[data-item-row]"),
+            function (row) { return !row.hidden; }
+        );
+
+        if (!rows.length) {
+            fail("حداقل یک آیتم به سفارش اضافه کنید.", addButton);
+        }
+
+        rows.forEach(function (row, index) {
+            var label = "آیتم " + (index + 1);
+            var select = row.querySelector(".menu-item-select");
+            var qty = row.querySelector(".quantity-input");
+
+            if (!select || !select.value) {
+                fail(label + ": محصول را انتخاب کنید.", row.querySelector(".searchable-select__input"));
+            } else if (!qty || (parseInt(qty.value, 10) || 0) < 1) {
+                fail(label + ": تعداد باید حداقل ۱ باشد.", qty);
+            }
+        });
+
+        return errors;
+    }
+
+    if (orderFormEl) {
+        orderFormEl.addEventListener("submit", function (event) {
+
+            var errors = validateOrderForm();
+
+            if (!errors.length) {
+                return;
+            }
+
+            event.preventDefault();
+
+            // لیسنر بالاتر جداکننده هزارگان را قبل از ارسال حذف کرده؛ نمایش را برمی‌گردانیم
+            document.querySelectorAll(".money-input").forEach(formatMoneyInput);
+
+            showToasts(errors.map(function (e) { return e.message; }));
+
+            var firstFocusable = errors.filter(function (e) { return e.focusEl; })[0];
+            if (firstFocusable) {
+                firstFocusable.focusEl.focus();
+            }
+        });
+    }
+
+    [orderTypeSelect, paymentMethodSelect, paymentStatusSelect].forEach(function (el) {
+        if (el) {
+            el.addEventListener("change", applyOrderRules);
+        }
+    });
+
+    applyOrderRules(); // برای حالت ویرایش یا بازگشت فرم با خطا
+
+
+    // ==================================================
+    // تاریخ (شمسی) و ساعت سفارش
+    // - مقدار پیش‌فرض: همین لحظه (اگر سرور مقداری نداده باشد)
+    // - کاربر تاریخ شمسی را می‌بیند؛ مقدار میلادی در فیلد مخفی
+    //   order_date ذخیره و به سرور ارسال می‌شود.
+    // ==================================================
+
+    var dateGregorian = document.getElementById("{{ order_form.order_date.id_for_label }}");
+    var dateJalali = document.getElementById("order-date-jalali");
+    var timeInput = document.getElementById("{{ order_form.order_time.id_for_label }}");
+
+    function pad2(n) {
+        return String(n).padStart(2, "0");
+    }
+
+    function toGregorianString(d) {
+        return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+    }
+
+    // تبدیل Date به رشته شمسی مثل 1405/07/08 با Intl داخلی مرورگر
+    function toJalaliString(d) {
+        var parts = new Intl.DateTimeFormat("en-US-u-ca-persian-nu-latn", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }).formatToParts(d);
+
+        var v = {};
+        parts.forEach(function (p) { v[p.type] = p.value; });
+
+        return v.year + "/" + v.month + "/" + v.day;
+    }
+
+    function normalizeDigits(str) {
+        return String(str || "")
+            .replace(/[\u06F0-\u06F9]/g, function (c) { return c.charCodeAt(0) - 0x06F0; })
+            .replace(/[\u0660-\u0669]/g, function (c) { return c.charCodeAt(0) - 0x0660; });
+    }
+
+    // تبدیل تاریخ شمسی به میلادی (الگوریتم استاندارد jalaali)
+    function jalaliToGregorian(jy, jm, jd) {
+        jy += 1595;
+        var days = -355668 + (365 * jy) + (Math.floor(jy / 33) * 8) +
+            Math.floor(((jy % 33) + 3) / 4) + jd +
+            ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+        var gy = 400 * Math.floor(days / 146097);
+        days %= 146097;
+        if (days > 36524) {
+            days--;
+            gy += 100 * Math.floor(days / 36524);
+            days %= 36524;
+            if (days >= 365) { days++; }
+        }
+        gy += 4 * Math.floor(days / 1461);
+        days %= 1461;
+        if (days > 365) {
+            gy += Math.floor((days - 1) / 365);
+            days = (days - 1) % 365;
+        }
+        var gd = days + 1;
+        var monthDays = [0, 31,
+            ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28,
+            31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        var gm = 0;
+        while (gm < 13 && gd > monthDays[gm]) {
+            gd -= monthDays[gm];
+            gm++;
+        }
+        return [gy, gm, gd];
+    }
+
+    // مقدار فیلد شمسی (قابل مشاهده) را به فیلد میلادی مخفی منتقل می‌کند
+    function syncGregorianFromJalali() {
+        if (!dateGregorian || !dateJalali) {
+            return;
+        }
+        var text = normalizeDigits(dateJalali.value).trim().replace(/[-.]/g, "/");
+        var m = /^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(text);
+        if (!m) {
+            dateGregorian.value = "";
+            return;
+        }
+        var g = jalaliToGregorian(+m[1], +m[2], +m[3]);
+        dateGregorian.value = g[0] + "-" + pad2(g[1]) + "-" + pad2(g[2]);
+    }
+
+    if (dateGregorian && dateJalali) {
+
+        var now = new Date();
+        var match = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateGregorian.value || "");
+        var baseDate;
+
+        if (match) {
+            // ظهر می‌گذاریم تا جابه‌جایی ساعت/منطقه زمانی روز را عوض نکند
+            baseDate = new Date(+match[1], +match[2] - 1, +match[3], 12);
+        } else {
+            // سفارش جدید: امروز
+            baseDate = now;
+            dateGregorian.value = toGregorianString(now);
+        }
+
+        // پیش‌فرض: تاریخ شمسی همان روز (یا تاریخ ذخیره‌شده در حالت ویرایش)
+        dateJalali.value = toJalaliString(baseDate);
+
+        if (timeInput && !timeInput.value) {
+            timeInput.value = pad2(now.getHours()) + ":" + pad2(now.getMinutes());
+        }
+
+        // هر بار که تقویم مقدار را عوض کرد، فیلد میلادی هم به‌روز شود
+        ["jdp:change", "change", "input", "blur"].forEach(function (evt) {
+            dateJalali.addEventListener(evt, syncGregorianFromJalali);
+        });
+
+        if (typeof jalaliDatepicker !== "undefined") {
+            try {
+                jalaliDatepicker.startWatch({
+                    time: false,
+                    autoReadOnlyInput: true,
+                    showTodayBtn: true,
+                    showEmptyBtn: false,
+                    zIndex: 2000
+                });
+            } catch (err) {
+                console.error("jalaliDatepicker init failed:", err);
+            }
+        }
+    }
+
+});
+
+</script>
+
+{% endblock %}

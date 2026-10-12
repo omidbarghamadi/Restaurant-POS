@@ -22,7 +22,7 @@ from .forms import (
 
 class CategoryListView(ListView):
     model = Category
-    template_name = "category-list.html"
+    template_name = "menu/category_list.html"
     context_object_name = "categories"
 
     def get_queryset(self):
@@ -32,7 +32,7 @@ class CategoryListView(ListView):
 class CategoryCreateView(SuccessMessageMixin, CreateView):
     model = Category
     form_class = CategoryForm
-    template_name = "category-form.html"
+    template_name = "menu/category_form.html"
     success_url = reverse_lazy("menu:category-list")
     success_message = "دسته‌بندی با موفقیت ایجاد شد."
 
@@ -40,14 +40,14 @@ class CategoryCreateView(SuccessMessageMixin, CreateView):
 class CategoryUpdateView(SuccessMessageMixin, UpdateView):
     model = Category
     form_class = CategoryForm
-    template_name = "category-form.html"
+    template_name = "menu/category_form.html"
     success_url = reverse_lazy("menu:category-list")
     success_message = "دسته‌بندی با موفقیت ویرایش شد."
 
 
 class CategoryDeleteView(DeleteView):
     model = Category
-    template_name = "category-confirm_delete.html"
+    template_name = "menu/category_confirm_delete.html"
     success_url = reverse_lazy("menu:category-list")
 
     def form_valid(self, form):
@@ -64,7 +64,7 @@ class CategoryDeleteView(DeleteView):
 
 class MenuItemListView(ListView):
     model = MenuItem
-    template_name = "menu-item_list.html"
+    template_name = "menu/menu_item_list.html"
     context_object_name = "menu_items"
 
     def get_queryset(self):
@@ -94,7 +94,7 @@ class MenuItemListView(ListView):
 class MenuItemCreateView(SuccessMessageMixin, CreateView):
     model = MenuItem
     form_class = MenuItemForm
-    template_name = "menu-item_form.html"
+    template_name = "menu/menu_item_form.html"
     success_url = reverse_lazy("menu:menu-item-list")
     success_message = "آیتم منو با موفقیت ایجاد شد."
 
@@ -102,14 +102,14 @@ class MenuItemCreateView(SuccessMessageMixin, CreateView):
 class MenuItemUpdateView(SuccessMessageMixin, UpdateView):
     model = MenuItem
     form_class = MenuItemForm
-    template_name = "menu-item_form.html"
+    template_name = "menu/menu_item_form.html"
     success_url = reverse_lazy("menu:menu-item-list")
     success_message = "آیتم منو با موفقیت ویرایش شد."
 
 
 class MenuItemDeleteView(DeleteView):
     model = MenuItem
-    template_name = "menu-item_confirm_delete.html"
+    template_name = "menu/menu_item_confirm_delete.html"
     success_url = reverse_lazy("menu:menu-item-list")
 
     def form_valid(self, form):
@@ -126,7 +126,7 @@ class MenuItemDeleteView(DeleteView):
 
 class MenuItemVariantListView(ListView):
     model = MenuItemVariant
-    template_name = "variant-list.html"
+    template_name = "menu/variant_list.html"
     context_object_name = "variants"
 
     def get_queryset(self):
@@ -140,7 +140,7 @@ class MenuItemVariantListView(ListView):
 class MenuItemVariantCreateView(SuccessMessageMixin, CreateView):
     model = MenuItemVariant
     form_class = MenuItemVariantForm
-    template_name = "variant-form.html"
+    template_name = "menu/variant_form.html"
     success_url = reverse_lazy("menu:variant-list")
     success_message = "زیرمنو با موفقیت ایجاد شد."
 
@@ -148,14 +148,14 @@ class MenuItemVariantCreateView(SuccessMessageMixin, CreateView):
 class MenuItemVariantUpdateView(SuccessMessageMixin, UpdateView):
     model = MenuItemVariant
     form_class = MenuItemVariantForm
-    template_name = "variant-form.html"
+    template_name = "menu/variant_form.html"
     success_url = reverse_lazy("menu:variant-list")
     success_message = "زیرمنو با موفقیت ویرایش شد."
 
 
 class MenuItemVariantDeleteView(DeleteView):
     model = MenuItemVariant
-    template_name = "variant-confirm_delete.html"
+    template_name = "menu/variant_confirm_delete.html"
     success_url = reverse_lazy("menu:variant-list")
 
     def form_valid(self, form):

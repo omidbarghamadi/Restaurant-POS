@@ -1,0 +1,297 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+
+{% load jalali_tags %}
+
+{% load humanize %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block title %}
+    {{ employee.first_name }} {{ employee.last_name }}
+    | همبر ثنائی
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    اطلاعات کارکنان
+                </span>
+
+                <h1>
+                    {{ employee.first_name }}
+                    {{ employee.last_name }}
+                </h1>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <a href="{% url 'accounts:employee-update' employee.pk %}"
+                   class="btn btn-primary">
+
+                    ویرایش
+
+                </a>
+
+                <a href="{% url 'accounts:employee-list' %}"
+                   class="btn btn-outline">
+
+                    بازگشت
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <div class="detail-header">
+
+                <div class="profile-avatar">
+                    {{ employee.first_name|first }}
+                </div>
+
+                <div>
+
+                    <h2>
+                        {{ employee.first_name }}
+                        {{ employee.last_name }}
+                    </h2>
+
+                    <span class="role-badge">
+                        {{ employee.role.title }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-grid">
+
+
+                <div class="detail-item">
+
+                    <span>
+                        موبایل
+                    </span>
+
+                    <strong>
+                        {{ employee.mobile }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        کد ملی
+                    </span>
+
+                    <strong>
+                        {{ employee.national_code|default:"-" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        تاریخ استخدام
+                    </span>
+
+                    <strong>
+                        {{ employee.hire_date|jalali|default:"-" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        وضعیت
+                    </span>
+
+                    <strong>
+
+                        {% if employee.status == "active" %}
+
+                            <span class="status-badge active">
+                                فعال
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-badge inactive">
+                                غیرفعال
+                            </span>
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        جمع دریافتی
+                    </span>
+
+                    <strong dir="ltr">
+                        {{ employee.balance|default:0|intcomma:False }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-full">
+
+                <span>
+                    آدرس
+                </span>
+
+                <p>
+                    {{ employee.address|default:"آدرسی ثبت نشده است." }}
+                </p>
+
+            </div>
+
+
+            <div class="detail-full">
+
+                <span>
+                    توضیحات
+                </span>
+
+                <p>
+                    {{ employee.description|default:"توضیحاتی ثبت نشده است." }}
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="detail-card transactions-card">
+
+                <div class="detail-header">
+                    <div>
+                        <h2>تراکنش‌های کارمند</h2>
+                        <span class="role-badge">
+                            {{ transactions|length }} تراکنش
+                        </span>
+                    </div>
+                </div>
+
+                {% if transactions %}
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>نوع تراکنش</th>
+                                    <th>مبلغ</th>
+                                    <th>روش پرداخت</th>
+                                    <th>تاریخ و ساعت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for tx in transactions %}
+
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+
+                                        <td>{{ tx.get_transaction_type_display }}</td>
+
+                                        <td>{{ tx.amount|intcomma:False }}</td>
+
+                                        <td>
+                                            {% if tx.payment_method %}
+                                                {{ tx.get_payment_method_display }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+
+                                        <td>{{ tx.transaction_date|jalali:"%Y/%m/%d - %H:%M" }}</td>
+
+                                        <td>
+                                            <div class="table-actions">
+
+                                                <a href="{% url 'transaction:transaction_update' tx.pk %}"
+                                                   class="action-button edit">
+
+                                                    ویرایش
+
+                                                </a>
+
+
+                                                <a href="{% url 'transaction:transaction_delete' tx.pk %}"
+                                                   class="action-button delete">
+
+                                                    حذف
+
+                                                </a>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">جمع کل</td>
+                                    <td colspan="4">
+                                        <strong>{{ transactions_total|intcomma:False }}</strong>
+                                    </td>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p>تراکنشی برای این کارمند ثبت نشده است.</p>
+
+                {% endif %}
+
+            </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

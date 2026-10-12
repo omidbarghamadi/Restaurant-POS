@@ -79,7 +79,7 @@ def order_list(request):
 
     return render(
         request,
-        "order-list.html",
+        "order/order_list.html",
         context,
     )
 
@@ -178,7 +178,7 @@ def order_create(request):
 
     return render(
         request,
-        "order-form.html",
+        "order/order_form.html",
         context,
     )
 
@@ -205,7 +205,7 @@ def order_detail(request, pk):
 
     return render(
         request,
-        "order-detail.html",
+        "order/order_detail.html",
         context,
     )
 
@@ -335,7 +335,7 @@ def order_update(request, pk):
 
     return render(
         request,
-        "order-form.html",
+        "order/order_form.html",
         context,
     )
 
@@ -368,7 +368,7 @@ def order_delete(request, pk):
 
     return render(
         request,
-        "order-confirm_delete.html",
+        "order/order_confirm_delete.html",
         {
             "order": order,
         },
@@ -384,7 +384,7 @@ def order_type_list(request):
 
     return render(
         request,
-        "order-type_list.html",
+        "order/order_type_list.html",
         {
             "order_types": order_types,
         },
@@ -414,7 +414,7 @@ def order_type_create(request):
 
     return render(
         request,
-        "order-type_form.html",
+        "order/order_type_form.html",
         {
             "form": form,
         },
@@ -454,7 +454,7 @@ def order_type_update(request, pk):
 
     return render(
         request,
-        "order-type_form.html",
+        "order/order_type_form.html",
         {
             "form": form,
             "order_type": order_type,
@@ -485,7 +485,7 @@ def order_type_delete(request, pk):
 
     return render(
         request,
-        "order-type_confirm_delete.html",
+        "order/order_type_confirm_delete.html",
         {
             "order_type": order_type,
         },

@@ -1,0 +1,280 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../../accounts/static/accounts/css/accounts.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <style>
+        /* هماهنگ‌سازی ظاهر Select2 با استایل فیلدهای فرم (فقط کارمند و مشتری) */
+        #employee-group .select2-container .select2-selection--single,
+        #customer-group .select2-container .select2-selection--single {
+            height: calc(2.25rem + 2px);
+            display: flex;
+            align-items: center;
+            border-radius: 6px;
+        }
+        #employee-group .select2-container--default .select2-selection--single .select2-selection__rendered,
+        #customer-group .select2-container--default .select2-selection--single .select2-selection__rendered {
+            padding-right: 0.75rem;
+            padding-left: 0.75rem;
+            line-height: normal;
+        }
+        #employee-group .select2-container--default .select2-selection--single .select2-selection__arrow,
+        #customer-group .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+        }
+        .select2-dropdown {
+            text-align: right;
+            direction: rtl;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+
+    {% if object %}
+        ویرایش تراکنش
+    {% else %}
+        ثبت تراکنش
+    {% endif %}
+
+    | همبر ثنائی
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container form-container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    مدیریت تراکنش‌ها
+                </span>
+
+                <h1>
+
+                    {% if object %}
+                        ویرایش تراکنش
+                    {% else %}
+                        ثبت تراکنش جدید
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+
+                {% endif %}
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.transaction_type.id_for_label }}">
+                            {{ form.transaction_type.label }}
+                        </label>
+
+                        {{ form.transaction_type }}
+
+                        {% if form.transaction_type.errors %}
+                            <div class="field-error">
+                                {{ form.transaction_type.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.amount.id_for_label }}">
+                            {{ form.amount.label }}
+                        </label>
+
+                        {{ form.amount }}
+
+                        {% if form.amount.errors %}
+                            <div class="field-error">
+                                {{ form.amount.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.payment_method.id_for_label }}">
+                            {{ form.payment_method.label }}
+                        </label>
+
+                        {{ form.payment_method }}
+
+                        {% if form.payment_method.errors %}
+                            <div class="field-error">
+                                {{ form.payment_method.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="form-group" id="employee-group">
+
+                        <label for="{{ form.employee.id_for_label }}">
+                            {{ form.employee.label }}
+                        </label>
+
+                        {{ form.employee }}
+
+                        {% if form.employee.errors %}
+                            <div class="field-error">
+                                {{ form.employee.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="form-group" id="customer-group">
+
+                        <label for="{{ form.customer.id_for_label }}">
+                            {{ form.customer.label }}
+                        </label>
+
+                        {{ form.customer }}
+
+                        {% if form.customer.errors %}
+                            <div class="field-error">
+                                {{ form.customer.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.transaction_date.id_for_label }}">
+                            {{ form.transaction_date.label }}
+                        </label>
+
+                        {{ form.transaction_date }}
+
+                        {% if form.transaction_date.errors %}
+                            <div class="field-error">
+                                {{ form.transaction_date.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.description.id_for_label }}">
+                        {{ form.description.label }}
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+                        <div class="field-error">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        {% if object %}
+                            ذخیره تغییرات
+                        {% else %}
+                            ثبت تراکنش
+                        {% endif %}
+
+                    </button>
+
+
+                    <a href="{% url 'transaction:transaction_list' %}"
+                       class="btn btn-outline">
+
+                        انصراف
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var select2Options = {
+            width: '100%',
+            dir: 'rtl',
+            language: {
+                noResults: function () {
+                    return 'موردی یافت نشد';
+                },
+                searching: function () {
+                    return 'در حال جستجو...';
+                }
+            }
+        };
+
+        $('#{{ form.employee.id_for_label }}').select2($.extend({}, select2Options, {
+            placeholder: 'کارمند'
+        }));
+
+        $('#{{ form.customer.id_for_label }}').select2($.extend({}, select2Options, {
+            placeholder: 'مشتری'
+        }));
+    });
+</script>
+
+{% block extra_js %}
+    <script src="{% static 'js/../../static/transactions/js/transaction.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

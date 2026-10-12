@@ -1,0 +1,134 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block title %}
+
+    {% if object %}
+        ویرایش نقش
+    {% else %}
+        افزودن نقش
+    {% endif %}
+
+    | همبر ثنائی
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container form-container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    مدیریت حساب‌ها
+                </span>
+
+                <h1>
+
+                    {% if object %}
+                        ویرایش نقش
+                    {% else %}
+                        افزودن نقش جدید
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-card">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="form-errors">
+
+                        {{ form.non_field_errors }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.title.id_for_label }}">
+                        عنوان نقش
+                    </label>
+
+                    {{ form.title }}
+
+                    {% if form.title.errors %}
+                        <div class="field-error">
+                            {{ form.title.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.description.id_for_label }}">
+                        توضیحات
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+                        <div class="field-error">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        {% if object %}
+                            ذخیره تغییرات
+                        {% else %}
+                            ایجاد نقش
+                        {% endif %}
+
+                    </button>
+
+
+                    <a href="{% url 'accounts:role-list' %}"
+                       class="btn btn-outline">
+
+                        انصراف
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

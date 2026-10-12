@@ -1,0 +1,360 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block title %}
+    مشتری‌ها | همبر ثنائی
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    مدیریت حساب‌ها
+                </span>
+
+                <h1>
+                    مشتری‌ها
+                </h1>
+
+                <p>
+                    مدیریت مشتریان و حساب آن‌ها
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'accounts:customer-create' %}"
+               class="btn btn-primary">
+
+                + افزودن مشتری
+
+            </a>
+
+        </div>
+
+
+        <div class="content-card">
+
+            {% if customers %}
+
+                <div class="search-filters">
+
+                    <div class="filter-field">
+                        <label for="filter-code">کد اشتراک</label>
+                        <div class="filter-input-wrap">
+                            <svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg>
+                            <input type="text"
+                                   id="filter-code"
+                                   class="ltr-input"
+                                   placeholder="جستجوی کد اشتراک..."
+                                   autocomplete="off">
+                            <button type="button" class="filter-clear" data-clear="filter-code" aria-label="پاک کردن">&times;</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="filter-name">نام مشتری</label>
+                        <div class="filter-input-wrap">
+                            <svg viewBox="0 0 24 24"><circle cx="11" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 7-7s7 3 7 7"/></svg>
+                            <input type="text"
+                                   id="filter-name"
+                                   placeholder="جستجوی نام..."
+                                   autocomplete="off">
+                            <button type="button" class="filter-clear" data-clear="filter-name" aria-label="پاک کردن">&times;</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="filter-phone">شماره تماس</label>
+                        <div class="filter-input-wrap">
+                            <svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+                            <input type="text"
+                                   id="filter-phone"
+                                   class="ltr-input"
+                                   placeholder="موبایل یا تلفن..."
+                                   inputmode="tel"
+                                   autocomplete="off">
+                            <button type="button" class="filter-clear" data-clear="filter-phone" aria-label="پاک کردن">&times;</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="filter-reset" id="filter-reset">
+                        پاک کردن همه
+                    </button>
+
+                </div>
+
+
+                <div class="filter-meta">
+                    <span>
+                        نمایش <strong id="visible-count">{{ customers|length }}</strong>
+                        از <strong>{{ customers|length }}</strong> مشتری
+                    </span>
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>
+                                    کد اشتراک
+                                </th>
+
+                                <th>
+                                    نام
+                                </th>
+
+                                <th>
+                                    موبایل
+                                </th>
+
+                                <th>
+                                    مانده حساب
+                                </th>
+
+                                <th>
+                                    عملیات
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="customer-table-body">
+
+                            {% for customer in customers %}
+
+                                <tr class="customer-row"
+                                    data-name="{{ customer.name }}"
+                                    data-code="{{ customer.subscription_code }}"
+                                    data-phone="{{ customer.mobile }} {{ customer.phone|default:'' }}">
+
+                                    <td class="row-counter">
+                                        {{ forloop.counter }}
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="subscription-code">
+                                            {{ customer.subscription_code }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+                                        <strong>
+                                            {{ customer.name }}
+                                        </strong>
+                                    </td>
+
+
+                                    <td>
+                                        {{ customer.mobile }}
+                                    </td>
+
+                                    <td>
+
+                                        {% if customer.balance < 0 %}
+
+                                            <span class="debt-value" dir="ltr">
+                                                {{ customer.balance|intcomma:False }}
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="balance-value" dir="ltr">
+                                                {{ customer.balance|intcomma:False }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'accounts:customer-detail' customer.pk %}"
+                                               class="action-button view">
+                                                مشاهده
+                                            </a>
+
+                                            <a href="{% url 'accounts:customer-update' customer.pk %}"
+                                               class="action-button edit">
+                                                ویرایش
+                                            </a>
+
+                                            <a href="{% url 'accounts:customer-delete' customer.pk %}"
+                                               class="action-button delete">
+                                                حذف
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                            <tr class="no-results-row" id="no-results-row" style="display:none;">
+                                <td colspan="7">
+                                    <span class="no-results-icon">🔍</span>
+                                    مشتری‌ای با این مشخصات پیدا نشد.
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        هنوز مشتری ثبت نشده است
+                    </h3>
+
+                    <p>
+                        اولین مشتری را به سیستم اضافه کنید.
+                    </p>
+
+                    <a href="{% url 'accounts:customer-create' %}"
+                       class="btn btn-primary">
+
+                        افزودن مشتری
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+(function () {
+    var inputs = {
+        name:  document.getElementById('filter-name'),
+        code:  document.getElementById('filter-code'),
+        phone: document.getElementById('filter-phone')
+    };
+    var resetBtn   = document.getElementById('filter-reset');
+    var noResults  = document.getElementById('no-results-row');
+    var countEl    = document.getElementById('visible-count');
+    var rows       = document.querySelectorAll('#customer-table-body .customer-row');
+
+    if (!inputs.name || !rows.length) return;
+
+    // Normalize so Persian/Arabic/English digits and letter variants all match
+    function normalize(str) {
+        return (str || '')
+            .toString()
+            .replace(/[۰-۹]/g, function (d) { return d.charCodeAt(0) - 1776; })
+            .replace(/[٠-٩]/g, function (d) { return d.charCodeAt(0) - 1632; })
+            .replace(/ي/g, 'ی')
+            .replace(/ك/g, 'ک')
+            .replace(/[\u200c\u200f\u200e]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .toLowerCase();
+    }
+
+    var data = Array.prototype.map.call(rows, function (row) {
+        return {
+            el: row,
+            counter: row.querySelector('.row-counter'),
+            name: normalize(row.dataset.name),
+            code: normalize(row.dataset.code),
+            phone: normalize(row.dataset.phone)
+        };
+    });
+
+    function applyFilters() {
+        var n = normalize(inputs.name.value);
+        var c = normalize(inputs.code.value);
+        var p = normalize(inputs.phone.value);
+        var visible = 0;
+
+        Object.keys(inputs).forEach(function (key) {
+            inputs[key].classList.toggle('has-value', inputs[key].value.trim() !== '');
+        });
+
+        data.forEach(function (item) {
+            var match =
+                (!n || item.name.indexOf(n) !== -1) &&
+                (!c || item.code.indexOf(c) !== -1) &&
+                (!p || item.phone.indexOf(p) !== -1);
+
+            item.el.style.display = match ? '' : 'none';
+
+            if (match) {
+                visible++;
+                item.counter.textContent = visible;
+            }
+        });
+
+        noResults.style.display = visible === 0 ? '' : 'none';
+        countEl.textContent = visible;
+    }
+
+    Object.keys(inputs).forEach(function (key) {
+        inputs[key].addEventListener('input', applyFilters);
+    });
+
+    // Small "×" button inside each field
+    document.querySelectorAll('.filter-clear').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var input = document.getElementById(btn.dataset.clear);
+            input.value = '';
+            applyFilters();
+            input.focus();
+        });
+    });
+
+    resetBtn.addEventListener('click', function () {
+        Object.keys(inputs).forEach(function (key) { inputs[key].value = ''; });
+        applyFilters();
+        inputs.name.focus();
+    });
+})();
+</script>
+
+{% endblock %}

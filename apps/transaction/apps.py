@@ -7,4 +7,4 @@ class TransactionConfig(AppConfig):
 
     def ready(self):
         # ایمپورت اینجا لازمه تا سیگنال‌ها موقع بالا اومدن جنگو رجیستر بشن
-        from . import Signals  # noqa: F401
+        from . import signals  # noqa: F401

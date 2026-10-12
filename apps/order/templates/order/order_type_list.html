@@ -1,0 +1,153 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../../accounts/static/accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block title %}
+    انواع سفارش | همبر ثنائی
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+                <span class="page-label">
+                    مدیریت سفارش‌ها
+                </span>
+
+                <h1>
+                    انواع سفارش
+                </h1>
+
+                <p>
+                    مدیریت انواع سفارش رستوران
+                </p>
+            </div>
+
+            <a href="{% url 'order:order_type_create' %}"
+               class="btn btn-primary">
+                + نوع سفارش جدید
+            </a>
+
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="content-card">
+
+            {% if order_types %}
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>نوع سفارش</th>
+                                <th>وضعیت</th>
+                                <th>تعداد سفارش</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for order_type in order_types %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+
+                                    <td>
+                                        <strong>
+                                            {{ order_type.name }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {% if order_type.is_active %}
+                                            <span class="balance-value">
+                                                فعال
+                                            </span>
+                                        {% else %}
+                                            <span class="debt-value">
+                                                غیرفعال
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {{ order_type.orders.count }}
+                                    </td>
+
+                                    <td>
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'order:order_type_update' order_type.pk %}"
+                                               class="action-button edit">
+                                                ویرایش
+                                            </a>
+
+                                            <a href="{% url 'order:order_type_delete' order_type.pk %}"
+                                               class="action-button delete">
+                                                حذف
+                                            </a>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        هنوز نوع سفارشی ثبت نشده است.
+                    </h3>
+
+                    <a href="{% url 'order:order_type_create' %}"
+                       class="btn btn-primary">
+                        ایجاد نوع سفارش
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

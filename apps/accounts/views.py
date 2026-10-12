@@ -20,14 +20,14 @@ from apps.order.models import Order
 
 class RoleListView(ListView):
     model = Role
-    template_name = "role-list.html"
+    template_name = "accounts/role_list.html"
     context_object_name = "roles"
 
 
 class RoleCreateView(CreateView):
     model = Role
     form_class = RoleForm
-    template_name = "role-form.html"
+    template_name = "accounts/role_form.html"
     success_url = reverse_lazy("accounts:role-list")
 
     def form_valid(self, form):
@@ -41,7 +41,7 @@ class RoleCreateView(CreateView):
 class RoleUpdateView(UpdateView):
     model = Role
     form_class = RoleForm
-    template_name = "role-form.html"
+    template_name = "accounts/role_form.html"
     success_url = reverse_lazy("accounts:role-list")
 
     def form_valid(self, form):
@@ -54,7 +54,7 @@ class RoleUpdateView(UpdateView):
 
 class RoleDeleteView(DeleteView):
     model = Role
-    template_name = "role-confirm_delete.html"
+    template_name = "accounts/role_confirm_delete.html"
     success_url = reverse_lazy("accounts:role-list")
 
     def form_valid(self, form):
@@ -71,14 +71,14 @@ class RoleDeleteView(DeleteView):
 
 class EmployeeListView(ListView):
     model = Employee
-    template_name = "employee-list.html"
+    template_name = "accounts/employee_list.html"
     context_object_name = "employees"
 
 
 class EmployeeCreateView(CreateView):
     model = Employee
     form_class = EmployeeForm
-    template_name = "employee-form.html"
+    template_name = "accounts/employee_form.html"
     success_url = reverse_lazy("accounts:employee-list")
 
     def form_valid(self, form):
@@ -91,7 +91,7 @@ class EmployeeCreateView(CreateView):
 
 class EmployeeDetailView(DetailView):
     model = Employee
-    template_name = "employee-detail.html"
+    template_name = "accounts/employee_detail.html"
     context_object_name = "employee"
 
     def get_context_data(self, **kwargs):
@@ -107,7 +107,7 @@ class EmployeeDetailView(DetailView):
 class EmployeeUpdateView(UpdateView):
     model = Employee
     form_class = EmployeeForm
-    template_name = "employee-form.html"
+    template_name = "accounts/employee_form.html"
     success_url = reverse_lazy("accounts:employee-list")
 
     def form_valid(self, form):
@@ -120,7 +120,7 @@ class EmployeeUpdateView(UpdateView):
 
 class EmployeeDeleteView(DeleteView):
     model = Employee
-    template_name = "employee-confirm_delete.html"
+    template_name = "accounts/employee_confirm_delete.html"
     success_url = reverse_lazy("accounts:employee-list")
 
     def form_valid(self, form):
@@ -137,7 +137,7 @@ class EmployeeDeleteView(DeleteView):
 
 class CustomerListView(ListView):
     model = Customer
-    template_name = "customer-list.html"
+    template_name = "accounts/customer_list.html"
     context_object_name = "customers"
 
     def get_queryset(self):
@@ -147,7 +147,7 @@ class CustomerListView(ListView):
 class CustomerCreateView(CreateView):
     model = Customer
     form_class = CustomerForm
-    template_name = "customer-form.html"
+    template_name = "accounts/customer_form.html"
     success_url = reverse_lazy("accounts:customer-list")
 
     def form_valid(self, form):
@@ -160,7 +160,7 @@ class CustomerCreateView(CreateView):
 
 class CustomerDetailView(DetailView):
     model = Customer
-    template_name = "customer-detail.html"
+    template_name = "accounts/customer_detail.html"
     context_object_name = "customer"
 
     def get_context_data(self, **kwargs):
@@ -186,7 +186,7 @@ class CustomerDetailView(DetailView):
 class CustomerUpdateView(UpdateView):
     model = Customer
     form_class = CustomerForm
-    template_name = "customer-form.html"
+    template_name = "accounts/customer_form.html"
     success_url = reverse_lazy("accounts:customer-list")
 
     def form_valid(self, form):
@@ -199,7 +199,7 @@ class CustomerUpdateView(UpdateView):
 
 class CustomerDeleteView(DeleteView):
     model = Customer
-    template_name = "customer-confirm_delete.html"
+    template_name = "accounts/customer_confirm_delete.html"
     success_url = reverse_lazy("accounts:customer-list")
 
     def form_valid(self, form):

@@ -1,0 +1,445 @@
+{% extends "base_pos.html" %}
+
+{% load static %}
+{% load humanize %}
+{% load jalali_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+
+    <style>
+        .related-card {
+            margin-top: 24px;
+        }
+
+        .related-card__title {
+            padding: 22px 25px 0;
+            color: var(--red);
+            font-size: 27px;
+            margin-bottom: 6px;
+        }
+
+        .related-card .table-wrapper {
+            padding: 16px 25px 25px;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    {{ customer.name }} | همبر ثنائی
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    اطلاعات مشتری
+                </span>
+
+                <h1>
+                    {{ customer.name }}
+                </h1>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <a href="{% url 'accounts:customer-update' customer.pk %}"
+                   class="btn btn-primary">
+
+                    ویرایش
+
+                </a>
+
+                <a href="{% url 'accounts:customer-list' %}"
+                   class="btn btn-outline">
+
+                    بازگشت
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <div class="detail-header">
+
+                <div class="profile-avatar customer">
+                    {{ customer.name|first }}
+                </div>
+
+                <div>
+
+                    <h2>
+                        {{ customer.name }}
+                    </h2>
+
+                    <span class="subscription-code">
+                        {{ customer.subscription_code }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-grid">
+
+
+                <div class="detail-item">
+
+                    <span>
+                        موبایل
+                    </span>
+
+                    <strong>
+                        {{ customer.mobile }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        تلفن
+                    </span>
+
+                    <strong>
+                        {{ customer.phone|default:"-" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        کد اشتراک
+                    </span>
+
+                    <strong>
+                        {{ customer.subscription_code }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        مانده حساب
+                    </span>
+
+                    <strong>
+
+                        {% if customer.balance < 0 %}
+
+                            <span class="debt-value" dir="ltr">
+                                {{ customer.balance|intcomma }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="balance-value" dir="ltr">
+                                {{ customer.balance|intcomma }}
+                            </span>
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="detail-full">
+
+                <span>
+                    آدرس
+                </span>
+
+                <p>
+                    {{ customer.address|default:"آدرسی ثبت نشده است." }}
+                </p>
+
+            </div>
+
+
+            <div class="detail-full">
+
+                <span>
+                    توضیحات
+                </span>
+
+                <p>
+                    {{ customer.description|default:"توضیحاتی ثبت نشده است." }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {# ===== تراکنش‌های مشتری ===== #}
+        <div class="content-card related-card">
+
+            <h2 class="related-card__title">تراکنش‌های مشتری</h2>
+
+            {% if transactions %}
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>نوع تراکنش</th>
+                                <th>مبلغ</th>
+                                <th>روش پرداخت</th>
+                                <th>تاریخ و ساعت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for transaction in transactions %}
+
+                                <tr>
+
+                                    <td>{{ forloop.counter }}</td>
+
+                                    <td>{{ transaction.get_transaction_type_display }}</td>
+
+                                    <td>
+                                        <strong>
+                                            {{ transaction.amount|thousands_separator }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {% if transaction.payment_method %}
+                                            {{ transaction.get_payment_method_display }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {{ transaction.transaction_date|jalali:"%Y/%m/%d - %H:%M" }}
+                                    </td>
+
+                                    <td>
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'transaction:transaction_update' transaction.pk %}"
+                                               class="action-button edit">
+                                                ویرایش
+                                            </a>
+
+                                            <a href="{% url 'transaction:transaction_delete' transaction.pk %}"
+                                               class="action-button delete">
+                                                حذف
+                                            </a>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        💳
+                    </div>
+
+                    <h3>
+                        تراکنشی برای این مشتری ثبت نشده است
+                    </h3>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        {# ===== سفارش‌های نسیه ===== #}
+        <div class="content-card related-card">
+
+            <h2 class="related-card__title">سفارش‌های نسیه</h2>
+
+            {% if credit_orders %}
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+                            <tr>
+                                <th>شماره سفارش</th>
+                                <th>تاریخ</th>
+                                <th>ساعت</th>
+                                <th>نوع سفارش</th>
+                                <th>مبلغ کل</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for order in credit_orders %}
+
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            #{{ order.order_number }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        <time datetime="{{ order.order_date|date:'Y-m-d' }}"
+                                              data-jalali-date>
+                                            {{ order.order_date|date:"Y/m/d" }}
+                                        </time>
+                                    </td>
+
+                                    <td>
+                                        {% if order.order_time %}
+                                            {{ order.order_time|time:"H:i" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {{ order.order_type.name }}
+                                    </td>
+
+                                    <td>
+                                        <span data-money="{{ order.total_price|stringformat:'d' }}">{{ order.total_price|stringformat:"d" }}</span>
+                                        تومان
+                                    </td>
+
+                                    <td>
+                                        <div class="table-actions">
+
+                                            <a href="{% url 'order:order_detail' order.pk %}"
+                                               class="action-button view">
+                                                مشاهده
+                                            </a>
+
+                                            <a href="{% url 'order:order_update' order.pk %}"
+                                               class="action-button edit">
+                                                ویرایش
+                                            </a>
+
+                                            <a href="{% url 'order:order_delete' order.pk %}"
+                                               class="action-button delete">
+                                                حذف
+                                            </a>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <th colspan="5">جمع کل نسیه</th>
+                                <th colspan="2">
+                                    <span data-money="{{ credit_total|stringformat:'d' }}">{{ credit_total|stringformat:"d" }}</span>
+                                    تومان
+                                </th>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        سفارش نسیه‌ای برای این مشتری ثبت نشده است
+                    </h3>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+    {% block extra_js %}
+
+    {% endblock %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    var jalaliFmt = new Intl.DateTimeFormat("en-US-u-ca-persian-nu-latn", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    });
+
+    document.querySelectorAll("time[data-jalali-date]").forEach(function (t) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(t.getAttribute("datetime") || "");
+        if (!m) return;
+
+        var d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+        var v = {};
+        jalaliFmt.formatToParts(d).forEach(function (p) { v[p.type] = p.value; });
+        t.textContent = v.year + "/" + v.month + "/" + v.day;
+    });
+
+    var moneyFmt = new Intl.NumberFormat("en-US");
+
+    document.querySelectorAll("[data-money]").forEach(function (m) {
+        var n = Number(m.getAttribute("data-money"));
+        if (!isNaN(n)) m.textContent = moneyFmt.format(n);
+    });
+
+});
+</script>
+{% endblock %}
