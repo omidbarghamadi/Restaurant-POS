@@ -1,4 +1,4 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 
@@ -7,7 +7,7 @@
 {% load humanize %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -40,14 +40,14 @@
 
             <div class="header-actions">
 
-                <a href="{% url 'accounts:employee-update' employee.pk %}"
+                <a href="{% url 'accounts:employee_update' employee.pk %}"
                    class="btn btn-primary">
 
                     ویرایش
 
                 </a>
 
-                <a href="{% url 'accounts:employee-list' %}"
+                <a href="{% url 'accounts:employee_list' %}"
                    class="btn btn-outline">
 
                     بازگشت

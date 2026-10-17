@@ -1,0 +1,255 @@
+/* =========================================================
+   LANDING.CSS
+   استایل‌های قالب base_home.html
+   (هدر و فوتر) - برای همه‌ی صفحات بخش اصلی سایت
+   ========================================================= */
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.site-header {
+    position: relative;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(84, 25, 18, 0.08);
+    z-index: 100;
+}
+
+.navbar {
+    min-height: 95px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+
+/* Logo */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--red);
+}
+
+.brand-icon {
+    font-size: 38px;
+    line-height: 1;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+}
+
+.brand-name {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.brand-subtitle {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-top: 5px;
+}
+
+
+/* Navigation */
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+}
+
+.nav-link {
+    position: relative;
+    font-size: 16px;
+    font-weight: 700;
+    transition: 0.25s ease;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -9px;
+    right: 0;
+    width: 0;
+    height: 3px;
+    background: var(--orange);
+    border-radius: 20px;
+    transition: width 0.25s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--red);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+
+/* Login / Dashboard button */
+
+.login-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    background: var(--blue);
+    color: var(--white);
+    border-radius: 14px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(23, 77, 122, 0.18);
+    transition: 0.25s ease;
+}
+
+.login-button:hover {
+    background: var(--blue-dark);
+    transform: translateY(-2px);
+}
+
+.login-icon {
+    font-size: 20px;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.site-footer {
+    background: var(--blue);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-content {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-logo {
+    font-size: 40px;
+}
+
+.footer-brand strong {
+    display: block;
+    font-size: 24px;
+}
+
+.footer-brand span {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.footer-address {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+}
+
+.footer-location-icon {
+    font-size: 22px;
+}
+
+.footer-instagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+}
+
+.footer-instagram strong {
+    color: var(--orange);
+    font-size: 15px;
+}
+
+.footer-bottom {
+    padding: 14px;
+    text-align: center;
+    background: var(--blue-dark);
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .main-nav {
+        gap: 18px;
+    }
+
+    .navbar {
+        gap: 15px;
+    }
+
+    .login-button span:first-child {
+        display: none;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .navbar {
+        min-height: 80px;
+    }
+
+    .brand-name {
+        font-size: 21px;
+    }
+
+    .brand-icon {
+        font-size: 30px;
+    }
+
+    .main-nav {
+        display: none;
+    }
+
+    .login-button {
+        padding: 9px 13px;
+    }
+
+    .footer-content {
+        padding: 35px 0;
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+
+@media (max-width: 400px) {
+
+    .brand-subtitle {
+        display: none;
+    }
+}

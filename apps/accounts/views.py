@@ -28,7 +28,7 @@ class RoleCreateView(CreateView):
     model = Role
     form_class = RoleForm
     template_name = "accounts/role_form.html"
-    success_url = reverse_lazy("accounts:role-list")
+    success_url = reverse_lazy("accounts:role_list")
 
     def form_valid(self, form):
         messages.success(
@@ -42,7 +42,7 @@ class RoleUpdateView(UpdateView):
     model = Role
     form_class = RoleForm
     template_name = "accounts/role_form.html"
-    success_url = reverse_lazy("accounts:role-list")
+    success_url = reverse_lazy("accounts:role_list")
 
     def form_valid(self, form):
         messages.success(
@@ -55,7 +55,7 @@ class RoleUpdateView(UpdateView):
 class RoleDeleteView(DeleteView):
     model = Role
     template_name = "accounts/role_confirm_delete.html"
-    success_url = reverse_lazy("accounts:role-list")
+    success_url = reverse_lazy("accounts:role_list")
 
     def form_valid(self, form):
         messages.success(
@@ -79,7 +79,7 @@ class EmployeeCreateView(CreateView):
     model = Employee
     form_class = EmployeeForm
     template_name = "accounts/employee_form.html"
-    success_url = reverse_lazy("accounts:employee-list")
+    success_url = reverse_lazy("accounts:employee_list")
 
     def form_valid(self, form):
         messages.success(
@@ -96,8 +96,8 @@ class EmployeeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        transactions = self.object.transactions.all()  # مرتب‌سازی از Meta: جدیدترین اول
-        context["transactions"] = transactions
+        transactions = self.object.transaction.all()  # مرتب‌سازی از Meta: جدیدترین اول
+        context["transaction"] = transactions
         context["transactions_total"] = (
                 transactions.aggregate(total=Sum("amount"))["total"] or 0
         )
@@ -108,7 +108,7 @@ class EmployeeUpdateView(UpdateView):
     model = Employee
     form_class = EmployeeForm
     template_name = "accounts/employee_form.html"
-    success_url = reverse_lazy("accounts:employee-list")
+    success_url = reverse_lazy("accounts:employee_list")
 
     def form_valid(self, form):
         messages.success(
@@ -121,7 +121,7 @@ class EmployeeUpdateView(UpdateView):
 class EmployeeDeleteView(DeleteView):
     model = Employee
     template_name = "accounts/employee_confirm_delete.html"
-    success_url = reverse_lazy("accounts:employee-list")
+    success_url = reverse_lazy("accounts:employee_list")
 
     def form_valid(self, form):
         messages.success(
@@ -148,7 +148,7 @@ class CustomerCreateView(CreateView):
     model = Customer
     form_class = CustomerForm
     template_name = "accounts/customer_form.html"
-    success_url = reverse_lazy("accounts:customer-list")
+    success_url = reverse_lazy("accounts:customer_list")
 
     def form_valid(self, form):
         messages.success(
@@ -167,7 +167,7 @@ class CustomerDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         customer = self.object
 
-        context["transactions"] = customer.transactions.all()  # ترتیب: جدیدترین اول
+        context["transaction"] = customer.transaction.all()  # ترتیب: جدیدترین اول
 
         credit_orders = (
             customer.orders
@@ -187,7 +187,7 @@ class CustomerUpdateView(UpdateView):
     model = Customer
     form_class = CustomerForm
     template_name = "accounts/customer_form.html"
-    success_url = reverse_lazy("accounts:customer-list")
+    success_url = reverse_lazy("accounts:customer_list")
 
     def form_valid(self, form):
         messages.success(
@@ -200,7 +200,7 @@ class CustomerUpdateView(UpdateView):
 class CustomerDeleteView(DeleteView):
     model = Customer
     template_name = "accounts/customer_confirm_delete.html"
-    success_url = reverse_lazy("accounts:customer-list")
+    success_url = reverse_lazy("accounts:customer_list")
 
     def form_valid(self, form):
         messages.success(

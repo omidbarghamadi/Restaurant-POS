@@ -42,7 +42,7 @@ class Transaction(models.Model):
     employee = models.ForeignKey(
         "accounts.Employee",
         on_delete=models.PROTECT,
-        related_name="transactions",
+        related_name="transaction",
         blank=True,
         null=True,
         verbose_name="کارمند",
@@ -51,7 +51,7 @@ class Transaction(models.Model):
     customer = models.ForeignKey(
         "accounts.Customer",
         on_delete=models.PROTECT,
-        related_name="transactions",
+        related_name="transaction",
         blank=True,
         null=True,
         verbose_name="مشتری",

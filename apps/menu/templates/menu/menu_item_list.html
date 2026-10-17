@@ -1,4 +1,4 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 
@@ -32,7 +32,7 @@
             </div>
 
 
-            <a href="{% url 'menu:menu-item-create' %}"
+            <a href="{% url 'menu:menu_item_create' %}"
                class="btn btn-primary">
 
                 + افزودن آیتم
@@ -90,7 +90,7 @@
 
                 {% if request.GET.q or request.GET.category %}
 
-                    <a href="{% url 'menu:menu-item-list' %}" class="filter-clear-btn" id="filter-clear-btn">
+                    <a href="{% url 'menu:menu_item_list' %}" class="filter-clear-btn" id="filter-clear-btn">
                         پاک کردن فیلتر
                     </a>
 
@@ -229,12 +229,12 @@
 
                                             <div class="table-actions">
 
-                                                <a href="{% url 'menu:menu-item-update' item.pk %}"
+                                                <a href="{% url 'menu:menu_item_update' item.pk %}"
                                                    class="action-button edit">
                                                     ویرایش
                                                 </a>
 
-                                                <a href="{% url 'menu:menu-item-delete' item.pk %}"
+                                                <a href="{% url 'menu:menu_item_delete' item.pk %}"
                                                    class="action-button delete">
                                                     حذف
                                                 </a>
@@ -321,12 +321,12 @@
 
                                                                         <div class="table-actions">
 
-                                                                            <a href="{% url 'menu:variant-update' variant.pk %}"
+                                                                            <a href="{% url 'menu:variant_update' variant.pk %}"
                                                                                class="action-button edit">
                                                                                 ویرایش
                                                                             </a>
 
-                                                                            <a href="{% url 'menu:variant-delete' variant.pk %}"
+                                                                            <a href="{% url 'menu:variant_delete' variant.pk %}"
                                                                                class="action-button delete">
                                                                                 حذف
                                                                             </a>
@@ -385,7 +385,7 @@
 
                         {% if not request.GET.q and not request.GET.category %}
 
-                            <a href="{% url 'menu:menu-item-create' %}"
+                            <a href="{% url 'menu:menu_item_create' %}"
                                class="btn btn-primary">
 
                                 افزودن آیتم

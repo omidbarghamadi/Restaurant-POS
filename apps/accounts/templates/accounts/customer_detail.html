@@ -1,11 +1,11 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 {% load humanize %}
 {% load jalali_tags %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
 
     <style>
         .related-card {
@@ -53,14 +53,14 @@
 
             <div class="header-actions">
 
-                <a href="{% url 'accounts:customer-update' customer.pk %}"
+                <a href="{% url 'accounts:customer_update' customer.pk %}"
                    class="btn btn-primary">
 
                     ویرایش
 
                 </a>
 
-                <a href="{% url 'accounts:customer-list' %}"
+                <a href="{% url 'accounts:customer_list' %}"
                    class="btn btn-outline">
 
                     بازگشت

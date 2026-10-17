@@ -1,4 +1,4 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 
@@ -36,7 +36,7 @@
             </div>
 
 
-            <a href="{% url 'menu:category-create' %}"
+            <a href="{% url 'menu:category_create' %}"
                class="btn btn-primary">
 
                 + افزودن دسته‌بندی
@@ -141,12 +141,12 @@
 
                                         <div class="table-actions">
 
-                                            <a href="{% url 'menu:category-update' category.pk %}"
+                                            <a href="{% url 'menu:category_update' category.pk %}"
                                                class="action-button edit">
                                                 ویرایش
                                             </a>
 
-                                            <a href="{% url 'menu:category-delete' category.pk %}"
+                                            <a href="{% url 'menu:category_delete' category.pk %}"
                                                class="action-button delete">
                                                 حذف
                                             </a>
@@ -181,7 +181,7 @@
                         اولین دسته‌بندی را به سیستم اضافه کنید.
                     </p>
 
-                    <a href="{% url 'menu:category-create' %}"
+                    <a href="{% url 'menu:category_create' %}"
                        class="btn btn-primary">
 
                         افزودن دسته‌بندی

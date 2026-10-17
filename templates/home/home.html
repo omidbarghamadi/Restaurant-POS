@@ -1,4 +1,4 @@
-{% extends "base_landing.html" %}
+{% extends "home/base_home.html" %}
 
 {% load static %}
 
@@ -6,6 +6,9 @@
     همبر ثنائی | فست فود
 {% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/home/home.css' %}">
+{% endblock %}
 
 {% block content %}
 

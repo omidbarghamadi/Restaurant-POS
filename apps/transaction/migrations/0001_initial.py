@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
                 ('payment_method', models.CharField(blank=True, choices=[('cash', 'نقدی'), ('card', 'کارت بانکی'), ('card_to_card', 'کارت به کارت'), ('other', 'سایر')], default='card_to_card', max_length=20, null=True, verbose_name='روش پرداخت')),
                 ('description', models.CharField(blank=True, max_length=255, verbose_name='توضیحات')),
                 ('transaction_date', models.DateTimeField(verbose_name='تاریخ تراکنش')),
-                ('customer', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='transactions', to='accounts.customer', verbose_name='مشتری')),
-                ('employee', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='transactions', to='accounts.employee', verbose_name='کارمند')),
+                ('customer', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='transaction', to='accounts.customer', verbose_name='مشتری')),
+                ('employee', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='transaction', to='accounts.employee', verbose_name='کارمند')),
                 ('paid_by', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='paid_transactions', to=settings.AUTH_USER_MODEL, verbose_name='پرداخت کننده')),
             ],
             options={

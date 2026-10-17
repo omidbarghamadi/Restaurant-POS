@@ -1,10 +1,10 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 {% load humanize %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -37,7 +37,7 @@
             </div>
 
 
-            <a href="{% url 'accounts:employee-create' %}"
+            <a href="{% url 'accounts:employee_create' %}"
                class="btn btn-primary">
 
                 + افزودن کارمند
@@ -165,17 +165,17 @@
 
                                         <div class="table-actions">
 
-                                            <a href="{% url 'accounts:employee-detail' employee.pk %}"
+                                            <a href="{% url 'accounts:employee_detail' employee.pk %}"
                                                class="action-button view">
                                                 مشاهده
                                             </a>
 
-                                            <a href="{% url 'accounts:employee-update' employee.pk %}"
+                                            <a href="{% url 'accounts:employee_update' employee.pk %}"
                                                class="action-button edit">
                                                 ویرایش
                                             </a>
 
-                                            <a href="{% url 'accounts:employee-delete' employee.pk %}"
+                                            <a href="{% url 'accounts:employee_delete' employee.pk %}"
                                                class="action-button delete">
                                                 حذف
                                             </a>
@@ -210,7 +210,7 @@
                         اولین کارمند را به سیستم اضافه کنید.
                     </p>
 
-                    <a href="{% url 'accounts:employee-create' %}"
+                    <a href="{% url 'accounts:employee_create' %}"
                        class="btn btn-primary">
 
                         افزودن کارمند

@@ -17,9 +17,9 @@ def transaction_list(request):
 
     return render(
         request,
-        "transactions/transaction_list.html",
+        "transaction/transaction_list.html",
         {
-            "transactions": transactions,
+            "transaction": transactions,
         },
     )
 
@@ -44,7 +44,7 @@ def transaction_create(request):
 
     return render(
         request,
-        "transactions/transaction_form.html",
+        "transaction/transaction_form.html",
         {
             "form": form,
         },
@@ -80,7 +80,7 @@ def transaction_update(request, pk):
 
     return render(
         request,
-        "transactions/transaction_form.html",
+        "transaction/transaction_form.html",
         {
             "form": form,
             "object": transaction,
@@ -106,7 +106,7 @@ def transaction_delete(request, pk):
 
     return render(
         request,
-        "transactions/transaction_confirm_delete.html",
+        "transaction/transaction_confirm_delete.html",
         {
             "transaction": transaction,
         },

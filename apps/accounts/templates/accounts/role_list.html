@@ -1,9 +1,9 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -33,7 +33,7 @@
                 </p>
             </div>
 
-            <a href="{% url 'accounts:role-create' %}"
+            <a href="{% url 'accounts:role_create' %}"
                class="btn btn-primary">
 
                 + افزودن نقش
@@ -90,12 +90,12 @@
 
                                         <div class="table-actions">
 
-                                            <a href="{% url 'accounts:role-update' role.pk %}"
+                                            <a href="{% url 'accounts:role_update' role.pk %}"
                                                class="action-button edit">
                                                 ویرایش
                                             </a>
 
-                                            <a href="{% url 'accounts:role-delete' role.pk %}"
+                                            <a href="{% url 'accounts:role_delete' role.pk %}"
                                                class="action-button delete">
                                                 حذف
                                             </a>
@@ -130,7 +130,7 @@
                         برای شروع، اولین نقش را ایجاد کنید.
                     </p>
 
-                    <a href="{% url 'accounts:role-create' %}"
+                    <a href="{% url 'accounts:role_create' %}"
                        class="btn btn-primary">
 
                         افزودن اولین نقش

@@ -1,0 +1,642 @@
+/* =========================================================
+   BASE.CSS
+   استایل‌های مشترک در «همه» صفحات (هم سایت اصلی، هم پنل POS)
+   شامل: فونت، متغیرها، ریست، دکمه‌ها و کامپوننت‌های
+   صفحات داخلی (جدول، فرم، کارت جزئیات، حذف و ...)
+   ========================================================= */
+
+
+/* =====================================================
+   FONT
+===================================================== */
+
+@font-face {
+    font-family: "YekanBakh";
+    src: url("../fonts/Yekan-Bakh-Bold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "YekanBakh";
+    src: url("../fonts/Yekan-Bakh-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+:root {
+    --cream: #f8ead5;
+    --cream-light: #fff8ed;
+
+    --red: #55130e;
+    --red-light: #711c13;
+
+    --orange: #f5a400;
+    --orange-light: #ffb719;
+
+    --blue: #174d7a;
+    --blue-dark: #103b60;
+
+    --text: #321712;
+    --white: #ffffff;
+
+    --border: #ead8bd;
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "YekanBakh", Tahoma, sans-serif;
+    direction: rtl;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(255, 180, 70, 0.08),
+            transparent 25%
+        ),
+        var(--cream-light);
+
+    color: var(--text);
+    line-height: 1.8;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+    .container {
+        width: min(100% - 28px, 1180px);
+    }
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    min-width: 155px;
+    padding: 13px 25px;
+
+    border-radius: 40px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--orange);
+    color: var(--blue);
+    box-shadow: 0 8px 18px rgba(245, 164, 0, 0.25);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    background: var(--orange-light);
+}
+
+.btn-outline {
+    border: 2px solid var(--red);
+    color: var(--red);
+}
+
+.btn-outline:hover {
+    background: var(--red);
+    color: var(--white);
+}
+
+.btn-danger {
+    background: #b53023;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #95261c;
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   INNER PAGES (accounts / menu / order / transaction)
+   این بخش در صفحات پنل POS استفاده می‌شود
+===================================================== */
+
+.page-section {
+    min-height: calc(100vh - 250px);
+    padding: 55px 0 80px;
+    background: var(--cream-light);
+}
+
+
+/* Page Header */
+
+.page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.page-label {
+    display: inline-block;
+    color: var(--blue);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.page-header h1 {
+    color: var(--red);
+    font-size: 38px;
+    line-height: 1.3;
+}
+
+.page-header p {
+    color: #76645c;
+    margin-top: 5px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* Content Card */
+
+.content-card,
+.form-card,
+.detail-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(50, 23, 18, 0.05);
+}
+
+.content-card {
+    overflow: hidden;
+}
+
+
+/* Table */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+.data-table th {
+    background: #f7ead7;
+    color: var(--red);
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    padding: 18px 20px;
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f0e5d6;
+    color: #4d3c36;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 17px;
+}
+
+.data-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+    background: #fffaf3;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Table Actions */
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.action-button {
+    padding: 6px 11px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.action-button.view {
+    background: #e7f0f7;
+    color: var(--blue);
+}
+
+.action-button.edit {
+    background: #fff1d2;
+    color: #9b6500;
+}
+
+.action-button.delete {
+    background: #fae5e2;
+    color: #a52d20;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+}
+
+
+/* Badges */
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: #e8f0f6;
+    color: var(--blue);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.status-badge.active {
+    color: #287548;
+    background: #e4f5ea;
+}
+
+.status-badge.inactive {
+    color: #9a4b3e;
+    background: #f8e5e1;
+}
+
+.subscription-code {
+    display: inline-block;
+    direction: ltr;
+    font-family: monospace;
+    padding: 4px 9px;
+    background: #f7ead7;
+    color: var(--red);
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+.balance-value {
+    color: #287548;
+    font-weight: 700;
+}
+
+.debt-value {
+    color: #b53023;
+    font-weight: 700;
+}
+
+.text-muted {
+    color: #9c8e87;
+}
+
+
+/* Empty State */
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+.empty-state h3 {
+    color: var(--red);
+    font-size: 23px;
+}
+
+.empty-state p {
+    color: #806f67;
+    margin: 5px 0 25px;
+}
+
+
+/* Forms */
+
+.form-container {
+    max-width: 900px;
+}
+
+.small-container {
+    max-width: 600px;
+}
+
+.form-card {
+    padding: 35px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--red);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    border: 1px solid #dfcfbb;
+    border-radius: 10px;
+    background: #fffdf9;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--text);
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.form-group input,
+.form-group select {
+    height: 48px;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(23, 77, 122, 0.08);
+}
+
+.field-error,
+.form-errors {
+    color: #b53023;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.form-errors {
+    background: #fae5e2;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.form-actions.center {
+    justify-content: center;
+}
+
+
+/* Detail */
+
+.detail-card {
+    padding: 35px;
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee2d4;
+}
+
+.profile-avatar {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--red);
+    color: var(--white);
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.profile-avatar.customer {
+    background: var(--blue);
+}
+
+.detail-header h2 {
+    color: var(--red);
+    font-size: 27px;
+    margin-bottom: 6px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.detail-item {
+    padding: 18px;
+    background: #fffaf3;
+    border-radius: 12px;
+}
+
+.detail-item span,
+.detail-full > span {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.detail-item strong {
+    color: var(--text);
+    font-size: 15px;
+}
+
+.detail-full {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fffaf3;
+    border-radius: 12px;
+}
+
+.detail-full p {
+    color: #55443d;
+}
+
+
+/* Delete */
+
+.delete-card {
+    background: white;
+    border-radius: 25px;
+    padding: 50px 35px;
+    text-align: center;
+    border: 1px solid var(--border);
+    box-shadow: 0 15px 35px rgba(50, 23, 18, 0.07);
+}
+
+.delete-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+.delete-card h1 {
+    color: var(--red);
+    margin-bottom: 15px;
+}
+
+.delete-card p {
+    color: #66534b;
+}
+
+.warning-text {
+    color: #b53023 !important;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 800px) {
+
+    .page-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .page-header .btn {
+        align-self: flex-start;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .detail-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-card,
+    .detail-card {
+        padding: 25px 20px;
+    }
+}
+
+@media (max-width: 550px) {
+
+    .page-section {
+        padding-top: 35px;
+    }
+
+    .page-header h1 {
+        font-size: 30px;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions .btn {
+        flex: 1;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+
+    .delete-card {
+        padding: 40px 20px;
+    }
+}

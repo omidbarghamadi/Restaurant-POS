@@ -1,4 +1,4 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 
@@ -36,7 +36,7 @@
             </div>
 
 
-            <a href="{% url 'menu:variant-create' %}"
+            <a href="{% url 'menu:variant_create' %}"
                class="btn btn-primary">
 
                 + افزودن زیرمنو
@@ -156,12 +156,12 @@
 
                                         <div class="table-actions">
 
-                                            <a href="{% url 'menu:variant-update' variant.pk %}"
+                                            <a href="{% url 'menu:variant_update' variant.pk %}"
                                                class="action-button edit">
                                                 ویرایش
                                             </a>
 
-                                            <a href="{% url 'menu:variant-delete' variant.pk %}"
+                                            <a href="{% url 'menu:variant_delete' variant.pk %}"
                                                class="action-button delete">
                                                 حذف
                                             </a>
@@ -196,7 +196,7 @@
                         اولین زیرمنو را به آیتم‌های منو اضافه کنید.
                     </p>
 
-                    <a href="{% url 'menu:variant-create' %}"
+                    <a href="{% url 'menu:variant_create' %}"
                        class="btn btn-primary">
 
                         افزودن زیرمنو

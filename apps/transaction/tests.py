@@ -4,7 +4,6 @@ from django.test import TestCase
 from apps.accounts.models import Customer, Employee, Role
 from .models import Transaction
 from django.utils import timezone
-from datetime import datetime
 
 User = get_user_model()
 
@@ -40,7 +39,6 @@ class TransactionModelTest(TestCase):
             employee=self.employee,
             description="پرداخت حقوق",
             transaction_date=self.transaction_date,
-            paid_by=self.user,
         )
 
         self.assertEqual(transaction.amount, 10_000_000)

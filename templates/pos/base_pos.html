@@ -9,10 +9,10 @@
     <title>{% block title %}پنل مدیریت POS{% endblock %}</title>
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
 
     <!-- POS CSS -->
-    <link rel="stylesheet" href="{% static 'css/base_pos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pos/base_pos.css' %}">
 
     {% block extra_css %}{% endblock %}
 </head>
@@ -86,21 +86,21 @@
 
                     <div class="pos-nav-submenu">
 
-                        <a href="{% url 'accounts:customer-list' %}"
+                        <a href="{% url 'accounts:customer_list' %}"
                            class="pos-nav-subitem">
 
                             مشتریان
 
                         </a>
 
-                        <a href="{% url 'accounts:employee-list' %}"
+                        <a href="{% url 'accounts:employee_list' %}"
                            class="pos-nav-subitem">
 
                             کارکنان
 
                         </a>
 
-                        <a href="{% url 'accounts:role-list' %}"
+                        <a href="{% url 'accounts:role_list' %}"
                            class="pos-nav-subitem">
 
                             نقش‌ها
@@ -131,15 +131,15 @@
 
                     <div class="pos-nav-submenu">
 
-                        <a href="{% url 'menu:category-list' %}" class="pos-nav-subitem">
+                        <a href="{% url 'menu:category_list' %}" class="pos-nav-subitem">
                             دسته‌بندی‌ها
                         </a>
 
-                        <a href="{% url 'menu:menu-item-list' %}" class="pos-nav-subitem">
+                        <a href="{% url 'menu:menu_item_list' %}" class="pos-nav-subitem">
                             منو
                         </a>
 
-                        <a href="{% url 'menu:variant-list' %}" class="pos-nav-subitem">
+                        <a href="{% url 'menu:variant_list' %}" class="pos-nav-subitem">
                             زیر منو
                         </a>
 

@@ -1,9 +1,9 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/../../static/accounts/css/accounts.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
 {% endblock %}
 
@@ -273,7 +273,7 @@
                     </button>
 
 
-                    <a href="{% url 'accounts:employee-list' %}"
+                    <a href="{% url 'accounts:employee_list' %}"
                        class="btn btn-outline">
 
                         انصراف

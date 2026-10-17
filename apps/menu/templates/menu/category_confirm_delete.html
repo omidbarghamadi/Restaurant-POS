@@ -1,10 +1,10 @@
-{% extends "base_pos.html" %}
+{% extends "pos/base_pos.html" %}
 
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/../../../accounts/static/accounts/css/accounts.css' %}">
-{% endblock %}
+{#{% block extra_css %}#}
+{#    <link rel="stylesheet" href="{% static 'menu/css/menu.css' %}">#}
+{#{% endblock %}#}
 
 {% block title %}
     حذف دسته‌بندی | همبر ثنائی
@@ -59,7 +59,7 @@
                     </button>
 
 
-                    <a href="{% url 'menu:category-list' %}"
+                    <a href="{% url 'menu:category_list' %}"
                        class="btn btn-outline">
 
                         انصراف
