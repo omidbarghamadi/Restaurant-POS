@@ -14,6 +14,7 @@ from .forms import (
     MenuItemForm,
     MenuItemVariantForm,
 )
+from apps.mixins import ConfirmDeleteMixin
 
 
 # ============================================================
@@ -45,17 +46,15 @@ class CategoryUpdateView(SuccessMessageMixin, UpdateView):
     success_message = "دسته‌بندی با موفقیت ویرایش شد."
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(ConfirmDeleteMixin, DeleteView):
     model = Category
-    template_name = "menu/category_confirm_delete.html"
     success_url = reverse_lazy("menu:category_list")
+    entity_name = "دسته‌بندی"
+    success_message = "دسته‌بندی با موفقیت حذف شد."
+    warning_text = "توجه: اگر آیتمی به این دسته‌بندی وابسته باشد، امکان حذف آن وجود ندارد."
 
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            "دسته‌بندی با موفقیت حذف شد."
-        )
-        return super().form_valid(form)
+    def get_object_label(self):
+        return self.object.title
 
 
 # ============================================================
@@ -107,17 +106,15 @@ class MenuItemUpdateView(SuccessMessageMixin, UpdateView):
     success_message = "آیتم منو با موفقیت ویرایش شد."
 
 
-class MenuItemDeleteView(DeleteView):
+class MenuItemDeleteView(ConfirmDeleteMixin, DeleteView):
     model = MenuItem
-    template_name = "menu/menu_item_confirm_delete.html"
     success_url = reverse_lazy("menu:menu_item_list")
+    entity_name = "آیتم منو"
+    success_message = "آیتم منو با موفقیت حذف شد."
+    warning_text = "تمام زیرمنوهای این آیتم نیز حذف خواهند شد."
 
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            "آیتم منو با موفقیت حذف شد."
-        )
-        return super().form_valid(form)
+    def get_object_label(self):
+        return self.object.name
 
 
 # ============================================================
@@ -153,14 +150,11 @@ class MenuItemVariantUpdateView(SuccessMessageMixin, UpdateView):
     success_message = "زیرمنو با موفقیت ویرایش شد."
 
 
-class MenuItemVariantDeleteView(DeleteView):
+class MenuItemVariantDeleteView(ConfirmDeleteMixin, DeleteView):
     model = MenuItemVariant
-    template_name = "menu/variant_confirm_delete.html"
     success_url = reverse_lazy("menu:variant_list")
+    entity_name = "زیرمنو"
+    success_message = "زیرمنو با موفقیت حذف شد."
 
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            "زیرمنو با موفقیت حذف شد."
-        )
-        return super().form_valid(form)
+    def get_object_label(self):
+        return f"{self.object.menu_item.name} - {self.object.name}"

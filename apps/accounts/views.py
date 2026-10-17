@@ -12,6 +12,7 @@ from .models import Role, Employee, Customer
 from .forms import RoleForm, EmployeeForm, CustomerForm
 from django.db.models import Sum
 from apps.order.models import Order
+from apps.mixins import ConfirmDeleteMixin
 
 # =========================================================
 # Role Views
@@ -52,17 +53,14 @@ class RoleUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class RoleDeleteView(DeleteView):
+class RoleDeleteView(ConfirmDeleteMixin, DeleteView):
     model = Role
-    template_name = "accounts/role_confirm_delete.html"
     success_url = reverse_lazy("accounts:role_list")
+    entity_name = "نقش"
+    success_message = "نقش با موفقیت حذف شد."
 
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            "نقش با موفقیت حذف شد."
-        )
-        return super().form_valid(form)
+    def get_object_label(self):
+        return f"«{self.object.title}»"
 
 
 # =========================================================
@@ -118,17 +116,11 @@ class EmployeeUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class EmployeeDeleteView(DeleteView):
+class EmployeeDeleteView(ConfirmDeleteMixin, DeleteView):
     model = Employee
-    template_name = "accounts/employee_confirm_delete.html"
     success_url = reverse_lazy("accounts:employee_list")
-
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            "کارمند با موفقیت حذف شد."
-        )
-        return super().form_valid(form)
+    entity_name = "کارمند"
+    success_message = "کارمند با موفقیت حذف شد."
 
 
 # =========================================================
@@ -197,14 +189,11 @@ class CustomerUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class CustomerDeleteView(DeleteView):
+class CustomerDeleteView(ConfirmDeleteMixin, DeleteView):
     model = Customer
-    template_name = "accounts/customer_confirm_delete.html"
     success_url = reverse_lazy("accounts:customer_list")
+    entity_name = "مشتری"
+    success_message = "مشتری با موفقیت حذف شد."
 
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            "مشتری با موفقیت حذف شد."
-        )
-        return super().form_valid(form)
+    def get_object_label(self):
+        return self.object.name

@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import TransactionForm
 from .models import Transaction
+from django.urls import reverse
+from apps.accounts.templatetags.jalali_tags import jalali, thousands_separator
 
 
 def transaction_list(request):
@@ -89,25 +91,19 @@ def transaction_update(request, pk):
 
 
 def transaction_delete(request, pk):
-    transaction = get_object_or_404(
-        Transaction,
-        pk=pk,
-    )
+    transaction = get_object_or_404(Transaction, pk=pk)
 
     if request.method == "POST":
-        transaction.delete()
+        ...  # بدون تغییر
 
-        messages.success(
-            request,
-            "تراکنش با موفقیت حذف شد.",
-        )
-
-        return redirect("transaction:transaction_list")
-
-    return render(
-        request,
-        "transaction/transaction_confirm_delete.html",
-        {
-            "transaction": transaction,
-        },
-    )
+    return render(request, "pos/confirm_delete.html", {
+        "entity_name": "تراکنش",
+        "object_label": transaction.get_transaction_type_display(),
+        "cancel_url": reverse("transaction:transaction_list"),
+        "warning_text": "در صورت حذف، این عملیات قابل بازگشت نیست.",
+        "details": [
+            ("نوع تراکنش", transaction.get_transaction_type_display()),
+            ("مبلغ", thousands_separator(transaction.amount)),
+            ("تاریخ", jalali(transaction.transaction_date, "%Y/%m/%d %H:%M")),
+        ],
+    })

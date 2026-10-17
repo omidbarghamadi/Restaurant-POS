@@ -305,16 +305,6 @@ a {
 
 /* Badges */
 
-.role-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    background: #e8f0f6;
-    color: var(--blue);
-    font-size: 15px;
-    font-weight: 700;
-}
-
 .status-badge {
     display: inline-block;
     padding: 4px 12px;
@@ -331,17 +321,6 @@ a {
 .status-badge.inactive {
     color: #9a4b3e;
     background: #f8e5e1;
-}
-
-.subscription-code {
-    display: inline-block;
-    direction: ltr;
-    font-family: monospace;
-    padding: 4px 9px;
-    background: #f7ead7;
-    color: var(--red);
-    border-radius: 7px;
-    font-size: 14px;
 }
 
 .balance-value {
@@ -472,6 +451,62 @@ a {
 }
 
 
+/* Checkbox / Form Check
+   استفاده‌شده در فرم‌های menu (category / menu_item / variant)
+   و order (order_type). (قبلاً در base_pos.css بود)
+   قوانین عمومی `.form-group input` بالا (width:100% و height:48px)
+   را برای چک‌باکس خنثی می‌کند؛ به همین دلیل !important دارد. */
+
+.form-group.checkbox-group {
+    display: flex !important;
+    align-items: center !important;
+
+    width: auto;
+
+    gap: 8px;
+}
+
+.form-group.checkbox-group label {
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+
+    color: var(--text);
+
+    font-size: 16px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+input[type="checkbox"].form-check-input {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+
+    border: 1px solid var(--border) !important;
+    border-radius: 4px !important;
+
+    background: none !important;
+
+    accent-color: var(--blue);
+
+    cursor: pointer;
+
+    appearance: auto;
+}
+
+
 /* Detail */
 
 .detail-card {
@@ -485,23 +520,6 @@ a {
     padding-bottom: 30px;
     margin-bottom: 30px;
     border-bottom: 1px solid #eee2d4;
-}
-
-.profile-avatar {
-    width: 75px;
-    height: 75px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--red);
-    color: var(--white);
-    font-size: 30px;
-    font-weight: 700;
-}
-
-.profile-avatar.customer {
-    background: var(--blue);
 }
 
 .detail-header h2 {

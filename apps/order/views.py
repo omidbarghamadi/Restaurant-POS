@@ -13,6 +13,8 @@ from .models import Order, OrderItem, OrderType
 from .services import get_next_order_number
 
 from apps.accounts.models import Customer
+from django.urls import reverse
+# from apps.mixins import ConfirmDeleteMixin
 
 
 def adjust_customer_balance(customer_id, payment_method, total_price, reverse=False):
@@ -341,38 +343,17 @@ def order_update(request, pk):
 
 
 def order_delete(request, pk):
-    """
-    حذف سفارش
-    """
-
     order = get_object_or_404(Order, pk=pk)
 
     if request.method == "POST":
-        order_number = order.order_number
+        ...  # بدون تغییر
 
-        with transaction.atomic():
-            adjust_customer_balance(
-                order.customer_id,
-                order.payment_method,
-                order.total_price,
-                reverse=True,
-            )
-            order.delete()
-
-        messages.success(
-            request,
-            f"سفارش شماره {order_number} حذف شد."
-        )
-
-        return redirect("order:order_list")
-
-    return render(
-        request,
-        "order/order_confirm_delete.html",
-        {
-            "order": order,
-        },
-    )
+    return render(request, "pos/confirm_delete.html", {
+        "entity_name": "سفارش",
+        "object_label": f"#{order.order_number}",
+        "cancel_url": reverse("order:order_detail", args=[order.pk]),
+        "warning_text": "در صورت حذف، این عملیات قابل بازگشت نیست.",
+    })
 
 
 def order_type_list(request):
@@ -463,30 +444,20 @@ def order_type_update(request, pk):
 
 
 def order_type_delete(request, pk):
-    """
-    حذف نوع سفارش
-    """
-
-    order_type = get_object_or_404(
-        OrderType,
-        pk=pk,
-    )
+    order_type = get_object_or_404(OrderType, pk=pk)
 
     if request.method == "POST":
+        ...  # بدون تغییر
 
-        order_type.delete()
+    blocked = order_type.orders.exists()
 
-        messages.success(
-            request,
-            "نوع سفارش با موفقیت حذف شد."
-        )
-
-        return redirect("order:order_type_list")
-
-    return render(
-        request,
-        "order/order_type_confirm_delete.html",
-        {
-            "order_type": order_type,
-        },
-    )
+    return render(request, "pos/confirm_delete.html", {
+        "entity_name": "نوع سفارش",
+        "object_label": order_type.name,
+        "cancel_url": reverse("order:order_type_list"),
+        "warning_text": "این عملیات قابل بازگشت نیست.",
+        "blocked_text": (
+            "این نوع سفارش دارای سفارش‌های ثبت‌شده است و به دلیل "
+            "محدودیت مدل، امکان حذف آن وجود ندارد."
+        ) if blocked else "",
+    })

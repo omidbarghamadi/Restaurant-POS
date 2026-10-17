@@ -1,9 +1,58 @@
 /* =========================================================
    ACCOUNTS APP
-   No app-specific CSS was present in the supplied stylesheet.
-   Add this app's styles here when they are defined.
+   استایل‌های مخصوص اپ accounts
+   (نقش‌ها، کارکنان، مشتریان)
    ========================================================= */
-/* ---------- Search filters ---------- */
+
+
+/* ---------- Role badge (employee_list, employee_detail) ---------- */
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: #e8f0f6;
+    color: var(--blue);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+/* ---------- Subscription code (customer_list, customer_detail) ---------- */
+
+.subscription-code {
+    display: inline-block;
+    direction: ltr;
+    font-family: monospace;
+    padding: 4px 9px;
+    background: #f7ead7;
+    color: var(--red);
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+
+/* ---------- Profile avatar (employee_detail, customer_detail) ---------- */
+
+.profile-avatar {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--red);
+    color: var(--white);
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.profile-avatar.customer {
+    background: var(--blue);
+}
+
+
+/* ---------- Search filters (customer_list) ---------- */
 .search-filters {
     display: grid;
     grid-template-columns: repeat(3, 1fr) auto;
@@ -186,7 +235,7 @@
     }
 }
 
-/*******************************/
+/* ---------- Employee transactions (employee_detail) ---------- */
 .transactions-card { margin-top: 24px; }
 
 .table-wrapper { overflow-x: auto; }
@@ -205,7 +254,6 @@
 }
 
 .data-table thead th {
-    /*background: #f7f7f7;*/
     font-weight: 600;
 }
 
@@ -213,5 +261,4 @@
     font-weight: 700;
     padding-right: 10px;
     font-size: 18px;
-    /*background: #fafafa;*/
 }
