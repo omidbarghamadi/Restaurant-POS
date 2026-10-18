@@ -262,3 +262,38 @@
     padding-right: 10px;
     font-size: 18px;
 }
+
+
+/* ---------- Related cards (customer_detail) ---------- */
+.related-card {
+    margin-top: 24px;
+}
+
+.related-card__title {
+    padding: 22px 25px 0;
+    color: var(--red);
+    font-size: 27px;
+    margin-bottom: 6px;
+}
+
+.related-card .table-wrapper {
+    padding: 16px 25px 25px;
+}
+
+
+/* ---------- Related cards (customer_detail: تراکنش‌ها و سفارش‌های نسیه) ---------- */
+
+.related-card {
+    margin-top: 24px;
+}
+
+.related-card__title {
+    padding: 22px 25px 0;
+    color: var(--red);
+    font-size: 27px;
+    margin-bottom: 6px;
+}
+
+.related-card .table-wrapper {
+    padding: 16px 25px 25px;
+}

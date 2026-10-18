@@ -223,7 +223,7 @@
                             {% endfor %}
 
                             <tr class="no-results-row" id="no-results-row" style="display:none;">
-                                <td colspan="7">
+                                <td colspan="6">
                                     <span class="no-results-icon">🔍</span>
                                     مشتری‌ای با این مشخصات پیدا نشد.
                                 </td>
@@ -251,7 +251,7 @@
                         اولین مشتری را به سیستم اضافه کنید.
                     </p>
 
-                    <a href="{% url 'accounts:customer-create' %}"
+                    <a href="{% url 'accounts:customer_create' %}"
                        class="btn btn-primary">
 
                         افزودن مشتری
@@ -268,93 +268,9 @@
 
 </section>
 
+{% endblock %}
 
-<script>
-(function () {
-    var inputs = {
-        name:  document.getElementById('filter-name'),
-        code:  document.getElementById('filter-code'),
-        phone: document.getElementById('filter-phone')
-    };
-    var resetBtn   = document.getElementById('filter-reset');
-    var noResults  = document.getElementById('no-results-row');
-    var countEl    = document.getElementById('visible-count');
-    var rows       = document.querySelectorAll('#customer-table-body .customer-row');
 
-    if (!inputs.name || !rows.length) return;
-
-    // Normalize so Persian/Arabic/English digits and letter variants all match
-    function normalize(str) {
-        return (str || '')
-            .toString()
-            .replace(/[۰-۹]/g, function (d) { return d.charCodeAt(0) - 1776; })
-            .replace(/[٠-٩]/g, function (d) { return d.charCodeAt(0) - 1632; })
-            .replace(/ي/g, 'ی')
-            .replace(/ك/g, 'ک')
-            .replace(/[\u200c\u200f\u200e]/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim()
-            .toLowerCase();
-    }
-
-    var data = Array.prototype.map.call(rows, function (row) {
-        return {
-            el: row,
-            counter: row.querySelector('.row-counter'),
-            name: normalize(row.dataset.name),
-            code: normalize(row.dataset.code),
-            phone: normalize(row.dataset.phone)
-        };
-    });
-
-    function applyFilters() {
-        var n = normalize(inputs.name.value);
-        var c = normalize(inputs.code.value);
-        var p = normalize(inputs.phone.value);
-        var visible = 0;
-
-        Object.keys(inputs).forEach(function (key) {
-            inputs[key].classList.toggle('has-value', inputs[key].value.trim() !== '');
-        });
-
-        data.forEach(function (item) {
-            var match =
-                (!n || item.name.indexOf(n) !== -1) &&
-                (!c || item.code.indexOf(c) !== -1) &&
-                (!p || item.phone.indexOf(p) !== -1);
-
-            item.el.style.display = match ? '' : 'none';
-
-            if (match) {
-                visible++;
-                item.counter.textContent = visible;
-            }
-        });
-
-        noResults.style.display = visible === 0 ? '' : 'none';
-        countEl.textContent = visible;
-    }
-
-    Object.keys(inputs).forEach(function (key) {
-        inputs[key].addEventListener('input', applyFilters);
-    });
-
-    // Small "×" button inside each field
-    document.querySelectorAll('.filter-clear').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            var input = document.getElementById(btn.dataset.clear);
-            input.value = '';
-            applyFilters();
-            input.focus();
-        });
-    });
-
-    resetBtn.addEventListener('click', function () {
-        Object.keys(inputs).forEach(function (key) { inputs[key].value = ''; });
-        applyFilters();
-        inputs.name.focus();
-    });
-})();
-</script>
-
+{% block extra_js %}
+    <script src="{% static 'accounts/js/accounts.js' %}"></script>
 {% endblock %}

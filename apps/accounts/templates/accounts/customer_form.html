@@ -220,27 +220,9 @@
 
 </section>
 
-<script>
-    (function () {
-        var balanceInput = document.getElementById("{{ form.balance.id_for_label }}");
-        if (!balanceInput) return;
+{% endblock %}
 
-        function groupDigits(raw) {
-            var negative = raw.trim().startsWith("-");
-            var digits = raw.replace(/[^0-9]/g, "");
-            digits = digits.replace(/^0+(?=\d)/, "");
-            if (!digits) return negative ? "-" : "";
-            var withCommas = digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            return negative ? "-" + withCommas : withCommas;
-        }
 
-        balanceInput.addEventListener("input", function () {
-            var cursorFromEnd = this.value.length - this.selectionStart;
-            this.value = groupDigits(this.value);
-            var pos = this.value.length - cursorFromEnd;
-            this.setSelectionRange(pos, pos);
-        });
-    })();
-</script>
-
+{% block extra_js %}
+    <script src="{% static 'accounts/js/accounts.js' %}"></script>
 {% endblock %}
