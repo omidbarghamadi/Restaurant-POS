@@ -89,6 +89,7 @@
                                     عملیات
                                 </th>
 
+
                             </tr>
 
                         </thead>
@@ -158,6 +159,14 @@
                                     <td>
 
                                         <div class="table-actions">
+
+                                            <a href="{% url 'transaction:transaction_detail' transaction.pk %}"
+                                               class="action-button view">
+
+                                                مشاهده
+
+                                            </a>
+
 
                                             <a href="{% url 'transaction:transaction_update' transaction.pk %}"
                                                class="action-button edit">

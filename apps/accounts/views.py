@@ -95,7 +95,7 @@ class EmployeeDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         transactions = self.object.transaction.all()  # مرتب‌سازی از Meta: جدیدترین اول
-        context["transaction"] = transactions
+        context["transactions"] = transactions
         context["transactions_total"] = (
                 transactions.aggregate(total=Sum("amount"))["total"] or 0
         )
@@ -159,7 +159,7 @@ class CustomerDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         customer = self.object
 
-        context["transaction"] = customer.transaction.all()  # ترتیب: جدیدترین اول
+        context["transactions"] = customer.transaction.all()  # ترتیب: جدیدترین اول
 
         credit_orders = (
             customer.orders

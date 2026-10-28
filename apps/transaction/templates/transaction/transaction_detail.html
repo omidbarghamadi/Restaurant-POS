@@ -1,0 +1,217 @@
+{% extends "pos/base_pos.html" %}
+
+{% load static %}
+{% load jalali_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'transactions/css/transaction.css' %}">
+{% endblock %}
+
+{% block title %}
+    تراکنش #{{ transaction.pk }} | همبر ثنائی
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="page-label">
+                    جزئیات تراکنش
+                </span>
+
+                <h1>
+                    {{ transaction.get_transaction_type_display }}
+                </h1>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <a href="{% url 'transaction:transaction_update' transaction.pk %}"
+                   class="btn btn-primary">
+                    ویرایش
+                </a>
+
+                <a href="{% url 'transaction:transaction_delete' transaction.pk %}"
+                   class="btn btn-danger">
+                    حذف
+                </a>
+
+                <a href="{% url 'transaction:transaction_list' %}"
+                   class="btn btn-outline">
+                    بازگشت
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- اطلاعات تراکنش -->
+        <div class="detail-card">
+
+            <div class="detail-header">
+                <div>
+                    <h2>اطلاعات تراکنش</h2>
+                </div>
+            </div>
+
+            <div class="detail-grid">
+
+                <div class="detail-item">
+                    <span>شماره تراکنش</span>
+                    <strong>#{{ transaction.pk }}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>نوع تراکنش</span>
+                    <strong>{{ transaction.get_transaction_type_display }}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>مبلغ</span>
+                    <strong>
+                        <span class="balance-value">
+                            {{ transaction.amount|thousands_separator }} تومان
+                        </span>
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>روش پرداخت</span>
+                    <strong>
+                        {{ transaction.get_payment_method_display|default:"-" }}
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>تاریخ</span>
+                    <strong>
+                        {{ transaction.transaction_date|jalali:"%Y/%m/%d" }}
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>ساعت</span>
+                    <strong>
+                        {{ transaction.transaction_date|jalali:"%H:%M" }}
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="detail-full">
+                <span>توضیحات</span>
+                <p>
+                    {{ transaction.description|default:"توضیحاتی ثبت نشده است." }}
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- اطلاعات کارمند -->
+        {% if transaction.employee %}
+
+            <div class="detail-card" style="margin-top: 24px;">
+
+                <div class="detail-header">
+                    <div>
+                        <h2>اطلاعات کارمند</h2>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <span>نام و نام خانوادگی</span>
+                        <strong>
+                            <a href="{% url 'accounts:employee_detail' transaction.employee.pk %}">
+                                {{ transaction.employee }}
+                            </a>
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>نقش</span>
+                        <strong>{{ transaction.employee.role.title }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>موبایل</span>
+                        <strong>{{ transaction.employee.mobile }}</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- اطلاعات مشتری -->
+        {% if transaction.customer %}
+
+            <div class="detail-card" style="margin-top: 24px;">
+
+                <div class="detail-header">
+                    <div>
+                        <h2>اطلاعات مشتری</h2>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <span>نام مشتری</span>
+                        <strong>
+                            <a href="{% url 'accounts:customer_detail' transaction.customer.pk %}">
+                                {{ transaction.customer.name }}
+                            </a>
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>کد اشتراک</span>
+                        <strong>{{ transaction.customer.subscription_code }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>موبایل</span>
+                        <strong>{{ transaction.customer.mobile }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>مانده حساب فعلی</span>
+                        <strong>
+                            {% if transaction.customer.balance < 0 %}
+                                <span class="debt-value" dir="ltr">
+                                    {{ transaction.customer.balance|thousands_separator }}
+                                </span>
+                            {% else %}
+                                <span class="balance-value" dir="ltr">
+                                    {{ transaction.customer.balance|thousands_separator }}
+                                </span>
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

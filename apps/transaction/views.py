@@ -21,7 +21,7 @@ def transaction_list(request):
         request,
         "transaction/transaction_list.html",
         {
-            "transaction": transactions,
+            "transactions": transactions,
         },
     )
 
@@ -49,6 +49,25 @@ def transaction_create(request):
         "transaction/transaction_form.html",
         {
             "form": form,
+        },
+    )
+
+
+def transaction_detail(request, pk):
+    transaction = get_object_or_404(
+        Transaction.objects.select_related(
+            "employee",
+            "employee__role",
+            "customer",
+        ),
+        pk=pk,
+    )
+
+    return render(
+        request,
+        "transaction/transaction_detail.html",
+        {
+            "transaction": transaction,
         },
     )
 

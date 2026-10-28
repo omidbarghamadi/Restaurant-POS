@@ -145,20 +145,32 @@ class TransactionForm(forms.ModelForm):
         employee = cleaned_data.get("employee")
         customer = cleaned_data.get("customer")
 
-        # پرداخت حقوق باید کارمند داشته باشد
-        if transaction_type == Transaction.TransactionType.SALARY:
+        EMPLOYEE_TYPES = (
+            Transaction.TransactionType.SALARY,
+            Transaction.TransactionType.DELIVERY,
+        )
+
+        # پرداخت حقوق و پیک: کارمند الزامی، مشتری نامربوط
+        if transaction_type in EMPLOYEE_TYPES:
             if not employee:
                 self.add_error(
                     "employee",
-                    "برای پرداخت حقوق، انتخاب کارمند الزامی است.",
+                    "برای این نوع تراکنش، انتخاب کارمند الزامی است.",
                 )
+            cleaned_data["customer"] = None
 
-        # دریافت طلب باید مشتری داشته باشد
-        if transaction_type == Transaction.TransactionType.RECEIVABLE:
+        # دریافت طلب: مشتری الزامی، کارمند نامربوط
+        elif transaction_type == Transaction.TransactionType.RECEIVABLE:
             if not customer:
                 self.add_error(
                     "customer",
                     "برای دریافت طلب، انتخاب مشتری الزامی است.",
                 )
+            cleaned_data["employee"] = None
+
+        # سایر انواع: هیچ‌کدام
+        else:
+            cleaned_data["employee"] = None
+            cleaned_data["customer"] = None
 
         return cleaned_data

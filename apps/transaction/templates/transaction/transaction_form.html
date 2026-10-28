@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
     <style>
+            .form-group.is-required label::after {
+            content: " *";
+            color: #b53023;
+        }
+
         /* هماهنگ‌سازی ظاهر Select2 با استایل فیلدهای فرم (فقط کارمند و مشتری) */
         #employee-group .select2-container .select2-selection--single,
         #customer-group .select2-container .select2-selection--single {
@@ -112,6 +117,23 @@
 
                     <div class="form-group">
 
+                        <label for="{{ form.payment_method.id_for_label }}">
+                            {{ form.payment_method.label }}
+                        </label>
+
+                        {{ form.payment_method }}
+
+                        {% if form.payment_method.errors %}
+                            <div class="field-error">
+                                {{ form.payment_method.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="form-group">
+
                         <label for="{{ form.amount.id_for_label }}">
                             {{ form.amount.label }}
                         </label>
@@ -126,18 +148,17 @@
 
                     </div>
 
-
                     <div class="form-group">
 
-                        <label for="{{ form.payment_method.id_for_label }}">
-                            {{ form.payment_method.label }}
+                        <label for="{{ form.transaction_date.id_for_label }}">
+                            {{ form.transaction_date.label }}
                         </label>
 
-                        {{ form.payment_method }}
+                        {{ form.transaction_date }}
 
-                        {% if form.payment_method.errors %}
+                        {% if form.transaction_date.errors %}
                             <div class="field-error">
-                                {{ form.payment_method.errors }}
+                                {{ form.transaction_date.errors }}
                             </div>
                         {% endif %}
 
@@ -178,21 +199,7 @@
                     </div>
 
 
-                    <div class="form-group">
 
-                        <label for="{{ form.transaction_date.id_for_label }}">
-                            {{ form.transaction_date.label }}
-                        </label>
-
-                        {{ form.transaction_date }}
-
-                        {% if form.transaction_date.errors %}
-                            <div class="field-error">
-                                {{ form.transaction_date.errors }}
-                            </div>
-                        {% endif %}
-
-                    </div>
 
 
                 </div>
@@ -253,13 +260,10 @@
         var select2Options = {
             width: '100%',
             dir: 'rtl',
+            allowClear: true,
             language: {
-                noResults: function () {
-                    return 'موردی یافت نشد';
-                },
-                searching: function () {
-                    return 'در حال جستجو...';
-                }
+                noResults: function () { return 'موردی یافت نشد'; },
+                searching: function () { return 'در حال جستجو...'; }
             }
         };
 
@@ -273,8 +277,7 @@
     });
 </script>
 
-{% block extra_js %}
-    <script src="{% static 'js/../../static/transaction/js/transaction.js' %}"></script>
-{% endblock %}
+{# بعد از لود کتابخانه‌ها #}
+<script src="{% static 'transactions/js/transaction.js' %}"></script>
 
 {% endblock %}

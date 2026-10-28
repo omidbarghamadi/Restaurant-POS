@@ -1,7 +1,6 @@
 {% extends "pos/base_pos.html" %}
 
 {% load static %}
-{% load humanize %}
 {% load jalali_tags %}
 
 {% block extra_css %}
@@ -9,7 +8,7 @@
 {% endblock %}
 
 {% block title %}
-    {{ customer.name }} | همبر ثنائی
+    {{ employee }} | همبر ثنائی
 {% endblock %}
 
 
@@ -24,11 +23,11 @@
             <div>
 
                 <span class="page-label">
-                    اطلاعات مشتری
+                    اطلاعات کارمند
                 </span>
 
                 <h1>
-                    {{ customer.name }}
+                    {{ employee.first_name }} {{ employee.last_name }}
                 </h1>
 
             </div>
@@ -36,18 +35,14 @@
 
             <div class="header-actions">
 
-                <a href="{% url 'accounts:customer_update' customer.pk %}"
+                <a href="{% url 'accounts:employee_update' employee.pk %}"
                    class="btn btn-primary">
-
                     ویرایش
-
                 </a>
 
-                <a href="{% url 'accounts:customer_list' %}"
+                <a href="{% url 'accounts:employee_list' %}"
                    class="btn btn-outline">
-
                     بازگشت
-
                 </a>
 
             </div>
@@ -59,18 +54,18 @@
 
             <div class="detail-header">
 
-                <div class="profile-avatar customer">
-                    {{ customer.name|first }}
+                <div class="profile-avatar">
+                    {{ employee.first_name|first }}
                 </div>
 
                 <div>
 
                     <h2>
-                        {{ customer.name }}
+                        {{ employee.first_name }} {{ employee.last_name }}
                     </h2>
 
-                    <span class="subscription-code">
-                        {{ customer.subscription_code }}
+                    <span class="role-badge">
+                        {{ employee.role.title }}
                     </span>
 
                 </div>
@@ -80,84 +75,61 @@
 
             <div class="detail-grid">
 
-
                 <div class="detail-item">
-
-                    <span>
-                        موبایل
-                    </span>
-
-                    <strong>
-                        {{ customer.mobile }}
-                    </strong>
-
+                    <span>موبایل</span>
+                    <strong>{{ employee.mobile }}</strong>
                 </div>
 
-
                 <div class="detail-item">
-
-                    <span>
-                        تلفن
-                    </span>
-
-                    <strong>
-                        {{ customer.phone|default:"-" }}
-                    </strong>
-
+                    <span>کد ملی</span>
+                    <strong>{{ employee.national_code|default:"-" }}</strong>
                 </div>
 
-
                 <div class="detail-item">
-
-                    <span>
-                        کد اشتراک
-                    </span>
-
+                    <span>تاریخ استخدام</span>
                     <strong>
-                        {{ customer.subscription_code }}
-                    </strong>
-
-                </div>
-
-
-                <div class="detail-item">
-
-                    <span>
-                        مانده حساب
-                    </span>
-
-                    <strong>
-
-                        {% if customer.balance < 0 %}
-
-                            <span class="debt-value" dir="ltr">
-                                {{ customer.balance|intcomma }}
-                            </span>
-
+                        {% if employee.hire_date %}
+                            {{ employee.hire_date|jalali:"%Y/%m/%d" }}
                         {% else %}
-
-                            <span class="balance-value" dir="ltr">
-                                {{ customer.balance|intcomma }}
-                            </span>
-
+                            -
                         {% endif %}
-
                     </strong>
-
                 </div>
 
+                <div class="detail-item">
+                    <span>وضعیت</span>
+                    <strong>
+                        {% if employee.status == "active" %}
+                            <span class="status-badge active">
+                                {{ employee.get_status_display }}
+                            </span>
+                        {% else %}
+                            <span class="status-badge inactive">
+                                {{ employee.get_status_display }}
+                            </span>
+                        {% endif %}
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>جمع دریافتی</span>
+                    <strong>
+                        <span class="balance-value" dir="ltr">
+                            {{ employee.balance|thousands_separator }}
+                        </span>
+                        تومان
+                    </strong>
+                </div>
 
             </div>
 
 
             <div class="detail-full">
 
-                <span>
-                    آدرس
-                </span>
+                <span>آدرس</span>
 
                 <p>
-                    {{ customer.address|default:"آدرسی ثبت نشده است." }}
+                    {{ employee.address|default:"آدرسی ثبت نشده است." }}
                 </p>
 
             </div>
@@ -165,12 +137,10 @@
 
             <div class="detail-full">
 
-                <span>
-                    توضیحات
-                </span>
+                <span>توضیحات</span>
 
                 <p>
-                    {{ customer.description|default:"توضیحاتی ثبت نشده است." }}
+                    {{ employee.description|default:"توضیحاتی ثبت نشده است." }}
                 </p>
 
             </div>
@@ -178,10 +148,10 @@
         </div>
 
 
-        {# ===== تراکنش‌های مشتری ===== #}
+        {# ===== تراکنش‌های کارمند ===== #}
         <div class="content-card related-card">
 
-            <h2 class="related-card__title">تراکنش‌های مشتری</h2>
+            <h2 class="related-card__title">تراکنش‌های کارمند</h2>
 
             {% if transactions %}
 
@@ -196,6 +166,7 @@
                                 <th>مبلغ</th>
                                 <th>روش پرداخت</th>
                                 <th>تاریخ و ساعت</th>
+                                <th>توضیحات</th>
                                 <th>عملیات</th>
                             </tr>
                         </thead>
@@ -229,6 +200,10 @@
                                     </td>
 
                                     <td>
+                                        {{ transaction.description|default:"-" }}
+                                    </td>
+
+                                    <td>
                                         <div class="table-actions">
 
                                             <a href="{% url 'transaction:transaction_update' transaction.pk %}"
@@ -250,6 +225,16 @@
 
                         </tbody>
 
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">جمع کل تراکنش‌ها</td>
+                                <td colspan="5">
+                                    {{ transactions_total|thousands_separator }}
+                                    تومان
+                                </td>
+                            </tr>
+                        </tfoot>
+
                     </table>
 
                 </div>
@@ -263,125 +248,7 @@
                     </div>
 
                     <h3>
-                        تراکنشی برای این مشتری ثبت نشده است
-                    </h3>
-
-                </div>
-
-            {% endif %}
-
-        </div>
-
-
-        {# ===== سفارش‌های نسیه ===== #}
-        <div class="content-card related-card">
-
-            <h2 class="related-card__title">سفارش‌های نسیه</h2>
-
-            {% if credit_orders %}
-
-                <div class="table-wrapper">
-
-                    <table class="data-table">
-
-                        <thead>
-                            <tr>
-                                <th>شماره سفارش</th>
-                                <th>تاریخ</th>
-                                <th>ساعت</th>
-                                <th>نوع سفارش</th>
-                                <th>مبلغ کل</th>
-                                <th>عملیات</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            {% for order in credit_orders %}
-
-                                <tr>
-
-                                    <td>
-                                        <strong>
-                                            #{{ order.order_number }}
-                                        </strong>
-                                    </td>
-
-                                    <td>
-                                        <time datetime="{{ order.order_date|date:'Y-m-d' }}"
-                                              data-jalali-date>
-                                            {{ order.order_date|date:"Y/m/d" }}
-                                        </time>
-                                    </td>
-
-                                    <td>
-                                        {% if order.order_time %}
-                                            {{ order.order_time|time:"H:i" }}
-                                        {% else %}
-                                            -
-                                        {% endif %}
-                                    </td>
-
-                                    <td>
-                                        {{ order.order_type.name }}
-                                    </td>
-
-                                    <td>
-                                        <span data-money="{{ order.total_price|stringformat:'d' }}">{{ order.total_price|stringformat:"d" }}</span>
-                                        تومان
-                                    </td>
-
-                                    <td>
-                                        <div class="table-actions">
-
-                                            <a href="{% url 'order:order_detail' order.pk %}"
-                                               class="action-button view">
-                                                مشاهده
-                                            </a>
-
-                                            <a href="{% url 'order:order_update' order.pk %}"
-                                               class="action-button edit">
-                                                ویرایش
-                                            </a>
-
-                                            <a href="{% url 'order:order_delete' order.pk %}"
-                                               class="action-button delete">
-                                                حذف
-                                            </a>
-
-                                        </div>
-                                    </td>
-
-                                </tr>
-
-                            {% endfor %}
-
-                        </tbody>
-
-                        <tfoot>
-                            <tr>
-                                <th colspan="4">جمع کل نسیه</th>
-                                <th colspan="2">
-                                    <span data-money="{{ credit_total|stringformat:'d' }}">{{ credit_total|stringformat:"d" }}</span>
-                                    تومان
-                                </th>
-                            </tr>
-                        </tfoot>
-
-                    </table>
-
-                </div>
-
-            {% else %}
-
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        📋
-                    </div>
-
-                    <h3>
-                        سفارش نسیه‌ای برای این مشتری ثبت نشده است
+                        تراکنشی برای این کارمند ثبت نشده است
                     </h3>
 
                 </div>
@@ -394,9 +261,4 @@
 
 </section>
 
-{% endblock %}
-
-
-{% block extra_js %}
-    <script src="{% static 'accounts/js/accounts.js' %}"></script>
 {% endblock %}

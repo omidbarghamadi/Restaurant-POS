@@ -76,24 +76,6 @@
 }
 
 
-.btn-primary {
-    color: #ffffff;
-
-    background-color: var(--pos-primary);
-
-    border-color: var(--pos-primary);
-}
-
-
-.btn-primary:hover {
-    color: #ffffff;
-
-    background-color: var(--pos-primary-dark);
-
-    border-color: var(--pos-primary-dark);
-}
-
-
 .btn-secondary {
     color: var(--pos-text);
 
