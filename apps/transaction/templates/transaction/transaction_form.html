@@ -3,38 +3,9 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'transactions/css/transaction.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
-    <style>
-            .form-group.is-required label::after {
-            content: " *";
-            color: #b53023;
-        }
-
-        /* هماهنگ‌سازی ظاهر Select2 با استایل فیلدهای فرم (فقط کارمند و مشتری) */
-        #employee-group .select2-container .select2-selection--single,
-        #customer-group .select2-container .select2-selection--single {
-            height: calc(2.25rem + 2px);
-            display: flex;
-            align-items: center;
-            border-radius: 6px;
-        }
-        #employee-group .select2-container--default .select2-selection--single .select2-selection__rendered,
-        #customer-group .select2-container--default .select2-selection--single .select2-selection__rendered {
-            padding-right: 0.75rem;
-            padding-left: 0.75rem;
-            line-height: normal;
-        }
-        #employee-group .select2-container--default .select2-selection--single .select2-selection__arrow,
-        #customer-group .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 100%;
-        }
-        .select2-dropdown {
-            text-align: right;
-            direction: rtl;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'transactions/css/transaction.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -252,32 +223,14 @@
     </div>
 
 </section>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var select2Options = {
-            width: '100%',
-            dir: 'rtl',
-            allowClear: true,
-            language: {
-                noResults: function () { return 'موردی یافت نشد'; },
-                searching: function () { return 'در حال جستجو...'; }
-            }
-        };
 
-        $('#{{ form.employee.id_for_label }}').select2($.extend({}, select2Options, {
-            placeholder: 'کارمند'
-        }));
+{% endblock %}
 
-        $('#{{ form.customer.id_for_label }}').select2($.extend({}, select2Options, {
-            placeholder: 'مشتری'
-        }));
-    });
-</script>
 
-{# بعد از لود کتابخانه‌ها #}
-<script src="{% static 'transactions/js/transaction.js' %}"></script>
-
+{% block extra_js %}
+    {# کتابخانه‌ها باید قبل از transaction.js لود شوند #}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+    <script src="{% static 'transactions/js/transaction.js' %}"></script>
 {% endblock %}

@@ -1,5 +1,41 @@
 /* =========================================================
    TRANSACTION APP
-   No app-specific CSS was present in the supplied stylesheet.
-   Add this app's styles here when they are defined.
+   استایل‌های مخصوص اپ transaction
    ========================================================= */
+
+
+/* ---------- ستاره‌ی فیلدهای الزامی ---------- */
+
+.form-group.is-required label::after {
+    content: " *";
+    color: #b53023;
+}
+
+
+/* ---------- هماهنگ‌سازی ظاهر Select2 با فیلدهای فرم
+              (فقط کارمند و مشتری) ---------- */
+
+#employee-group .select2-container .select2-selection--single,
+#customer-group .select2-container .select2-selection--single {
+    height: calc(2.25rem + 2px);
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+}
+
+#employee-group .select2-container--default .select2-selection--single .select2-selection__rendered,
+#customer-group .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    line-height: normal;
+}
+
+#employee-group .select2-container--default .select2-selection--single .select2-selection__arrow,
+#customer-group .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+}
+
+.select2-dropdown {
+    text-align: right;
+    direction: rtl;
+}

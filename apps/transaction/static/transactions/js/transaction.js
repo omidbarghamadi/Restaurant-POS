@@ -1,5 +1,29 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    /* ===== Select2 برای کارمند و مشتری ===== */
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2) {
+
+        var $ = window.jQuery;
+
+        var select2Options = {
+            width: "100%",
+            dir: "rtl",
+            allowClear: true,
+            language: {
+                noResults: function () { return "موردی یافت نشد"; },
+                searching: function () { return "در حال جستجو..."; }
+            }
+        };
+
+        $("#id_employee").select2($.extend({}, select2Options, {
+            placeholder: "کارمند"
+        }));
+
+        $("#id_customer").select2($.extend({}, select2Options, {
+            placeholder: "مشتری"
+        }));
+    }
+
     /* ===== تقویم شمسی ===== */
     if (typeof jalaliDatepicker !== "undefined") {
         jalaliDatepicker.startWatch({
