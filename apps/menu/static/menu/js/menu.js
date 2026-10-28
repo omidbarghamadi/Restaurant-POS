@@ -26,6 +26,11 @@ function toggleVariantRow(rowId, triggerBtn) {
     var resultsContainer = document.getElementById('menu-items-results');
     var loadingIndicator = document.getElementById('filter-loading-indicator');
 
+    // این بخش فقط در صفحهٔ لیست آیتم‌های منو وجود دارد
+    if (!form || !searchInput || !categorySelect || !resultsContainer) {
+        return;
+    }
+
     var debounceTimer = null;
     var activeController = null;
 
@@ -111,3 +116,84 @@ function toggleVariantRow(rowId, triggerBtn) {
     });
 
 })();
+
+/* =========================================================
+   فرم زیرمنو (variant_form)
+   فقط وقتی فرم #variant-form در صفحه باشد اجرا می‌شود
+   ========================================================= */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    var variantForm = document.getElementById('variant-form');
+
+    if (!variantForm) {
+        return;
+    }
+
+    /* 1) Select2 برای انتخاب آیتم منو */
+
+    var menuItemSelect = variantForm.querySelector('[name="menu_item"]');
+
+    if (menuItemSelect && window.jQuery && window.jQuery.fn.select2) {
+        window.jQuery(menuItemSelect).select2({
+            width: '100%',
+            dir: 'rtl',
+            language: {
+                noResults: function () {
+                    return 'موردی یافت نشد';
+                },
+                searching: function () {
+                    return 'در حال جستجو...';
+                }
+            },
+            placeholder: 'انتخاب آیتم منو'
+        });
+    }
+
+    /* 2) جداکننده سه‌رقمی فیلد قیمت */
+
+    var priceInput = variantForm.querySelector('[name="price"]');
+
+    if (!priceInput) {
+        return;
+    }
+
+    // کاما در type=number مجاز نیست، پس نوع فیلد را به text تغییر می‌دهیم
+    priceInput.type = 'text';
+    priceInput.setAttribute('inputmode', 'numeric');
+    priceInput.setAttribute('autocomplete', 'off');
+
+    function formatPrice(value) {
+        var digitsOnly = String(value).replace(/,/g, '').replace(/[^0-9]/g, '');
+
+        if (!digitsOnly) {
+            return '';
+        }
+
+        return Number(digitsOnly).toLocaleString('en-US');
+    }
+
+    // فرمت‌دهی مقدار اولیه (در حالت ویرایش)
+    if (priceInput.value) {
+        var initial = parseFloat(String(priceInput.value).replace(/,/g, ''));
+
+        if (!isNaN(initial)) {
+            priceInput.value = formatPrice(Math.round(initial));
+        }
+    }
+
+    priceInput.addEventListener('input', function (e) {
+        var cursorFromEnd = e.target.value.length - e.target.selectionStart;
+
+        e.target.value = formatPrice(e.target.value);
+
+        var newPos = e.target.value.length - cursorFromEnd;
+        e.target.setSelectionRange(newPos, newPos);
+    });
+
+    // حذف کاماها قبل از ارسال فرم به سرور
+    variantForm.addEventListener('submit', function () {
+        priceInput.value = priceInput.value.replace(/,/g, '');
+    });
+
+});

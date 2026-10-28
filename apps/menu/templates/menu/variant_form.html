@@ -5,27 +5,6 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'menu/css/menu.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
-    <style>
-        /* هماهنگ‌سازی ظاهر Select2 با استایل فیلدهای فرم */
-        .select2-container .select2-selection--single {
-            height: calc(2.25rem + 2px);
-            display: flex;
-            align-items: center;
-            border-radius: 6px;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            padding-right: 0.75rem;
-            padding-left: 0.75rem;
-            line-height: normal;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 100%;
-        }
-        .select2-dropdown {
-            text-align: right;
-            direction: rtl;
-        }
-    </style>
 {% endblock %}
 
 {% block title %}
@@ -72,7 +51,7 @@
 
         <div class="form-card">
 
-            <form method="post">
+            <form method="post" id="variant-form">
 
                 {% csrf_token %}
 
@@ -185,62 +164,11 @@
 
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#{{ form.menu_item.id_for_label }}').select2({
-            width: '100%',
-            dir: 'rtl',
-            language: {
-                noResults: function () {
-                    return 'موردی یافت نشد';
-                },
-                searching: function () {
-                    return 'در حال جستجو...';
-                }
-            },
-            placeholder: 'انتخاب آیتم منو'
-        });
+{% endblock %}
 
-    // جداسازی سه‌رقمی فیلد قیمت
-    var priceInput = document.getElementById('{{ form.price.id_for_label }}');
 
-    if (priceInput) {
-
-        // مهم: کاما در type=number مجاز نیست، پس نوع فیلد را به text تغییر می‌دهیم
-        priceInput.type = 'text';
-        priceInput.setAttribute('inputmode', 'numeric');
-        priceInput.setAttribute('autocomplete', 'off');
-
-        function formatPrice(value) {
-            var digitsOnly = String(value).replace(/,/g, '').replace(/[^0-9]/g, '');
-            if (!digitsOnly) return '';
-            return Number(digitsOnly).toLocaleString('en-US');
-        }
-
-        // فرمت‌دهی مقدار اولیه (در حالت ویرایش)
-        if (priceInput.value) {
-            // مثلاً "150000.00" → 150000 (بخش اعشار حذف می‌شود)
-            var initial = parseFloat(String(priceInput.value).replace(/,/g, ''));
-            if (!isNaN(initial)) {
-                priceInput.value = formatPrice(Math.round(initial));
-            }
-        }
-
-        priceInput.addEventListener('input', function (e) {
-            var cursorFromEnd = e.target.value.length - e.target.selectionStart;
-            e.target.value = formatPrice(e.target.value);
-            var newPos = e.target.value.length - cursorFromEnd;
-            e.target.setSelectionRange(newPos, newPos);
-        });
-
-        // حذف کاما‌ها قبل از ارسال فرم به سرور
-        priceInput.closest('form').addEventListener('submit', function () {
-            priceInput.value = priceInput.value.replace(/,/g, '');
-        });
-    }
-    });
-</script>
-
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{% static 'menu/js/menu.js' %}"></script>
 {% endblock %}
